@@ -1,6 +1,7 @@
 import 'package:english_words/english_words.dart';
 import 'package:flutter/material.dart';
 import 'package:sca_app/home/home.dart';
+import 'package:sca_app/router/router.dart';
 
 void main() {
   runApp(const MyApp());
@@ -53,13 +54,15 @@ class _LoginScreenState extends State<LoginScreen> {
     return Future.delayed(loginTime).then((value) => {
       users.forEach((key, value) {
         if (usernameController.text == key && passwordController.text == value) {
-          print("Uspješna prijava");
-          Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => const HomeScreen(),
-              )
-          );
+          // Navigator.push(
+          //     context,
+          //     MaterialPageRoute(
+          //       builder: (context) => const HomeScreen(),
+          //     )
+          // );
+          navigateToMatch(context);
+        } else {
+
         }
       })
     });
