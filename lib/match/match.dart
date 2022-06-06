@@ -12,9 +12,9 @@ class _MatchPageState extends State<MatchPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Match"),
-        leading: Icon(Icons.arrow_back),
-        actions: [
+        title: const Text("Match"),
+        leading: const Icon(Icons.arrow_back),
+        actions: const <Widget>[
           Icon(
             Icons.edit
           ),
@@ -27,7 +27,6 @@ class _MatchPageState extends State<MatchPage> {
               Icons.add_box
           ),
           SizedBox(width: 10,)
-          
         ],
       ),
     );
