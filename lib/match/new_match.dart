@@ -1,18 +1,15 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:sca_app/common/style.dart';
+import 'package:sca_app/models/match.dart';
 
 class NewMatch extends StatefulWidget {
   const NewMatch({
     Key? key,
-    required this.homeTeam,
-    required this.awayTeam,
-    required this.round
+    required this.match
   }) : super(key: key);
 
-  final String homeTeam;
-  final String awayTeam;
-  final String round;
+  final Match match;
 
   @override
   State<NewMatch> createState() => _NewMatchState();
@@ -49,7 +46,7 @@ class _NewMatchState extends State<NewMatch> {
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          _newMatchHeader(widget.homeTeam, widget.awayTeam, widget.round)
+          _newMatchHeader(widget.match.homeTeam, widget.match.awayTeam, widget.match.round)
         ],
       ),
     );
@@ -57,7 +54,7 @@ class _NewMatchState extends State<NewMatch> {
 }
 
 /// New team header - upload photo of team
-Container _newMatchHeader(String homeTeam, String awayTeam, String round) {
+Container _newMatchHeader(String homeTeam, String awayTeam, int round) {
   return Container(
     height: 130,
     padding: const EdgeInsets.symmetric(vertical: 20),
