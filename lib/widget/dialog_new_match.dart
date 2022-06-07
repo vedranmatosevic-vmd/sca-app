@@ -8,7 +8,7 @@ import 'package:sca_app/models/match.dart';
 
 late String _setTime, _setDate;
 
-late Match newMatch = Match.emptyMatch();
+late Match newMatch;
 
 class DialogNewMatch extends StatefulWidget {
   const DialogNewMatch({Key? key}) : super(key: key);
@@ -71,6 +71,7 @@ class _DialogNewMatchState extends State<DialogNewMatch> {
 
   @override
   Widget build(BuildContext context) {
+    newMatch = Match.emptyMatch();
     return SimpleDialog(
       title: const Text('New match'),
       children: <Widget>[
@@ -148,7 +149,6 @@ GestureDetector _btnCreate(BuildContext context, String label) {
           context,
           MaterialPageRoute(builder: (context) => NewMatch(match: newMatch))
       );
-      newMatch = Match.emptyMatch();
     },
     child: SimpleDialogOption(
       child: Text(
@@ -308,6 +308,7 @@ class _DropDownItemState extends State<DropDownItem> {
 
   void _setDropDownValue(String value) {
     if (widget.type == Type.home) {
+      log(value);
       newMatch.homeTeam = value;
     } else if (widget.type == Type.away) {
       newMatch.awayTeam = value;

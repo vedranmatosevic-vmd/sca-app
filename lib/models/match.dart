@@ -1,5 +1,5 @@
 class Match {
-  late final String homeTeam;
+  late String homeTeam;
   late String awayTeam;
   late String date;
   late String time;
