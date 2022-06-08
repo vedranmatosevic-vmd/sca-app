@@ -34,18 +34,21 @@ class MenuCardHomeScreen extends StatelessWidget {
           Row(
             mainAxisSize: MainAxisSize.max,
             mainAxisAlignment: MainAxisAlignment.center,
-            children: const [
+            children: const <Widget>[
               HomeContentButton(
-                value: 'Add team',
+                value: 'Add Team',
+                icon: Icons.group,
                 page: Pages.newTeam,
               ),
               HomeContentButton(
-                value: 'Add player',
+                value: 'Add Player',
+                icon: Icons.person,
                 page: Pages.newPlayer,
               ),
               HomeContentButton(
-                value: 'Add match',
-                page: Pages.newMatch,
+                value: 'Add Match',
+                icon: Icons.sports_soccer,
+                page: Pages.createNewMatch,
               ),
             ],
           )

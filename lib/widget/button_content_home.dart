@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:sca_app/common/style.dart';
 import 'package:sca_app/router/router.dart';
 
 class HomeContentButton extends StatelessWidget {
-  const HomeContentButton({Key? key, required this.value, required this.page}) : super(key: key);
+  const HomeContentButton({Key? key, required this.value, required this.icon, required this.page}) : super(key: key);
 
   final String value;
+  final IconData? icon;
   final Pages page;
 
   @override
@@ -28,19 +30,25 @@ class HomeContentButton extends StatelessWidget {
                   ]),
             ),
           ),
-          TextButton(
-            style: TextButton.styleFrom(
-              padding: const EdgeInsets.fromLTRB(16, 16, 16, 16),
-              primary: Colors.white,
-              textStyle: const TextStyle(fontSize: 20),
-            ),
-            onPressed: () {
-              navigateTo(context, page);
-            },
-            child: Text(
-              value,
-              style: const TextStyle(color: Colors.black, fontSize: 14),
-            ),
+          SizedBox.fromSize(
+            size: const Size(100, 100),
+            child: InkWell(
+              onTap: () {navigateTo(context, page);},
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  Icon(
+                    icon,
+                    size: 34,
+                    color: CustomColors.buttonGrey,
+                  ),
+                  Text(
+                      value,
+                      style: const TextStyle(color: CustomColors.buttonGrey, fontSize: 14, fontWeight: FontWeight.bold,),
+                    ),
+                ],
+              ),
+            )
           ),
         ],
       ),

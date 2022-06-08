@@ -1,5 +1,3 @@
-import 'dart:ffi';
-
 import 'package:flutter/material.dart';
 import 'package:sca_app/common/style.dart';
 import 'package:sca_app/widget/input_text_form_field.dart';
@@ -77,7 +75,7 @@ Container _newTeamHeader() {
           height: 90,
           margin: const EdgeInsets.symmetric(vertical: 20),
           decoration: const BoxDecoration(
-              color: Colors.deepOrangeAccent, shape: BoxShape.circle
+              color: CustomColors.buttonGrey, shape: BoxShape.circle
           ),
           child: const Center(
             child: Text(

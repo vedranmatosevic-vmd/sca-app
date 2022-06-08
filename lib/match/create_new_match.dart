@@ -1,23 +1,21 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:sca_app/common/style.dart';
-import 'package:sca_app/match/new_match.dart';
 import 'package:sca_app/models/match.dart';
+import 'package:sca_app/router/router.dart';
 
-late String _setTime, _setDate;
+import 'new_match.dart';
 
 late Match newMatch;
 
-class DialogNewMatch extends StatefulWidget {
-  const DialogNewMatch({Key? key}) : super(key: key);
+class CreateNewMatch extends StatefulWidget {
+  const CreateNewMatch({Key? key}) : super(key: key);
 
   @override
-  State<DialogNewMatch> createState() => _DialogNewMatchState();
+  State<CreateNewMatch> createState() => _CreateNewMatchState();
 }
 
-class _DialogNewMatchState extends State<DialogNewMatch> {
+class _CreateNewMatchState extends State<CreateNewMatch> {
   TimeOfDay selectedTime = const TimeOfDay(hour: 11, minute: 00);
   DateTime selectedDate = DateTime.now();
 
@@ -34,8 +32,80 @@ class _DialogNewMatchState extends State<DialogNewMatch> {
   }
 
   @override
-  void initState() {
-    super.initState();
+  Widget build(BuildContext context) {
+    newMatch = Match.emptyMatch();
+
+    return Scaffold(
+      backgroundColor: CustomColors.greyBack,
+      appBar: AppBar(
+        backgroundColor: Colors.blue,
+        foregroundColor: Colors.white,
+        title: const Text("Create new match"),
+        leading: Builder(
+          builder: (BuildContext context) {
+            return IconButton(
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              icon: const Icon(
+                Icons.arrow_back,
+              ),
+            );
+          },
+        ),
+        actions: <Widget>[
+          const SizedBox(width: 10,),
+          GestureDetector(
+            onTap: () {
+              navigateTo(context, Pages.newMatch, match: newMatch);
+            },
+            child: const Icon(
+                Icons.save
+            ),
+          ),
+          const SizedBox(width: 10,)
+        ],
+      ),
+      body: Column(
+        children: <Widget>[
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+            child: Row(
+              children: const [
+                Text(
+                  'Infromacije',
+                  style: TextStyle(
+                    color: CustomColors.textGreyDark,
+                    fontSize: 16
+                  ),
+                ),
+              ],
+            ),
+          ),
+          Container(
+            decoration: const BoxDecoration(
+              color: Colors.white
+            ),
+            child: Column(
+              children: <Widget>[
+                _simpleDialogOption('Home', teams, Type.home),
+                _simpleDialogOption('Away', teams, Type.away),
+                // todo Vedran - homeTeam has not init
+
+                DateTimeRow(selectDate: _selectDate,
+                    selectTime: _selectTime,
+                    dateController: _dateController,
+                    timeController: _timeController),
+                _simpleDialogOption(
+                    'Duration', duration, Type.duration, inOneLine: true),
+                _simpleDialogOption('Round', rounds, Type.round, inOneLine: true),
+              ],
+            ),
+          ),
+
+        ],
+      )
+    );
   }
 
   Future<void> _selectDate() async {
@@ -68,30 +138,15 @@ class _DialogNewMatchState extends State<DialogNewMatch> {
       });
     }
   }
-
-  @override
-  Widget build(BuildContext context) {
-    newMatch = Match.emptyMatch();
-    return SimpleDialog(
-      title: const Text('New match'),
-      children: <Widget>[
-        _simpleDialogOption('Home', teams, Type.home),
-        _simpleDialogOption('Away', teams, Type.away),
-        DateTimeRow(selectDate: _selectDate, selectTime: _selectTime, dateController: _dateController, timeController: _timeController),
-        _simpleDialogOption('Duration', duration, Type.duration, inOneLine: true),
-        _simpleDialogOption('Round', rounds, Type.round, inOneLine: true),
-        _btnCreate(context, 'Create')
-      ],
-    );
-  }
 }
 
-SimpleDialogOption _simpleDialogOption(
+Container _simpleDialogOption(
     String label,
     List<String> items,
     Type type,
     {bool inOneLine = false}) {
-  return SimpleDialogOption(
+  return Container(
+    padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
     child: Column(
       children: [
         inOneLine ? Row(
@@ -100,7 +155,7 @@ SimpleDialogOption _simpleDialogOption(
               '$label ',
               style: const TextStyle(
                   color: CustomColors.textGreyLight,
-                  fontSize: 12
+                  fontSize: 14
               ),
             ),
             const SizedBox(
@@ -120,7 +175,7 @@ SimpleDialogOption _simpleDialogOption(
                   '$label ',
                   style: const TextStyle(
                       color: CustomColors.textGreyLight,
-                      fontSize: 12
+                      fontSize: 14
                   ),
                 ),
               ],
@@ -137,29 +192,6 @@ SimpleDialogOption _simpleDialogOption(
           ],
         )
       ],
-    ),
-  );
-}
-
-GestureDetector _btnCreate(BuildContext context, String label) {
-  return GestureDetector(
-    onTap: () {
-      Navigator.pop(context);
-      Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) => NewMatch(match: newMatch))
-      );
-    },
-    child: SimpleDialogOption(
-      child: Text(
-        label,
-        textAlign: TextAlign.end,
-        style: const TextStyle(
-          color: CustomColors.primaryBlue,
-          fontSize: 20,
-          fontWeight: FontWeight.bold,
-        ),
-      ),
     ),
   );
 }
@@ -183,16 +215,17 @@ class DateTimeRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SimpleDialogOption(
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 20),
       child: Column(
-        children: [
+        children: <Widget>[
           Row(
             children: const <Widget>[
               Text(
                 'Date',
                 style: TextStyle(
                     color: CustomColors.textGreyLight,
-                    fontSize: 12
+                    fontSize: 14
                 ),
               ),
             ],
@@ -211,7 +244,7 @@ class DateTimeRow extends StatelessWidget {
                           fontSize: 16
                       ),
                       onSaved: (val) {
-                        _setDate = val!;
+
                       },
                       enabled: false,
                       keyboardType: TextInputType.none,
@@ -226,12 +259,13 @@ class DateTimeRow extends StatelessWidget {
                       selectTime();
                     },
                     child: TextFormField(
+
                       textAlign: TextAlign.center,
                       style: const TextStyle(
                           fontSize: 16
                       ),
                       onSaved: (val) {
-                        _setTime = val!;
+
                       },
                       enabled: false,
                       keyboardType: TextInputType.none,
@@ -283,7 +317,11 @@ class _DropDownItemState extends State<DropDownItem> {
   void initState() {
     super.initState();
 
-    selectedValue = widget.items[0];
+    if (widget.type == Type.duration) {
+      selectedValue = widget.items[6];
+    } else {
+      selectedValue = widget.items[0];
+    }
     _setDropDownValue(widget.items[0]);
   }
 
@@ -308,7 +346,6 @@ class _DropDownItemState extends State<DropDownItem> {
 
   void _setDropDownValue(String value) {
     if (widget.type == Type.home) {
-      log(value);
       newMatch.homeTeam = value;
     } else if (widget.type == Type.away) {
       newMatch.awayTeam = value;
