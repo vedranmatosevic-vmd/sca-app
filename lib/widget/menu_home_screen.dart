@@ -41,9 +41,9 @@ class MenuCardHomeScreen extends StatelessWidget {
                 page: Pages.newTeam,
               ),
               HomeContentButton(
-                value: 'Add Player',
+                value: 'Add League',
                 icon: Icons.person,
-                page: Pages.newPlayer,
+                page: Pages.newLeague,
               ),
               HomeContentButton(
                 value: 'Add Match',

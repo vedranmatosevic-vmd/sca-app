@@ -5,17 +5,23 @@ class InputTextFormField extends StatelessWidget {
   const InputTextFormField({
     Key? key,
     this.isPhoneNumber = false,
+    this.padding = const EdgeInsets.symmetric(horizontal: 8, vertical: 10),
+    this.controller,
     required this.value
   }) : super(key: key);
 
   final String value;
   final bool isPhoneNumber;
+  final EdgeInsetsGeometry padding;
+  final TextEditingController? controller;
 
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 10),
+      padding: padding,
       child: TextFormField(
+        textInputAction: TextInputAction.next,
+        controller: controller,
         keyboardType: isPhoneNumber ? TextInputType.number : TextInputType.text,
         cursorColor: Colors.black,
         decoration: InputDecoration(

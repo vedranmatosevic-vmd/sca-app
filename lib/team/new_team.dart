@@ -1,18 +1,30 @@
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
+import 'package:sca_app/common/selected_competition.dart';
 import 'package:sca_app/common/style.dart';
 import 'package:sca_app/widget/input_text_form_field.dart';
 
 class NewTeam extends StatefulWidget {
   const NewTeam({Key? key}) : super(key: key);
 
+
   @override
   State<NewTeam> createState() => _NewTeamState();
 }
 
 class _NewTeamState extends State<NewTeam> {
+  final _nameTEC = TextEditingController();
+  final _shortNameTEC = TextEditingController();
+  final _emailTEC = TextEditingController();
+  final _contactPersonTEC = TextEditingController();
+  final _phoneTEC = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
+    DatabaseReference _testRef = FirebaseDatabase.instance.ref().child('users/vematosevic/competitions/$selectedLeague');
+
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       backgroundColor: Colors.white,
       appBar: AppBar(
         title: const Text("Add a new team"),
@@ -28,12 +40,21 @@ class _NewTeamState extends State<NewTeam> {
             );
           },
         ),
-        actions: const [
-          SizedBox(
+        actions: <Widget>[
+          const SizedBox(
             width: 10,
           ),
-          Icon(Icons.save),
-          SizedBox(
+          GestureDetector(
+            onTap: () {
+              _testRef.child(_nameTEC.text).child('name').set(_nameTEC.text);
+              _testRef.child(_nameTEC.text).child('shortName').set(_shortNameTEC.text);
+              _testRef.child(_nameTEC.text).child('email').set(_emailTEC.text);
+              _testRef.child(_nameTEC.text).child('contactPerson').set(_contactPersonTEC.text);
+              _testRef.child(_nameTEC.text).child('phone').set(_phoneTEC.text);
+            },
+              child: const Icon(Icons.save)
+          ),
+          const SizedBox(
             width: 10,
           )
         ],
@@ -44,15 +65,15 @@ class _NewTeamState extends State<NewTeam> {
           // New team header
           _newTeamHeader(),
           // Team name TextFormField
-          const InputTextFormField(value: 'Team name'),
+          InputTextFormField(controller: _nameTEC, value: 'Team name'),
           // Short team name
-          const InputTextFormField(value: 'Short team name'),
+          InputTextFormField(controller: _shortNameTEC, value: 'Short team name'),
           // Team email
-          const InputTextFormField(value: 'Email'),
+          InputTextFormField(controller: _emailTEC, value: 'Email'),
           // Contact person
-          const InputTextFormField(value: 'Contact person'),
+          InputTextFormField(controller: _contactPersonTEC, value: 'Contact person'),
           // Phone number
-          const InputTextFormField(value: 'Phone number', isPhoneNumber: true),
+          InputTextFormField(controller: _phoneTEC, value: 'Phone number', isPhoneNumber: true),
         ],
       ),
     );

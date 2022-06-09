@@ -1,6 +1,7 @@
 import 'dart:ffi';
 
 import 'package:flutter/material.dart';
+import 'package:sca_app/competitions/create_new_competition.dart';
 import 'package:sca_app/match/create_new_match.dart';
 import 'package:sca_app/match/new_match.dart';
 import 'package:sca_app/models/match.dart';
@@ -11,7 +12,9 @@ void navigateTo(BuildContext context, Pages page, {Match? match}) {
     Navigator.push(
         context, MaterialPageRoute(builder: (context) => NewMatch(match: match!))
     );
-  } else if (page == Pages.newPlayer) {
+  } else if (page == Pages.newLeague) {
+    Navigator.push(
+        context, MaterialPageRoute(builder: (context) => const NewCompetition()));
   } else if (page == Pages.newTeam) {
     Navigator.push(
         context, MaterialPageRoute(builder: (context) => const NewTeam()));
@@ -21,4 +24,4 @@ void navigateTo(BuildContext context, Pages page, {Match? match}) {
   }
 }
 
-enum Pages { home, teams, newTeam, player, newPlayer, newMatch, createNewMatch }
+enum Pages { home, teams, newTeam, player, newPlayer, newMatch, createNewMatch, newLeague }
