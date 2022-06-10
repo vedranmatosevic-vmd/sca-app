@@ -1,8 +1,9 @@
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
-import 'package:sca_app/common/selected_competition.dart';
+import 'package:sca_app/common/loaded_data.dart';
 import 'package:sca_app/common/style.dart';
 import 'package:sca_app/widget/input_text_form_field.dart';
+import 'package:sca_app/widget/styled_layout.dart';
 
 class NewTeam extends StatefulWidget {
   const NewTeam({Key? key}) : super(key: key);
@@ -21,44 +22,34 @@ class _NewTeamState extends State<NewTeam> {
 
   @override
   Widget build(BuildContext context) {
-    DatabaseReference _testRef = FirebaseDatabase.instance.ref().child('users/vematosevic/competitions/$selectedLeague');
+    DatabaseReference databaseRef = FirebaseDatabase.instance.ref().child('users/vematosevic/competitions/$selectedLeague');
 
-    return Scaffold(
-      resizeToAvoidBottomInset: false,
-      backgroundColor: Colors.white,
-      appBar: AppBar(
-        title: const Text("Add a new team"),
-        leading: Builder(
-          builder: (BuildContext context) {
-            return IconButton(
-              onPressed: () {
-                Navigator.pop(context);
-              },
-              icon: const Icon(
-                Icons.arrow_back,
-              ),
-            );
-          },
+    void _saveNewTeam() async {
+      await databaseRef.child(_nameTEC.text).set({
+        "name": _nameTEC.text,
+        "shortName": _shortNameTEC.text,
+        "email": _emailTEC.text,
+        "contactPerson": _contactPersonTEC.text,
+        "phone": _phoneTEC.text
+      });
+    }
+
+    return StyledLayout(
+      appBarTitle: "Add a new team",
+      actions: <Widget>[
+        const SizedBox(
+          width: 10,
         ),
-        actions: <Widget>[
-          const SizedBox(
-            width: 10,
-          ),
-          GestureDetector(
+        GestureDetector(
             onTap: () {
-              _testRef.child(_nameTEC.text).child('name').set(_nameTEC.text);
-              _testRef.child(_nameTEC.text).child('shortName').set(_shortNameTEC.text);
-              _testRef.child(_nameTEC.text).child('email').set(_emailTEC.text);
-              _testRef.child(_nameTEC.text).child('contactPerson').set(_contactPersonTEC.text);
-              _testRef.child(_nameTEC.text).child('phone').set(_phoneTEC.text);
+              _saveNewTeam();
             },
-              child: const Icon(Icons.save)
-          ),
-          const SizedBox(
-            width: 10,
-          )
-        ],
-      ),
+            child: const Icon(Icons.save)
+        ),
+        const SizedBox(
+          width: 10,
+        )
+      ],
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -77,6 +68,57 @@ class _NewTeamState extends State<NewTeam> {
         ],
       ),
     );
+
+    // return Scaffold(
+    //   resizeToAvoidBottomInset: false,
+    //   backgroundColor: Colors.white,
+    //   appBar: AppBar(
+    //     title: const Text("Add a new team"),
+    //     leading: Builder(
+    //       builder: (BuildContext context) {
+    //         return IconButton(
+    //           onPressed: () {
+    //             Navigator.pop(context);
+    //           },
+    //           icon: const Icon(
+    //             Icons.arrow_back,
+    //           ),
+    //         );
+    //       },
+    //     ),
+    //     actions: <Widget>[
+    //       const SizedBox(
+    //         width: 10,
+    //       ),
+    //       GestureDetector(
+    //         onTap: () {
+    //           _saveNewTeam();
+    //         },
+    //           child: const Icon(Icons.save)
+    //       ),
+    //       const SizedBox(
+    //         width: 10,
+    //       )
+    //     ],
+    //   ),
+    //   body: Column(
+    //     crossAxisAlignment: CrossAxisAlignment.start,
+    //     children: [
+    //       // New team header
+    //       _newTeamHeader(),
+    //       // Team name TextFormField
+    //       InputTextFormField(controller: _nameTEC, value: 'Team name'),
+    //       // Short team name
+    //       InputTextFormField(controller: _shortNameTEC, value: 'Short team name'),
+    //       // Team email
+    //       InputTextFormField(controller: _emailTEC, value: 'Email'),
+    //       // Contact person
+    //       InputTextFormField(controller: _contactPersonTEC, value: 'Contact person'),
+    //       // Phone number
+    //       InputTextFormField(controller: _phoneTEC, value: 'Phone number', isPhoneNumber: true),
+    //     ],
+    //   ),
+    // );
   }
 }
 

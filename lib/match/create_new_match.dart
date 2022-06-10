@@ -1,10 +1,11 @@
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:sca_app/common/loaded_data.dart';
 import 'package:sca_app/common/style.dart';
 import 'package:sca_app/models/match.dart';
 import 'package:sca_app/router/router.dart';
-
-import 'new_match.dart';
+import 'package:sca_app/widget/styled_layout.dart';
 
 late Match newMatch;
 
@@ -35,37 +36,21 @@ class _CreateNewMatchState extends State<CreateNewMatch> {
   Widget build(BuildContext context) {
     newMatch = Match.emptyMatch();
 
-    return Scaffold(
+    return StyledLayout(
+      appBarTitle: "Create new match",
       backgroundColor: CustomColors.greyBack,
-      appBar: AppBar(
-        backgroundColor: Colors.blue,
-        foregroundColor: Colors.white,
-        title: const Text("Create new match"),
-        leading: Builder(
-          builder: (BuildContext context) {
-            return IconButton(
-              onPressed: () {
-                Navigator.pop(context);
-              },
-              icon: const Icon(
-                Icons.arrow_back,
-              ),
-            );
+      actions: <Widget>[
+        const SizedBox(width: 10,),
+        GestureDetector(
+          onTap: () {
+            navigateTo(context, Pages.newMatch, match: newMatch);
           },
-        ),
-        actions: <Widget>[
-          const SizedBox(width: 10,),
-          GestureDetector(
-            onTap: () {
-              navigateTo(context, Pages.newMatch, match: newMatch);
-            },
-            child: const Icon(
-                Icons.save
-            ),
+          child: const Icon(
+              Icons.save
           ),
-          const SizedBox(width: 10,)
-        ],
-      ),
+        ),
+        const SizedBox(width: 10,)
+      ],
       body: Column(
         children: <Widget>[
           Container(
@@ -75,8 +60,8 @@ class _CreateNewMatchState extends State<CreateNewMatch> {
                 Text(
                   'Infromacije',
                   style: TextStyle(
-                    color: CustomColors.textGreyDark,
-                    fontSize: 16
+                      color: CustomColors.textGreyDark,
+                      fontSize: 16
                   ),
                 ),
               ],
@@ -84,12 +69,12 @@ class _CreateNewMatchState extends State<CreateNewMatch> {
           ),
           Container(
             decoration: const BoxDecoration(
-              color: Colors.white
+                color: Colors.white
             ),
             child: Column(
               children: <Widget>[
-                _simpleDialogOption('Home', teams, Type.home),
-                _simpleDialogOption('Away', teams, Type.away),
+                _simpleDialogOption('Home', teamsByCompetitions, Type.home),
+                _simpleDialogOption('Away', teamsByCompetitions, Type.away),
                 // todo Vedran - homeTeam has not init
 
                 DateTimeRow(selectDate: _selectDate,
@@ -104,7 +89,7 @@ class _CreateNewMatchState extends State<CreateNewMatch> {
           ),
 
         ],
-      )
+      ),
     );
   }
 
@@ -323,10 +308,13 @@ class _DropDownItemState extends State<DropDownItem> {
       selectedValue = widget.items[0];
     }
     _setDropDownValue(widget.items[0]);
+
+    rebuildAllChildren(context);
   }
 
   @override
   Widget build(BuildContext context) {
+
     return DropdownButton(
         underline: Container(height: 1, color: CustomColors.textGreyLight,),
         value: selectedValue,
@@ -354,5 +342,13 @@ class _DropDownItemState extends State<DropDownItem> {
     } else if (widget.type == Type.duration) {
       newMatch.duration = int.parse(value);
     }
+  }
+
+  void rebuildAllChildren(BuildContext context) {
+    void rebuild(Element el) {
+      el.markNeedsBuild();
+      el.visitChildren(rebuild);
+    }
+    (context as Element).visitChildren(rebuild);
   }
 }

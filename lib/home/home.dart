@@ -1,6 +1,6 @@
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
-import 'package:sca_app/common/selected_competition.dart';
+import 'package:sca_app/common/loaded_data.dart';
 import 'package:sca_app/common/style.dart';
 import 'package:sca_app/match/matches.dart';
 import 'package:sca_app/widget/header_home_screen.dart';
@@ -16,33 +16,13 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   late String selectedValue;
 
-  String name = "";
-  String lastname = "";
-
-  void setValues() {
-    DatabaseReference databaseRef =
-    FirebaseDatabase.instance.ref().child('users/vematosevic');
-
-    Stream<DatabaseEvent> nameStream = databaseRef.child('name').onValue;
-    Stream<DatabaseEvent> lastNameStream = databaseRef.child('lastname').onValue;
-
-    nameStream.listen((DatabaseEvent event) {
-      name = event.snapshot.value.toString();
-    });
-
-    lastNameStream.listen((DatabaseEvent event) {
-      lastname = event.snapshot.value.toString();
-    });
-
-  }
-
   @override
   void initState() {
     super.initState();
-    selectedValue = competitions[0];
-    selectedLeague = competitions[0];
-
-    setValues();
+    if (competitionsByUser.isNotEmpty) {
+      selectedValue = competitionsByUser.first;
+      selectedLeague = competitionsByUser.first;
+    }
   }
 
   @override
@@ -72,7 +52,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   color: Colors.blue,
                 ),
                 child: Text(
-                  '$name $lastname',
+                  username.isNotEmpty ? username : "Username",
                   style: const TextStyle(fontSize: 18, color: Colors.white),
                 ),
               ),
@@ -80,14 +60,14 @@ class _HomeScreenState extends State<HomeScreen> {
                 padding: const EdgeInsets.symmetric(horizontal: 16),
                 decoration:
                     const BoxDecoration(color: CustomColors.primaryBlue),
-                child: Row(
+                child: competitionsByUser.isNotEmpty ? Row(
                   children: <Widget>[
                     DropdownButton<String>(
                       dropdownColor: CustomColors.primaryBlue,
                       iconEnabledColor: Colors.white,
                       underline: Container(),
                       value: selectedValue,
-                      items: competitions.map((String item) {
+                      items: competitionsByUser.map((String item) {
                         return DropdownMenuItem(
                             value: item,
                             child: Text(
@@ -106,7 +86,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       },
                     )
                   ],
-                ),
+                ) : const Text("Create league"),
               ),
               ListTile(
                 leading: const Icon(

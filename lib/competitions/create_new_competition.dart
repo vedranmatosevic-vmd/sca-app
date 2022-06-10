@@ -1,5 +1,6 @@
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
+import 'package:sca_app/common/loaded_data.dart';
 import 'package:sca_app/widget/input_text_form_field.dart';
 import 'package:sca_app/widget/styled_layout.dart';
 
@@ -15,10 +16,10 @@ class NewCompetition extends StatefulWidget {
 class _NewCompetitionState extends State<NewCompetition> {
   final myController = TextEditingController();
 
+  final DatabaseReference _testRef = FirebaseDatabase.instance.ref().child('users/vematosevic/competitions');
+
   @override
   Widget build(BuildContext context) {
-    DatabaseReference _testRef = FirebaseDatabase.instance.ref().child('users/vematosevic/competitions');
-
     return StyledLayout(
       appBarTitle: 'Create new competition',
       actions: [

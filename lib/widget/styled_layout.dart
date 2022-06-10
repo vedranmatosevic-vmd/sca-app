@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-class StyledLayout extends StatelessWidget {
+class StyledLayout extends StatefulWidget {
   const StyledLayout({
     Key? key,
     required this.appBarTitle,
@@ -17,32 +17,41 @@ class StyledLayout extends StatelessWidget {
   final bool willPop;
 
   @override
+  State<StyledLayout> createState() => _StyledLayoutState();
+}
+
+class _StyledLayoutState extends State<StyledLayout> {
+  @override
   Widget build(BuildContext context) {
     return WillPopScope(
-      onWillPop: willPop ? () async => true : () async => false,
+      onWillPop: widget.willPop ? () async => true : () async => false,
       child: Scaffold(
         resizeToAvoidBottomInset: true,
-        backgroundColor: backgroundColor,
-        appBar: AppBar(
-          backgroundColor: Colors.blue,
-          foregroundColor: Colors.white,
-          title: Text(appBarTitle),
-          leading: Builder(
-            builder: (BuildContext context) {
-              return IconButton(
-                onPressed: () {
-                  Navigator.pop(context);
-                },
-                icon: const Icon(
-                  Icons.arrow_back,
-                ),
-              );
-            },
-          ),
-          actions: actions
-        ),
-        body: body,
+        backgroundColor: widget.backgroundColor,
+        appBar: _appBar(widget.appBarTitle, widget.actions),
+        body: widget.body,
       ),
     );
   }
+}
+
+AppBar _appBar(String appBarTitle, List<Widget>? actions) {
+  return AppBar(
+      backgroundColor: Colors.blue,
+      foregroundColor: Colors.white,
+      title: Text(appBarTitle),
+      leading: Builder(
+        builder: (BuildContext context) {
+          return IconButton(
+            onPressed: () {
+              Navigator.pop(context);
+            },
+            icon: const Icon(
+              Icons.arrow_back,
+            ),
+          );
+        },
+      ),
+      actions: actions
+  );
 }
