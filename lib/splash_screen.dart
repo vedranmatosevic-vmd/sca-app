@@ -29,7 +29,6 @@ class _SplashScreenState extends State<SplashScreen> {
       Stream<DatabaseEvent> competitionsStream = databaseRef.child('competitions').onValue;
       Stream<DatabaseEvent> nameStream = databaseRef.child('name').onValue;
       Stream<DatabaseEvent> lastNameStream = databaseRef.child('lastname').onValue;
-      Stream<DatabaseEvent> teamsStream = databaseRef.child(name).onValue;
 
 
       nameStream.listen((DatabaseEvent event) {
@@ -45,13 +44,9 @@ class _SplashScreenState extends State<SplashScreen> {
       competitionsStream.listen((DatabaseEvent event) {
         for (final child in event.snapshot.children) {
           competitionsByUser.add(child.key!);
-          if (child.key == competitionsByUser.first) {
-            for (final teams in child.children) {
-              teamsByCompetitions.add(teams.key!);
-            }
-          }
         }
-        print("teams: ${teamsByCompetitions.length}" );
+        selectedLeague = competitionsByUser.first;
+        getTeamsByCompetitions(selectedLeague);
       });
     });
   }

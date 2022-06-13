@@ -7,7 +7,9 @@ List<String> competitionsByUser = [];
 
 List<String> teamsByCompetitions = [];
 
-void getTeamsByCompetitions(String name) {
+Future<List<String>> getTeamsByCompetitions(String name) async{
+  teamsByCompetitions.clear();
+
   DatabaseReference databaseRef =
   FirebaseDatabase.instance.ref().child('users/vematosevic/competitions');
 
@@ -15,10 +17,11 @@ void getTeamsByCompetitions(String name) {
 
   competitionsStream.listen((DatabaseEvent event) {
     for (final child in event.snapshot.children) {
-      print("child: $child");
       teamsByCompetitions.add(child.key!);
     }
   });
+
+  return teamsByCompetitions;
 }
 
 void updateCompetitionsList() {

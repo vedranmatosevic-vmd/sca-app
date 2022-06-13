@@ -1,4 +1,7 @@
+import 'package:flutter/material.dart';
+
 class Match {
+  late int uuid = UniqueKey().hashCode;
   late String homeTeam;
   late String awayTeam;
   late String date;
@@ -20,4 +23,29 @@ class Match {
     this.homeScore = 0,
     this.awayScore = 0
   });
+
+  Map<String, dynamic> toMap() {
+    return {
+      'id': uuid,
+      'homeTeam': homeTeam,
+      'awayTeam': awayTeam,
+      'date': date,
+      'time': time,
+      'duration': duration,
+      'round': round,
+      'homeScore': homeScore = 0,
+      'awayScore': awayScore = 0,
+    };
+  }
+
+  Match.fromMap(Map<String, dynamic> matchMap)
+      : uuid = matchMap["uuid"],
+        homeTeam = matchMap["homeTeam"],
+        awayTeam = matchMap["awayTeam"],
+        date = matchMap["date"],
+        time = matchMap["time"],
+        duration = matchMap["duration"],
+        round = matchMap["round"],
+        homeScore = matchMap["homeScore"],
+        awayScore = matchMap["awayScore"];
 }

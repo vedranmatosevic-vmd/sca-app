@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:sca_app/common/style.dart';
 import 'package:sca_app/models/match.dart';
+import 'package:sca_app/router/router.dart';
 
 class NewMatch extends StatefulWidget {
   const NewMatch({
@@ -20,13 +21,13 @@ class _NewMatchState extends State<NewMatch> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Create a new match"),
+        title: const Text("Match details"),
         backgroundColor: Colors.blue,
         foregroundColor: Colors.white,
         leading: Builder(
           builder: (BuildContext context) {
             return IconButton(
-              onPressed: () {Navigator.pop(context);},
+              onPressed: () {navigateTo(context, Pages.home);},
               icon: const Icon(
                 Icons.arrow_back,
               ),
@@ -46,15 +47,15 @@ class _NewMatchState extends State<NewMatch> {
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          _newMatchHeader(widget.match.homeTeam, widget.match.awayTeam, widget.match.round)
+          _newMatchHeader(widget.match)
         ],
       ),
     );
   }
 }
 
-/// New team header - upload photo of team
-Container _newMatchHeader(String homeTeam, String awayTeam, int round) {
+/// New team header - upload photo of team on click placeholder
+Container _newMatchHeader(Match match) {
   return Container(
     height: 130,
     padding: const EdgeInsets.symmetric(vertical: 20),
@@ -65,9 +66,9 @@ Container _newMatchHeader(String homeTeam, String awayTeam, int round) {
       crossAxisAlignment: CrossAxisAlignment.center,
       mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
-        const Text(
-          'Jun 3, 2022 at 11:00 - 30 min',
-          style: TextStyle(
+        Text(
+          '${match.date} at ${match.time} - ${match.duration} min',
+          style: const TextStyle(
             color: CustomColors.textGreyLight,
             fontSize: 14
           ),
@@ -78,10 +79,10 @@ Container _newMatchHeader(String homeTeam, String awayTeam, int round) {
             Expanded(
               flex: 4,
               child: Text(
-                homeTeam,
+                match.homeTeam,
                 textAlign: TextAlign.center,
                 style: const TextStyle(
-                  fontSize: 18,
+                  fontSize: 16,
                   color: Colors.white,
                 ),
               ),
@@ -92,7 +93,7 @@ Container _newMatchHeader(String homeTeam, String awayTeam, int round) {
                 '0 - 0',
                 textAlign: TextAlign.center,
                 style: TextStyle(
-                  fontSize: 30,
+                  fontSize: 26,
                   color: Colors.white,
                   fontWeight: FontWeight.bold
                 ),
@@ -101,10 +102,10 @@ Container _newMatchHeader(String homeTeam, String awayTeam, int round) {
             Expanded(
               flex: 4,
               child: Text(
-                awayTeam,
+                match.awayTeam,
                 textAlign: TextAlign.center,
                 style: const TextStyle(
-                  fontSize: 18,
+                  fontSize: 16,
                   color: Colors.white,
                 ),
               ),
@@ -116,7 +117,7 @@ Container _newMatchHeader(String homeTeam, String awayTeam, int round) {
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             Text(
-              'Futsalito, $round' 'st round',
+              'Futsalito, ${match.round}' 'st round',
               style: const TextStyle(
                   color: CustomColors.textGreyLight,
                   fontSize: 14

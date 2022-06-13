@@ -5,9 +5,10 @@ import 'package:sca_app/common/loaded_data.dart';
 import 'package:sca_app/common/style.dart';
 import 'package:sca_app/models/match.dart';
 import 'package:sca_app/router/router.dart';
+import 'package:sca_app/services/database_service.dart';
 import 'package:sca_app/widget/styled_layout.dart';
 
-late Match newMatch;
+Match newMatch = Match.emptyMatch();
 
 class CreateNewMatch extends StatefulWidget {
   const CreateNewMatch({Key? key}) : super(key: key);
@@ -34,60 +35,32 @@ class _CreateNewMatchState extends State<CreateNewMatch> {
 
   @override
   Widget build(BuildContext context) {
-    newMatch = Match.emptyMatch();
 
     return StyledLayout(
       appBarTitle: "Create new match",
       backgroundColor: CustomColors.greyBack,
-      actions: <Widget>[
-        const SizedBox(width: 10,),
-        GestureDetector(
-          onTap: () {
-            navigateTo(context, Pages.newMatch, match: newMatch);
-          },
-          child: const Icon(
-              Icons.save
-          ),
-        ),
-        const SizedBox(width: 10,)
-      ],
+      actions: _actions(context, _dateController, _timeController),
       body: Column(
         children: <Widget>[
-          Container(
-            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-            child: Row(
-              children: const [
-                Text(
-                  'Infromacije',
-                  style: TextStyle(
-                      color: CustomColors.textGreyDark,
-                      fontSize: 16
-                  ),
-                ),
-              ],
-            ),
-          ),
+          _contentTitle(),
           Container(
             decoration: const BoxDecoration(
                 color: Colors.white
             ),
             child: Column(
               children: <Widget>[
-                _simpleDialogOption('Home', teamsByCompetitions, Type.home),
-                _simpleDialogOption('Away', teamsByCompetitions, Type.away),
-                // todo Vedran - homeTeam has not init
-
+                _simpleDialogOption('Home', teamsByCompetitions, FormFieldType.home),
+                _simpleDialogOption('Away', teamsByCompetitions, FormFieldType.away),
                 DateTimeRow(selectDate: _selectDate,
                     selectTime: _selectTime,
                     dateController: _dateController,
                     timeController: _timeController),
                 _simpleDialogOption(
-                    'Duration', duration, Type.duration, inOneLine: true),
-                _simpleDialogOption('Round', rounds, Type.round, inOneLine: true),
+                    'Duration', duration, FormFieldType.duration, inOneLine: true),
+                _simpleDialogOption('Round', rounds, FormFieldType.round, inOneLine: true),
               ],
             ),
           ),
-
         ],
       ),
     );
@@ -128,7 +101,7 @@ class _CreateNewMatchState extends State<CreateNewMatch> {
 Container _simpleDialogOption(
     String label,
     List<String> items,
-    Type type,
+    FormFieldType type,
     {bool inOneLine = false}) {
   return Container(
     padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
@@ -266,19 +239,11 @@ class DateTimeRow extends StatelessWidget {
   }
 }
 
-List<String> teams = [
-  'FŠ Zagi',
-  'MNK Gimka',
-  'Gimka Malešnica',
-  'Gimka Keglić',
-  'Futsal Dinamo'
-];
-
 List<String> rounds = ['1', '2', '3', '4', '5', '6', '7', '8'];
 
 List<String> duration = ['0', '5', '10', '15', '20', '25', '30', '35', '40', '45', '50', '55', '60'];
 
-enum Type {
+enum FormFieldType {
   home,
   away,
   round,
@@ -289,7 +254,7 @@ class DropDownItem extends StatefulWidget {
   const DropDownItem({Key? key, required this.items, required this.type}) : super(key: key);
 
   final List<String> items;
-  final Type type;
+  final FormFieldType type;
 
   @override
   State<DropDownItem> createState() => _DropDownItemState();
@@ -302,12 +267,13 @@ class _DropDownItemState extends State<DropDownItem> {
   void initState() {
     super.initState();
 
-    if (widget.type == Type.duration) {
+    if (widget.type == FormFieldType.duration) {
       selectedValue = widget.items[6];
     } else {
       selectedValue = widget.items[0];
     }
-    _setDropDownValue(widget.items[0]);
+
+    _setDropDownValue(selectedValue);
 
     rebuildAllChildren(context);
   }
@@ -326,20 +292,22 @@ class _DropDownItemState extends State<DropDownItem> {
         }).toList(),
         onChanged: (String? newValue) {
           setState(() {
-            selectedValue = newValue!;
+            selectedValue = newValue!.toString();
             _setDropDownValue(selectedValue);
           });
         });
   }
 
   void _setDropDownValue(String value) {
-    if (widget.type == Type.home) {
+    print("_setDD: $value");
+
+    if (widget.type == FormFieldType.home) {
       newMatch.homeTeam = value;
-    } else if (widget.type == Type.away) {
+    } else if (widget.type == FormFieldType.away) {
       newMatch.awayTeam = value;
-    } else if (widget.type == Type.round) {
+    } else if (widget.type == FormFieldType.round) {
       newMatch.round = int.parse(value);
-    } else if (widget.type == Type.duration) {
+    } else if (widget.type == FormFieldType.duration) {
       newMatch.duration = int.parse(value);
     }
   }
@@ -351,4 +319,43 @@ class _DropDownItemState extends State<DropDownItem> {
     }
     (context as Element).visitChildren(rebuild);
   }
+}
+
+Container _contentTitle() {
+  return Container(
+    padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+    child: Row(
+      children: const [
+        Text(
+          'Infromacije',
+          style: TextStyle(
+              color: CustomColors.textGreyDark,
+              fontSize: 16
+          ),
+        ),
+      ],
+    ),
+  );
+}
+
+List<Widget> _actions(BuildContext context, TextEditingController dateController, TextEditingController timeController) {
+
+  return <Widget>[
+    const SizedBox(width: 10,),
+    GestureDetector(
+      onTap: () async {
+        DatabaseService service = DatabaseService();
+        newMatch.date = dateController.text;
+        newMatch.time = timeController.text;
+
+        await service.addMatch(newMatch);
+
+        navigateTo(context, Pages.newMatch, match: newMatch);
+      },
+      child: const Icon(
+          Icons.save
+      ),
+    ),
+    const SizedBox(width: 10,)
+  ];
 }
