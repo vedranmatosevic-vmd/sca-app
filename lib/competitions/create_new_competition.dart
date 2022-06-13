@@ -27,6 +27,7 @@ class _NewCompetitionState extends State<NewCompetition> {
         GestureDetector(
           onTap: () {
             _testRef.child(myController.text).set("");
+            Navigator.pop(context);
           },
           child: const Icon(
               Icons.save

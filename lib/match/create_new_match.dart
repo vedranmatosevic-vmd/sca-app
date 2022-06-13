@@ -299,7 +299,6 @@ class _DropDownItemState extends State<DropDownItem> {
   }
 
   void _setDropDownValue(String value) {
-    print("_setDD: $value");
 
     if (widget.type == FormFieldType.home) {
       newMatch.homeTeam = value;

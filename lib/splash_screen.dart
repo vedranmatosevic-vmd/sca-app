@@ -42,6 +42,7 @@ class _SplashScreenState extends State<SplashScreen> {
       });
 
       competitionsStream.listen((DatabaseEvent event) {
+        competitionsByUser.clear();
         for (final child in event.snapshot.children) {
           competitionsByUser.add(child.key!);
         }
