@@ -54,7 +54,7 @@ class _SideBarState extends State<SideBar> {
                               fontWeight: FontWeight.w500),
                         ));
                   }).toList(),
-                  onChanged: (String? value) {
+                  onChanged: (String? value) async {
                     setState(() {
                       selectedLeague = value!;
                       getTeamsByCompetitions(selectedLeague);

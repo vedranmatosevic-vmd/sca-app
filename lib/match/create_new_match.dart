@@ -89,8 +89,8 @@ class _CreateNewMatchState extends State<CreateNewMatch> {
     if (picked != null) {
       setState(() {
         selectedTime = picked;
-        _hour = selectedTime.hour.toString();
-        _minute = selectedTime.minute.toString();
+        _hour = selectedTime.hour < 10 ? "0" + selectedTime.hour.toString() : selectedTime.hour.toString();
+        _minute = selectedTime.minute < 10 ? "0" + selectedTime.minute.toString() : selectedTime.minute.toString();
         _time = _hour + ' : ' + _minute;
         _timeController.text = _time;
       });
@@ -344,6 +344,7 @@ List<Widget> _actions(BuildContext context, TextEditingController dateController
     GestureDetector(
       onTap: () async {
         DatabaseService service = DatabaseService();
+        newMatch.uuid = UniqueKey().hashCode;
         newMatch.date = dateController.text;
         newMatch.time = timeController.text;
         newMatch.competition = selectedLeague;

@@ -42,7 +42,7 @@ class _MatchesState extends State<Matches> {
   Widget build(BuildContext context) {
     DatabaseService service = DatabaseService();
     return FutureBuilder(
-      future: service.getMatchesByCompetition(),
+      future: service.getMatchesByCompetition(selectedLeague),
       builder: (context, snapshot) {
         if (snapshot.hasError) {
           if (kDebugMode) {
@@ -53,8 +53,8 @@ class _MatchesState extends State<Matches> {
           return StyledLayout(
             appBarTitle: 'Matches',
             actions: _actions(context),
-            body: _body(context),
-          );;
+            body: _body(context, snapshot.data as List<Match>),
+          );
         } else {
           return const Center(
             child: CircularProgressIndicator(),
@@ -65,19 +65,33 @@ class _MatchesState extends State<Matches> {
   }
 }
 
-_body(BuildContext context) {
-  return ListView(
-    children: <Widget>[
-      _roundTitle(newMatch.round.toString()),
-      _matchCard(newMatch),
-      _matchCard(newMatch2),
-      _matchCard(newMatch),
-      _roundTitle(newMatch.round.toString()),
-      _matchCard(newMatch),
-      _matchCard(newMatch),
-      _matchCard(newMatch)
-    ],
+_body(BuildContext context, List<Match> listOfMatches) {
+  bool newRound = true;
+  return ListView.builder(
+    itemCount: listOfMatches.length,
+    itemBuilder: (BuildContext context, int index) {
+      return _matchCard(listOfMatches.elementAt(index));
+    }
+    // children: <Widget>[
+    //   _matchesByRound(context, listOfMatches)
+    //   // _roundTitle(newMatch.round.toString()),
+    //   // _matchCard(newMatch),
+    //   // _matchCard(newMatch2),
+    //   // _matchCard(newMatch),
+    //   // _roundTitle(newMatch.round.toString()),
+    //   // _matchCard(newMatch),
+    //   // _matchCard(newMatch),
+    //   // _matchCard(newMatch)
+    // ],
   );
+}
+
+_matchesByRound(BuildContext context, List<Match> listOfMatches) {
+  List<Widget> widgets = List.empty(growable: true);
+  for (final match in listOfMatches) {
+    widgets.add(_matchCard(match));
+  }
+  return widgets;
 }
 
 _roundTitle(String s) {
@@ -130,7 +144,7 @@ _circleHours(Match match) {
         color: CustomColors.primaryBlue, shape: BoxShape.circle),
     child: Text(
       match.time,
-      style: const TextStyle(color: Colors.white, fontSize: 12),
+      style: const TextStyle(color: Colors.white, fontSize: 11),
     ),
   );
 }

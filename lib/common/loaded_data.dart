@@ -17,7 +17,7 @@ Future<List<String>> getTeamsByCompetitions(String name) async{
 
   competitionsStream.listen((DatabaseEvent event) {
     for (final child in event.snapshot.children) {
-      teamsByCompetitions.add(child.key!);
+      teamsByCompetitions.add(child.child("shortName").value.toString());
     }
   });
 

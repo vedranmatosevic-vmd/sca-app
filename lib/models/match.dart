@@ -42,14 +42,14 @@ class Match {
   }
 
   Match.fromMap(Map<String, dynamic> matchMap)
-      : uuid = matchMap["uuid"],
+      : uuid = matchMap["id"] as int,
         competition = matchMap["competition"],
-        homeTeam = matchMap["homeTeam"],
-        awayTeam = matchMap["awayTeam"],
-        date = matchMap["date"],
-        time = matchMap["time"],
-        duration = matchMap["duration"],
-        round = matchMap["round"],
-        homeScore = matchMap["homeScore"],
-        awayScore = matchMap["awayScore"];
+        homeTeam = matchMap["homeTeam"] as String,
+        awayTeam = matchMap["awayTeam"] as String,
+        date = matchMap["date"] as String,
+        time = matchMap["time"] as String,
+        duration = matchMap["duration"] as int,
+        round = matchMap["round"] as int,
+        homeScore = matchMap["homeScore"] as int,
+        awayScore = matchMap["awayScore"] as int;
 }
