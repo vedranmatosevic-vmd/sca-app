@@ -1,8 +1,6 @@
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:sca_app/common/loaded_data.dart';
-import 'package:sca_app/common/style.dart';
-import 'package:sca_app/match/matches.dart';
 import 'package:sca_app/widget/header_home_screen.dart';
 import 'package:sca_app/widget/menu_home_screen.dart';
 import 'package:sca_app/widget/sidebar.dart';
@@ -16,11 +14,18 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  String title = selectedLeague;
+
+  @override
+  void setState(VoidCallback fn) {
+    title = selectedLeague;
+    super.setState(fn);
+  }
 
   @override
   Widget build(BuildContext context) {
     return StyledLayout(
-      appBarTitle: "Home",
+      appBarTitle: title,
       drawer: const SideBar(),
       body: Column(
         children: const <Widget>[

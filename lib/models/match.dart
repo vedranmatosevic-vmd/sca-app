@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 class Match {
   late int uuid = UniqueKey().hashCode;
+  late String competition;
   late String homeTeam;
   late String awayTeam;
   late String date;
@@ -14,6 +15,7 @@ class Match {
   Match.emptyMatch();
 
   Match({
+    required this.competition,
     required this.homeTeam,
     required this.awayTeam,
     required this.date,
@@ -27,6 +29,7 @@ class Match {
   Map<String, dynamic> toMap() {
     return {
       'id': uuid,
+      'competition': competition,
       'homeTeam': homeTeam,
       'awayTeam': awayTeam,
       'date': date,
@@ -40,6 +43,7 @@ class Match {
 
   Match.fromMap(Map<String, dynamic> matchMap)
       : uuid = matchMap["uuid"],
+        competition = matchMap["competition"],
         homeTeam = matchMap["homeTeam"],
         awayTeam = matchMap["awayTeam"],
         date = matchMap["date"],

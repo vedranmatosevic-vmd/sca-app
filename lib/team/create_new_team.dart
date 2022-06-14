@@ -38,7 +38,6 @@ class _NewTeamState extends State<NewTeam> {
               DatabaseService service = DatabaseService();
               newTeam = Team(name: _nameTEC.text, shortName: _shortNameTEC.text, email: _emailTEC.text, contactPerson: _contactPersonTEC.text, phone: _phoneTEC.text);
               service.addTeam(selectedLeague, newTeam);
-              Navigator.pop(context);
             },
             child: const Icon(Icons.save)
         ),

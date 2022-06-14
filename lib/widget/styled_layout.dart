@@ -28,7 +28,7 @@ class _StyledLayoutState extends State<StyledLayout> {
     return WillPopScope(
       onWillPop: widget.willPop ? () async => true : () async => false,
       child: Scaffold(
-        resizeToAvoidBottomInset: true,
+        resizeToAvoidBottomInset: false,
         backgroundColor: widget.backgroundColor,
         appBar: _appBar(widget.appBarTitle, widget.actions, willPop: widget.willPop),
         body: widget.body,

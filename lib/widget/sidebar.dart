@@ -59,7 +59,8 @@ class _SideBarState extends State<SideBar> {
                       selectedLeague = value!;
                       getTeamsByCompetitions(selectedLeague);
                     });
-                    Navigator.pop(context);
+                    navigateTo(context, Pages.home);
+                    // navigateTo(context, Pages.home, title: selectedLeague);
                   },
                 )
               ],

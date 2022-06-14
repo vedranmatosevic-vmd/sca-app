@@ -22,6 +22,7 @@ class _SplashScreenState extends State<SplashScreen> {
   String lastname = "";
 
   void getData() async {
+    int screenCounter = 0;
     setState(() {
       DatabaseReference databaseRef =
       FirebaseDatabase.instance.ref().child('users/vematosevic');
@@ -46,8 +47,9 @@ class _SplashScreenState extends State<SplashScreen> {
         for (final child in event.snapshot.children) {
           competitionsByUser.add(child.key!);
         }
-        selectedLeague = competitionsByUser.first;
+        if (screenCounter == 0) selectedLeague = competitionsByUser.first;
         getTeamsByCompetitions(selectedLeague);
+        screenCounter++;
       });
     });
   }

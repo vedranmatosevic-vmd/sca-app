@@ -7,7 +7,23 @@ class DatabaseService {
   final DatabaseReference _ref = FirebaseDatabase.instance.ref();
 
   addMatch(Match matchData) async {
-    await _ref.child("users/vematosevic/matches").set(matchData.toMap());
+    await _ref.child("users/vematosevic/matches/${matchData.uuid}").set(matchData.toMap());
+  }
+  
+  Future<List<Match>> getMatchesByCompetition() async {
+    List<Match> matches = [];
+    print("get: ${_ref.child("users/vematosevic/matches").get()}");
+    // TODO VEDRAN
+    // Stream<DatabaseEvent> matchesStream = _ref.child("users/vematosevic/matches").onValue;
+    // matchesStream.listen((DatabaseEvent event) {
+    //   for (final child in event.snapshot.children) {
+    //     if (child.child("competition").value.toString() == competition) {
+    //       print("for petlja: child: ${child.value}");
+    //       matches.add(jsonEncode(child.value) as Match);
+    //     }
+    //   }
+    // });
+    return matches;
   }
   
   addTeam(String competition, Team team) async {

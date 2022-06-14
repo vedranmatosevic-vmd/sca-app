@@ -8,7 +8,7 @@ import 'package:sca_app/match/new_match.dart';
 import 'package:sca_app/models/match.dart';
 import 'package:sca_app/team/create_new_team.dart';
 
-void navigateTo(BuildContext context, Pages page, {Match? match}) {
+void navigateTo(BuildContext context, Pages page, {Match? match, String? title}) {
   if (page == Pages.newMatch) {
     Navigator.push(
         context, MaterialPageRoute(builder: (context) => NewMatch(match: match!))

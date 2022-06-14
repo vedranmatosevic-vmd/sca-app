@@ -346,6 +346,7 @@ List<Widget> _actions(BuildContext context, TextEditingController dateController
         DatabaseService service = DatabaseService();
         newMatch.date = dateController.text;
         newMatch.time = timeController.text;
+        newMatch.competition = selectedLeague;
 
         await service.addMatch(newMatch);
 

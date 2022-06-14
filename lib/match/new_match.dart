@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:sca_app/common/loaded_data.dart';
 import 'package:sca_app/common/style.dart';
 import 'package:sca_app/models/match.dart';
 import 'package:sca_app/router/router.dart';
@@ -27,6 +28,7 @@ class _NewMatchState extends State<NewMatch> {
         leading: Builder(
           builder: (BuildContext context) {
             return IconButton(
+              // onPressed: () {navigateTo(context, Pages.home, title: selectedLeague);},
               onPressed: () {navigateTo(context, Pages.home);},
               icon: const Icon(
                 Icons.arrow_back,

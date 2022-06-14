@@ -3,6 +3,7 @@ import 'dart:developer';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:sca_app/common/loaded_data.dart';
 import 'package:sca_app/common/style.dart';
 import 'package:sca_app/home/home.dart';
 import 'package:shared_preferences/shared_preferences.dart';
