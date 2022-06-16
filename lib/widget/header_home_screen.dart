@@ -14,7 +14,7 @@ class _HeaderCardHomeScreenState extends State<HeaderCardHomeScreen> {
     return Container(
       height: 200,
       decoration: const BoxDecoration(
-        color: CustomColors.primaryBlue,
+        color: CustomColors.grey,
       ),
       child: const Center(
         child: Icon(

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:sca_app/common/style.dart';
 import 'package:sca_app/router/router.dart';
-import 'package:sca_app/widget/button_content_home.dart';
+import 'package:sca_app/widget/squared_button.dart';
 
 class MenuCardHomeScreen extends StatelessWidget {
   const MenuCardHomeScreen({Key? key}) : super(key: key);
@@ -24,7 +25,7 @@ class MenuCardHomeScreen extends StatelessWidget {
                   maxLines: 1,
                   textAlign: TextAlign.start,
                   style: TextStyle(
-                      color: Colors.black,
+                      color: CustomColors.black,
                       fontSize: 18,
                       fontWeight: FontWeight.bold),
                 ),
@@ -35,17 +36,17 @@ class MenuCardHomeScreen extends StatelessWidget {
             mainAxisSize: MainAxisSize.max,
             mainAxisAlignment: MainAxisAlignment.center,
             children: const <Widget>[
-              HomeContentButton(
+              SquaredButton(
                 value: 'Add Team',
                 icon: Icons.group,
                 page: Pages.newTeam,
               ),
-              HomeContentButton(
+              SquaredButton(
                 value: 'Add League',
                 icon: Icons.person,
                 page: Pages.newLeague,
               ),
-              HomeContentButton(
+              SquaredButton(
                 value: 'Add Match',
                 icon: Icons.sports_soccer,
                 page: Pages.createNewMatch,

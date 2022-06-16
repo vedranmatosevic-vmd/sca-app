@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:sca_app/common/style.dart';
 
 class StyledLayout extends StatefulWidget {
   const StyledLayout({
@@ -40,7 +41,7 @@ class _StyledLayoutState extends State<StyledLayout> {
 
 AppBar _appBar(String appBarTitle, List<Widget>? actions, {bool? willPop = true}) {
   return AppBar(
-      backgroundColor: Colors.blue,
+      backgroundColor: CustomColors.black,
       foregroundColor: Colors.white,
       title: Text(appBarTitle),
       leading: willPop! ? Builder(

@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:sca_app/common/style.dart';
 import 'package:sca_app/router/router.dart';
 
-class HomeContentButton extends StatelessWidget {
-  const HomeContentButton({Key? key, required this.value, required this.icon, required this.page}) : super(key: key);
+class SquaredButton extends StatelessWidget {
+  const SquaredButton({Key? key, required this.value, required this.icon, required this.page}) : super(key: key);
 
   final String value;
   final IconData? icon;
@@ -40,11 +40,11 @@ class HomeContentButton extends StatelessWidget {
                   Icon(
                     icon,
                     size: 34,
-                    color: CustomColors.buttonGrey,
+                    color: CustomColors.black,
                   ),
                   Text(
                       value,
-                      style: const TextStyle(color: CustomColors.buttonGrey, fontSize: 14, fontWeight: FontWeight.bold,),
+                      style: const TextStyle(color: CustomColors.black, fontSize: 14, fontWeight: FontWeight.bold,),
                     ),
                 ],
               ),

@@ -1,4 +1,3 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:sca_app/common/loaded_data.dart';
 import 'package:sca_app/common/style.dart';
@@ -7,28 +6,6 @@ import 'package:sca_app/widget/styled_layout.dart';
 import 'package:sca_app/models/match.dart';
 
 import '../services/database_service.dart';
-
-Match newMatch = Match(
-    competition: selectedLeague,
-    homeTeam: 'FŠ Zagi',
-    awayTeam: 'Gimka Malešnica',
-    date: '16.6.2022',
-    time: '11:20',
-    duration: 30,
-    round: 1,
-    homeScore: 2,
-    awayScore: 1);
-
-Match newMatch2 = Match(
-    competition: selectedLeague,
-    homeTeam: 'OŠ Savski Gaj',
-    awayTeam: 'Gimka Keglić',
-    date: '16.6.2022',
-    time: '11:55',
-    duration: 30,
-    round: 1,
-    homeScore: 5,
-    awayScore: 2);
 
 class Matches extends StatefulWidget {
   const Matches({Key? key}) : super(key: key);
@@ -41,55 +18,48 @@ class _MatchesState extends State<Matches> {
   @override
   Widget build(BuildContext context) {
     DatabaseService service = DatabaseService();
-    return FutureBuilder(
-      future: service.getMatchesByCompetition(selectedLeague),
-      builder: (context, snapshot) {
-        if (snapshot.hasError) {
-          if (kDebugMode) {
-            print('You have an error! ${snapshot.error.toString()}');
-          }
-          return const Text('Something went wrong');
-        } else if (snapshot.hasData) {
-          return StyledLayout(
-            appBarTitle: 'Matches',
-            actions: _actions(context),
-            body: _body(context, snapshot.data as List<Match>),
-          );
-        } else {
-          return const Center(
-            child: CircularProgressIndicator(),
-          );
-        }
-      },
+    return StyledLayout(
+      appBarTitle: 'Matches',
+      actions: _actions(context),
+      body: FutureBuilder<List<Match>>(
+        future: service.getMatchesByCompetition(selectedLeague),
+          builder: (BuildContext context, AsyncSnapshot snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return const Center(
+                child: CircularProgressIndicator(
+                  color: CustomColors.red,
+                ),
+              );
+            }
+            if (snapshot.hasData) {
+              return _body(context, snapshot.data!);
+            }
+            return const Text('Something went wrong');
+          }),
     );
   }
 }
 
 _body(BuildContext context, List<Match> listOfMatches) {
-  bool newRound = true;
-  return ListView.builder(
-    itemCount: listOfMatches.length,
-    itemBuilder: (BuildContext context, int index) {
-      return _matchCard(listOfMatches.elementAt(index));
-    }
-    // children: <Widget>[
-    //   _matchesByRound(context, listOfMatches)
-    //   // _roundTitle(newMatch.round.toString()),
-    //   // _matchCard(newMatch),
-    //   // _matchCard(newMatch2),
-    //   // _matchCard(newMatch),
-    //   // _roundTitle(newMatch.round.toString()),
-    //   // _matchCard(newMatch),
-    //   // _matchCard(newMatch),
-    //   // _matchCard(newMatch)
-    // ],
+  return ListView(
+    children: _matchesByRound(context, listOfMatches),
   );
 }
 
 _matchesByRound(BuildContext context, List<Match> listOfMatches) {
-  List<Widget> widgets = List.empty(growable: true);
+  List<Widget> widgets = [];
+  int currentRounds = 1;
+  bool newRound = true;
   for (final match in listOfMatches) {
-    widgets.add(_matchCard(match));
+    if (match.round > currentRounds) {
+      newRound = true;
+      currentRounds++;
+    }
+    if (newRound) {
+      widgets.add(_roundTitle(currentRounds.toString()));
+      newRound = false;
+    }
+    widgets.add(_matchCard(context, match));
   }
   return widgets;
 }
@@ -106,31 +76,36 @@ _roundTitle(String s) {
     height: 50,
     alignment: Alignment.centerLeft,
     decoration: const BoxDecoration(
-      color: CustomColors.greyBack,
+      color: CustomColors.grey,
     ),
     child: Expanded(
       child: Text(
         '$round round',
-        style: const TextStyle(color: CustomColors.textGreyDark, fontSize: 16),
+        style: const TextStyle(color: CustomColors.red, fontSize: 16),
       ),
     ),
   );
 }
 
-_matchCard(Match match) {
-  return Container(
-    padding: const EdgeInsets.symmetric(horizontal: 20),
-    height: 60,
-    decoration: const BoxDecoration(
-        border: Border(
-      top: BorderSide(width: 0.3, color: CustomColors.textGreyLight),
-      bottom: BorderSide(width: 1.0, color: CustomColors.textGreyLight),
-    )),
-    child: Row(
-      children: <Widget>[
-        _circleHours(match),
-        _scoreRow(match),
-      ],
+_matchCard(BuildContext context, Match match) {
+  return GestureDetector(
+    onTap: () {
+      navigateTo(context, Pages.newMatch, match: match);
+    },
+    child: Container(
+      padding: const EdgeInsets.symmetric(horizontal: 20),
+      height: 60,
+      decoration: const BoxDecoration(
+          border: Border(
+        top: BorderSide(width: 0.3, color: CustomColors.black),
+        bottom: BorderSide(width: 1.0, color: CustomColors.black),
+      )),
+      child: Row(
+        children: <Widget>[
+          _circleHours(match),
+          _scoreRow(match),
+        ],
+      ),
     ),
   );
 }
@@ -141,10 +116,10 @@ _circleHours(Match match) {
     height: 40,
     alignment: Alignment.center,
     decoration: const BoxDecoration(
-        color: CustomColors.primaryBlue, shape: BoxShape.circle),
+        color: CustomColors.grey, shape: BoxShape.circle),
     child: Text(
       match.time,
-      style: const TextStyle(color: Colors.white, fontSize: 11),
+      style: const TextStyle(color: Colors.black, fontSize: 11),
     ),
   );
 }
@@ -159,11 +134,11 @@ _scoreRow(Match match) {
         Text(
           '${match.homeTeam} ${match.homeScore} - ${match.awayScore} ${match.awayTeam}',
           style: const TextStyle(
-              color: CustomColors.textGreyDark, fontWeight: FontWeight.w500),
+              color: CustomColors.black, fontWeight: FontWeight.w500),
         ),
         Text(match.date,
             style: const TextStyle(
-                color: CustomColors.textGreyLight,
+                color: CustomColors.black,
                 fontWeight: FontWeight.w400,
                 fontSize: 12))
       ],

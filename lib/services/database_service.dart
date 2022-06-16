@@ -12,12 +12,16 @@ class DatabaseService {
     await _ref.child("users/vematosevic/matches/${matchData.uuid}").set(matchData.toMap());
   }
   
+  updateMatch(Match match) async {
+    await _ref.child("users/vematosevic/matches/${match.uuid}").update(match.toMap());
+  }
+  
   Future<List<Match>> getMatchesByCompetition(String competition) async {
     List<Match> matches = List.empty(growable: true);
     Stream<DatabaseEvent> matchesStream = _ref.child("users/vematosevic/matches").orderByChild("round").onValue;
     matchesStream.listen((DatabaseEvent event) {
       for (final child in event.snapshot.children) {
-        if (child.child("competition").value.toString() == competition) {
+        if (child.child("competition").value.toString() == competition)  {
           try{
             var json = jsonDecode(jsonEncode(child.value)) as Map<String, dynamic>;
             matches.add(Match.fromMap(json));
@@ -42,7 +46,9 @@ class DatabaseService {
         }
       }
     });
-    return matches;
+    return Future.delayed(const Duration(seconds: 2), () {
+      return matches;
+    });
   }
   
   addTeam(String competition, Team team) async {

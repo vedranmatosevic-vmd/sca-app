@@ -38,7 +38,7 @@ class _CreateNewMatchState extends State<CreateNewMatch> {
 
     return StyledLayout(
       appBarTitle: "Create new match",
-      backgroundColor: CustomColors.greyBack,
+      backgroundColor: CustomColors.grey,
       actions: _actions(context, _dateController, _timeController),
       body: Column(
         children: <Widget>[
@@ -112,7 +112,7 @@ Container _simpleDialogOption(
             Text(
               '$label ',
               style: const TextStyle(
-                  color: CustomColors.textGreyLight,
+                  color: CustomColors.black,
                   fontSize: 14
               ),
             ),
@@ -132,7 +132,7 @@ Container _simpleDialogOption(
                 Text(
                   '$label ',
                   style: const TextStyle(
-                      color: CustomColors.textGreyLight,
+                      color: CustomColors.black,
                       fontSize: 14
                   ),
                 ),
@@ -182,7 +182,7 @@ class DateTimeRow extends StatelessWidget {
               Text(
                 'Date',
                 style: TextStyle(
-                    color: CustomColors.textGreyLight,
+                    color: CustomColors.black,
                     fontSize: 14
                 ),
               ),
@@ -198,6 +198,11 @@ class DateTimeRow extends StatelessWidget {
                       selectDate();
                     },
                     child: TextFormField(
+                      decoration: const InputDecoration(
+                        disabledBorder: UnderlineInputBorder(
+                            borderSide: BorderSide(color: CustomColors.black)
+                        ),
+                      ),
                       style: const TextStyle(
                           fontSize: 16
                       ),
@@ -217,7 +222,11 @@ class DateTimeRow extends StatelessWidget {
                       selectTime();
                     },
                     child: TextFormField(
-
+                      decoration: const InputDecoration(
+                        disabledBorder: UnderlineInputBorder(
+                            borderSide: BorderSide(color: CustomColors.black)
+                        ),
+                      ),
                       textAlign: TextAlign.center,
                       style: const TextStyle(
                           fontSize: 16
@@ -282,7 +291,7 @@ class _DropDownItemState extends State<DropDownItem> {
   Widget build(BuildContext context) {
 
     return DropdownButton(
-        underline: Container(height: 1, color: CustomColors.textGreyLight,),
+        underline: Container(height: 1, color: CustomColors.black,),
         value: selectedValue,
         items: widget.items.map((String items) {
           return DropdownMenuItem(
@@ -326,9 +335,9 @@ Container _contentTitle() {
     child: Row(
       children: const [
         Text(
-          'Infromacije',
+          'Informacije',
           style: TextStyle(
-              color: CustomColors.textGreyDark,
+              color: CustomColors.black,
               fontSize: 16
           ),
         ),

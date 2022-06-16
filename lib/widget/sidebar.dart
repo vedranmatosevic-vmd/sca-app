@@ -25,7 +25,7 @@ class _SideBarState extends State<SideBar> {
           DrawerHeader(
             margin: EdgeInsets.zero,
             decoration: const BoxDecoration(
-              color: Colors.blue,
+              color: CustomColors.black,
             ),
             child: Text(
               username.isNotEmpty ? username : "Username",
@@ -35,12 +35,12 @@ class _SideBarState extends State<SideBar> {
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 16),
             decoration:
-            const BoxDecoration(color: CustomColors.primaryBlue),
+            const BoxDecoration(color: CustomColors.grey),
             child: competitionsByUser.isNotEmpty ? Row(
               children: <Widget>[
                 DropdownButton<String>(
-                  dropdownColor: CustomColors.primaryBlue,
-                  iconEnabledColor: Colors.white,
+                  dropdownColor: CustomColors.grey,
+                  iconEnabledColor: Colors.grey,
                   underline: Container(),
                   value: selectedLeague,
                   items: competitionsByUser.map((String item) {
@@ -49,7 +49,7 @@ class _SideBarState extends State<SideBar> {
                         child: Text(
                           item,
                           style: const TextStyle(
-                              color: Colors.white,
+                              color: Colors.black,
                               fontSize: 17,
                               fontWeight: FontWeight.w500),
                         ));
