@@ -27,7 +27,7 @@ class _MatchesState extends State<Matches> {
             if (snapshot.connectionState == ConnectionState.waiting) {
               return const Center(
                 child: CircularProgressIndicator(
-                  color: CustomColors.red,
+                  color: Style.red,
                 ),
               );
             }
@@ -76,12 +76,12 @@ _roundTitle(String s) {
     height: 50,
     alignment: Alignment.centerLeft,
     decoration: const BoxDecoration(
-      color: CustomColors.grey,
+      color: Style.grey,
     ),
     child: Expanded(
       child: Text(
         '$round round',
-        style: const TextStyle(color: CustomColors.red, fontSize: 16),
+        style: const TextStyle(color: Style.red, fontSize: 16),
       ),
     ),
   );
@@ -97,34 +97,34 @@ _matchCard(BuildContext context, Match match) {
       height: 60,
       decoration: const BoxDecoration(
           border: Border(
-        top: BorderSide(width: 0.3, color: CustomColors.black),
-        bottom: BorderSide(width: 1.0, color: CustomColors.black),
+        top: BorderSide(width: 0.3, color: Style.black),
+        bottom: BorderSide(width: 1.0, color: Style.black),
       )),
       child: Row(
         children: <Widget>[
-          _circleHours(match),
-          _scoreRow(match),
+          _circleHours(context,match),
+          _scoreRow(context, match),
         ],
       ),
     ),
   );
 }
 
-_circleHours(Match match) {
+_circleHours(BuildContext context, Match match) {
   return Container(
     width: 40,
     height: 40,
     alignment: Alignment.center,
     decoration: const BoxDecoration(
-        color: CustomColors.grey, shape: BoxShape.circle),
+        color: Style.grey, shape: BoxShape.circle),
     child: Text(
       match.time,
-      style: const TextStyle(color: Colors.black, fontSize: 11),
+      style: Style.getTextStyle(context, StyleText.smallTextRegular),
     ),
   );
 }
 
-_scoreRow(Match match) {
+_scoreRow(BuildContext context, Match match) {
   return Container(
     padding: const EdgeInsets.only(left: 14.0),
     child: Column(
@@ -133,14 +133,11 @@ _scoreRow(Match match) {
       children: [
         Text(
           '${match.homeTeam} ${match.homeScore} - ${match.awayScore} ${match.awayTeam}',
-          style: const TextStyle(
-              color: CustomColors.black, fontWeight: FontWeight.w500),
+          style: Style.getTextStyle(context, StyleText.textBold),
         ),
         Text(match.date,
-            style: const TextStyle(
-                color: CustomColors.black,
-                fontWeight: FontWeight.w400,
-                fontSize: 12))
+            style: Style.getTextStyle(context, StyleText.smallTextRegular),
+        )
       ],
     ),
   );

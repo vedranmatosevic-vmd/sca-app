@@ -25,7 +25,7 @@ class _SideBarState extends State<SideBar> {
           DrawerHeader(
             margin: EdgeInsets.zero,
             decoration: const BoxDecoration(
-              color: CustomColors.black,
+              color: Style.black,
             ),
             child: Text(
               username.isNotEmpty ? username : "Username",
@@ -35,12 +35,12 @@ class _SideBarState extends State<SideBar> {
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 16),
             decoration:
-            const BoxDecoration(color: CustomColors.grey),
+            const BoxDecoration(color: Style.grey),
             child: competitionsByUser.isNotEmpty ? Row(
               children: <Widget>[
                 DropdownButton<String>(
-                  dropdownColor: CustomColors.grey,
-                  iconEnabledColor: Colors.grey,
+                  dropdownColor: Style.grey,
+                  iconEnabledColor: Style.black,
                   underline: Container(),
                   value: selectedLeague,
                   items: competitionsByUser.map((String item) {
@@ -48,10 +48,7 @@ class _SideBarState extends State<SideBar> {
                         value: item,
                         child: Text(
                           item,
-                          style: const TextStyle(
-                              color: Colors.black,
-                              fontSize: 17,
-                              fontWeight: FontWeight.w500),
+                          style: Style.getTextStyle(context, StyleText.subTitle),
                         ));
                   }).toList(),
                   onChanged: (String? value) async {
@@ -71,10 +68,12 @@ class _SideBarState extends State<SideBar> {
               Icons.group,
               color: Colors.black,
             ),
-            title: const Text('Teams'),
+            title: Text(
+                'Teams',
+              style: Style.getTextStyle(context, StyleText.textRegular),
+            ),
             onTap: () {
-              // Update the state of the app.
-              // ...
+              navigateTo(context, Pages.teams);
             },
           ),
           ListTile(
@@ -82,7 +81,10 @@ class _SideBarState extends State<SideBar> {
               Icons.sports_soccer,
               color: Colors.black,
             ),
-            title: const Text('Matches'),
+            title: Text(
+                'Matches',
+              style: Style.getTextStyle(context, StyleText.textRegular),
+            ),
             onTap: () {
               Navigator.push(context,
                   MaterialPageRoute(builder: (context) => const Matches()));
@@ -93,7 +95,10 @@ class _SideBarState extends State<SideBar> {
               Icons.table_rows_rounded,
               color: Colors.black,
             ),
-            title: const Text('Table'),
+            title: Text(
+                'Table',
+              style: Style.getTextStyle(context, StyleText.textRegular),
+            ),
             onTap: () {
               // Update the state of the app.
               // ...

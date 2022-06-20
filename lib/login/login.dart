@@ -85,7 +85,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       Positioned.fill(
                         child: Container(
                           decoration: const BoxDecoration(
-                            color: CustomColors.white,
+                            color: Style.white,
                           ),
                         ),
                       ),

@@ -19,15 +19,12 @@ class MenuCardHomeScreen extends StatelessWidget {
             child: Row(
               mainAxisSize: MainAxisSize.max,
               crossAxisAlignment: CrossAxisAlignment.center,
-              children: const [
+              children: <Widget>[
                 Text(
                   "Content",
                   maxLines: 1,
                   textAlign: TextAlign.start,
-                  style: TextStyle(
-                      color: CustomColors.black,
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold),
+                  style: Style.getTextStyle(context, StyleText.subTitle)
                 ),
               ],
             ),

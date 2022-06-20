@@ -1,13 +1,16 @@
+import 'package:sca_app/models/player.dart';
+
 class Team {
   late String name;
   late String shortName;
   late String? email;
   late String? contactPerson;
   late String? phone;
+  late List<Player>? players = [];
 
   Team.emptyTeam();
 
-  Team({required this.name, required this.shortName, this.email, this.contactPerson, this.phone});
+  Team({required this.name, required this.shortName, this.email, this.contactPerson, this.phone, this.players});
 
   Map<String, dynamic> toMap() {
     return {
@@ -16,6 +19,7 @@ class Team {
       'email': email,
       'contactPerson': contactPerson,
       'phone': phone,
+      'players': players
     };
   }
 
@@ -24,5 +28,6 @@ class Team {
         shortName = teamMap["shortName"],
         email = teamMap["email"],
         contactPerson = teamMap["contactPerson"],
-        phone = teamMap["phone"];
+        phone = teamMap["phone"],
+        players = teamMap["players"];
 }

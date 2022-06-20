@@ -1,6 +1,5 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:sca_app/common/loaded_data.dart';
 import 'package:sca_app/common/style.dart';
 import 'package:sca_app/models/match.dart';
 import 'package:sca_app/router/router.dart';
@@ -79,7 +78,7 @@ class _MatchDetailHeaderState extends State<MatchDetailHeader> {
       height: 130,
       padding: const EdgeInsets.symmetric(vertical: 20),
       decoration: const BoxDecoration(
-          color: CustomColors.grey
+          color: Style.grey
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
@@ -88,7 +87,7 @@ class _MatchDetailHeaderState extends State<MatchDetailHeader> {
           Text(
             '${widget.match.date} at ${widget.match.time} - ${widget.match.duration} min',
             style: const TextStyle(
-                color: CustomColors.black,
+                color: Style.black,
                 fontSize: 14
             ),
           ),
@@ -102,7 +101,7 @@ class _MatchDetailHeaderState extends State<MatchDetailHeader> {
                   textAlign: TextAlign.center,
                   style: const TextStyle(
                       fontSize: 16,
-                      color: CustomColors.black,
+                      color: Style.black,
                       fontWeight: FontWeight.bold
                   ),
                 ),
@@ -114,7 +113,7 @@ class _MatchDetailHeaderState extends State<MatchDetailHeader> {
                   textAlign: TextAlign.center,
                   style: const TextStyle(
                       fontSize: 26,
-                      color: CustomColors.black,
+                      color: Style.black,
                       fontWeight: FontWeight.bold
                   ),
                 ),
@@ -126,7 +125,7 @@ class _MatchDetailHeaderState extends State<MatchDetailHeader> {
                   textAlign: TextAlign.center,
                   style: const TextStyle(
                       fontSize: 16,
-                      color: CustomColors.black,
+                      color: Style.black,
                       fontWeight: FontWeight.bold
                   ),
                 ),
@@ -140,7 +139,7 @@ class _MatchDetailHeaderState extends State<MatchDetailHeader> {
               Text(
                 'Futsalito, ${widget.match.round}' 'st round',
                 style: const TextStyle(
-                    color: CustomColors.black,
+                    color: Style.black,
                     fontSize: 14
                 ),
               ),

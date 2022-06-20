@@ -70,7 +70,7 @@ class _NewTeamState extends State<NewTeam> {
 Container _newTeamHeader() {
   return Container(
     decoration: const BoxDecoration(
-      color: CustomColors.grey
+      color: Style.grey
     ),
     child: Row(
       mainAxisSize: MainAxisSize.max,
@@ -82,7 +82,7 @@ Container _newTeamHeader() {
           height: 90,
           margin: const EdgeInsets.symmetric(vertical: 20),
           decoration: const BoxDecoration(
-              color: CustomColors.red, shape: BoxShape.circle
+              color: Style.red, shape: BoxShape.circle
           ),
           child: const Center(
             child: Text(

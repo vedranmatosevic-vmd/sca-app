@@ -28,21 +28,6 @@ class DatabaseService {
           } catch(e) {
             print(e);
           }
-          // matches.add(jsonDecode(child.value.toString()));
-          // var match = Match(
-          //     competition: child.child("competition").value.toString(),
-          //     homeTeam: child.child("homeTeam").value.toString(),
-          //     awayTeam: child.child("awayTeam").value.toString(),
-          //     date: child.child("date").value.toString(),
-          //     time: child.child("time").value.toString(),
-          //     duration: int.parse(child.child("duration").value.toString()),
-          //     round: int.parse(child.child("round").value.toString()),
-          //     awayScore: int.parse(child.child("awayScore").value.toString()),
-          //     homeScore: int.parse(child.child("homeScore").value.toString())
-          // );
-          // matches.add(match);
-          // print("Home team: ${match.homeTeam}");
-          // print("Duration: ${match.duration}");
         }
       }
     });
@@ -53,6 +38,24 @@ class DatabaseService {
   
   addTeam(String competition, Team team) async {
     await _ref.child("users/vematosevic/competitions/$competition/${team.name}").set(team.toMap());
+  }
+
+  Future<List<Team>> getTeamsByCompetition(String competition) async {
+    List<Team> team = List.empty(growable: true);
+    Stream<DatabaseEvent> matchesStream = _ref.child("users/vematosevic/competitions/$competition").orderByChild("name").onValue;
+    matchesStream.listen((DatabaseEvent event) {
+      for (final child in event.snapshot.children) {
+        try{
+          var json = jsonDecode(jsonEncode(child.value)) as Map<String, dynamic>;
+          team.add(Team.fromMap(json));
+        } catch(e) {
+          print(e);
+        }
+      }
+    });
+    return Future.delayed(const Duration(seconds: 2), () {
+      return team;
+    });
   }
 
 }

@@ -40,11 +40,11 @@ class SquaredButton extends StatelessWidget {
                   Icon(
                     icon,
                     size: 34,
-                    color: CustomColors.black,
+                    color: Style.black,
                   ),
                   Text(
                       value,
-                      style: const TextStyle(color: CustomColors.black, fontSize: 14, fontWeight: FontWeight.bold,),
+                      style: Style.getTextStyle(context, StyleText.buttonText),
                     ),
                 ],
               ),
