@@ -66,6 +66,13 @@ class Style {
             fontSize: 11,
             color: getColor(context, StyleColor.black)
         );
+      case StyleText.bigTextBold:
+        return TextStyle(
+            fontFamily: "Roboto",
+            fontWeight: FontWeight.w600,
+            fontSize: 24,
+            color: getColor(context, color ?? StyleColor.black)
+        );
     }
   }
 }
@@ -104,7 +111,14 @@ enum StyleText {
   /// **[weight]**: 400
   ///
   /// **[size]**: 11
-  smallTextRegular
+  smallTextRegular,
+
+  /// **[font]**: Roboto
+  ///
+  /// **[weight]**: 600
+  ///
+  /// **[size]**: 24
+  bigTextBold
 }
 
 enum StyleColor {
@@ -112,6 +126,4 @@ enum StyleColor {
   grey,
   red,
   white
-  
-  
 }

@@ -78,7 +78,7 @@ _roundTitle(String s) {
     decoration: const BoxDecoration(
       color: Style.grey,
     ),
-    child: Expanded(
+    child: Flexible(
       child: Text(
         '$round round',
         style: const TextStyle(color: Style.red, fontSize: 16),

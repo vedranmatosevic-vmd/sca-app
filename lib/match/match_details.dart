@@ -34,7 +34,6 @@ class _MatchDetailsState extends State<MatchDetails> {
     super.setState(fn);
   }
 
-  // TODO VEDRAN
   @override
   Widget build(BuildContext context) {
     return StyledLayout(
@@ -69,9 +68,9 @@ class _MatchDetailHeaderState extends State<MatchDetailHeader> {
 
   @override
   void setState(VoidCallback fn) {
-    // TODO: implement setState
     super.setState(fn);
   }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -94,40 +93,52 @@ class _MatchDetailHeaderState extends State<MatchDetailHeader> {
           const SizedBox(height: 10,),
           Row(
             children: <Widget>[
-              Expanded(
+              Flexible(
                 flex: 4,
-                child: Text(
-                  widget.match.homeTeam,
-                  textAlign: TextAlign.center,
-                  style: const TextStyle(
-                      fontSize: 16,
-                      color: Style.black,
-                      fontWeight: FontWeight.bold
-                  ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      widget.match.homeTeam,
+                      style: const TextStyle(
+                          fontSize: 16,
+                          color: Style.black,
+                          fontWeight: FontWeight.bold
+                      ),
+                    ),
+                  ],
                 ),
               ),
-              Expanded(
+              Flexible(
                 flex: 2,
-                child: Text(
-                  '${widget.match.homeScore} - 0',
-                  textAlign: TextAlign.center,
-                  style: const TextStyle(
-                      fontSize: 26,
-                      color: Style.black,
-                      fontWeight: FontWeight.bold
-                  ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      '${widget.match.homeScore} - 0',
+                      style: const TextStyle(
+                          fontSize: 26,
+                          color: Style.black,
+                          fontWeight: FontWeight.bold
+                      ),
+                    ),
+                  ],
                 ),
               ),
-              Expanded(
+              Flexible(
                 flex: 4,
-                child: Text(
-                  widget.match.awayTeam,
-                  textAlign: TextAlign.center,
-                  style: const TextStyle(
-                      fontSize: 16,
-                      color: Style.black,
-                      fontWeight: FontWeight.bold
-                  ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      widget.match.awayTeam,
+                      style: const TextStyle(
+                          fontSize: 16,
+                          color: Style.black,
+                          fontWeight: FontWeight.bold
+                      ),
+                    ),
+                  ],
                 ),
               )
             ],

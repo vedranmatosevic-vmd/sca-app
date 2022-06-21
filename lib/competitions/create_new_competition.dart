@@ -40,7 +40,7 @@ class _NewCompetitionState extends State<NewCompetition> {
           Row(
             mainAxisSize: MainAxisSize.max,
             children: <Widget>[
-              Expanded(
+              Flexible(
                 child: InputTextFormField(
                   controller: myController,
                   isPhoneNumber: false,

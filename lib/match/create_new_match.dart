@@ -191,7 +191,7 @@ class DateTimeRow extends StatelessWidget {
           Row(
             mainAxisSize: MainAxisSize.max,
             children: <Widget>[
-              Expanded(
+              Flexible(
                   flex: 2,
                   child: InkWell(
                     onTap: () {
@@ -215,7 +215,7 @@ class DateTimeRow extends StatelessWidget {
                     ),
                   )
               ),
-              Expanded(
+              Flexible(
                   flex: 1,
                   child: InkWell(
                     onTap: () {
