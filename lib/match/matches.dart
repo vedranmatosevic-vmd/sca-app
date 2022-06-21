@@ -27,7 +27,7 @@ class _MatchesState extends State<Matches> {
             if (snapshot.connectionState == ConnectionState.waiting) {
               return const Center(
                 child: CircularProgressIndicator(
-                  color: Style.red,
+                  color: Style.colorRed,
                 ),
               );
             }
@@ -76,12 +76,12 @@ _roundTitle(String s) {
     height: 50,
     alignment: Alignment.centerLeft,
     decoration: const BoxDecoration(
-      color: Style.grey,
+      color: Style.colorGrey,
     ),
     child: Flexible(
       child: Text(
         '$round round',
-        style: const TextStyle(color: Style.red, fontSize: 16),
+        style: const TextStyle(color: Style.colorRed, fontSize: 16),
       ),
     ),
   );
@@ -97,8 +97,8 @@ _matchCard(BuildContext context, Match match) {
       height: 60,
       decoration: const BoxDecoration(
           border: Border(
-        top: BorderSide(width: 0.3, color: Style.black),
-        bottom: BorderSide(width: 1.0, color: Style.black),
+        top: BorderSide(width: 0.3, color: Style.colorBlack),
+        bottom: BorderSide(width: 1.0, color: Style.colorBlack),
       )),
       child: Row(
         children: <Widget>[
@@ -116,7 +116,7 @@ _circleHours(BuildContext context, Match match) {
     height: 40,
     alignment: Alignment.center,
     decoration: const BoxDecoration(
-        color: Style.grey, shape: BoxShape.circle),
+        color: Style.colorGrey, shape: BoxShape.circle),
     child: Text(
       match.time,
       style: Style.getTextStyle(context, StyleText.smallTextRegular),

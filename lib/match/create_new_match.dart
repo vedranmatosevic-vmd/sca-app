@@ -38,7 +38,7 @@ class _CreateNewMatchState extends State<CreateNewMatch> {
 
     return StyledLayout(
       appBarTitle: "Create new match",
-      backgroundColor: Style.grey,
+      backgroundColor: Style.colorGrey,
       actions: _actions(context, _dateController, _timeController),
       body: Column(
         children: <Widget>[
@@ -112,7 +112,7 @@ Container _simpleDialogOption(
             Text(
               '$label ',
               style: const TextStyle(
-                  color: Style.black,
+                  color: Style.colorBlack,
                   fontSize: 14
               ),
             ),
@@ -132,7 +132,7 @@ Container _simpleDialogOption(
                 Text(
                   '$label ',
                   style: const TextStyle(
-                      color: Style.black,
+                      color: Style.colorBlack,
                       fontSize: 14
                   ),
                 ),
@@ -182,7 +182,7 @@ class DateTimeRow extends StatelessWidget {
               Text(
                 'Date',
                 style: TextStyle(
-                    color: Style.black,
+                    color: Style.colorBlack,
                     fontSize: 14
                 ),
               ),
@@ -200,7 +200,7 @@ class DateTimeRow extends StatelessWidget {
                     child: TextFormField(
                       decoration: const InputDecoration(
                         disabledBorder: UnderlineInputBorder(
-                            borderSide: BorderSide(color: Style.black)
+                            borderSide: BorderSide(color: Style.colorBlack)
                         ),
                       ),
                       style: const TextStyle(
@@ -224,7 +224,7 @@ class DateTimeRow extends StatelessWidget {
                     child: TextFormField(
                       decoration: const InputDecoration(
                         disabledBorder: UnderlineInputBorder(
-                            borderSide: BorderSide(color: Style.black)
+                            borderSide: BorderSide(color: Style.colorBlack)
                         ),
                       ),
                       textAlign: TextAlign.center,
@@ -291,7 +291,7 @@ class _DropDownItemState extends State<DropDownItem> {
   Widget build(BuildContext context) {
 
     return DropdownButton(
-        underline: Container(height: 1, color: Style.black,),
+        underline: Container(height: 1, color: Style.colorBlack,),
         value: selectedValue,
         items: widget.items.map((String items) {
           return DropdownMenuItem(
@@ -337,7 +337,7 @@ Container _contentTitle() {
         Text(
           'Informacije',
           style: TextStyle(
-              color: Style.black,
+              color: Style.colorBlack,
               fontSize: 16
           ),
         ),

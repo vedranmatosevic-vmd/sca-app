@@ -27,7 +27,7 @@ class _TeamsState extends State<Teams> {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const Center(
               child: CircularProgressIndicator(
-                color: Style.red,
+                color: Style.colorRed,
               ),
             );
           }
@@ -74,7 +74,7 @@ _teamRow(BuildContext context, Team team) {
       height: 60,
       decoration: const BoxDecoration(
           border: Border(
-            bottom: BorderSide(width: 1.0, color: Style.black),
+            bottom: BorderSide(width: 1.0, color: Style.colorBlack),
           )),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.start,

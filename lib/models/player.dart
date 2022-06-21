@@ -4,7 +4,7 @@ class Player {
   late int uuid = UniqueKey().hashCode;
   late String name;
   late String lastName;
-  late DateTime dateOfBirth;
+  late String dateOfBirth;
 
   Player.emptyTeam();
 

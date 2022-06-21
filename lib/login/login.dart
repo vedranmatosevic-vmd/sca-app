@@ -59,17 +59,39 @@ class _LoginScreenState extends State<LoginScreen> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
                     TextField(
+                      style: Style.getTextStyle(context, StyleText.formFieldTextNormal),
                       controller: usernameController,
-                      decoration: const InputDecoration(
-                          border: OutlineInputBorder(),
+                      cursorColor: Style.getColor(context, StyleColor.black),
+                      decoration: InputDecoration(
+                          border: OutlineInputBorder(
+                            borderSide: BorderSide(
+                                color: Style.getColor(context, StyleColor.grey)
+                            )
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                              borderSide: BorderSide(
+                                  color: Style.getColor(context, StyleColor.black)
+                              )
+                          ),
                           hintText: 'Username'
                       ),
                     ),
                     const SizedBox(height: 20,),
                     TextField(
+                      style: Style.getTextStyle(context, StyleText.formFieldTextNormal),
                       controller: passwordController,
-                      decoration: const InputDecoration(
-                          border: OutlineInputBorder(),
+                      cursorColor: Style.getColor(context, StyleColor.black),
+                      decoration: InputDecoration(
+                          border: OutlineInputBorder(
+                            borderSide: BorderSide(
+                              color: Style.getColor(context, StyleColor.grey)
+                            )
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                              borderSide: BorderSide(
+                                  color: Style.getColor(context, StyleColor.black)
+                              )
+                          ),
                           hintText: 'Password'
                       ),
                     )
@@ -85,18 +107,27 @@ class _LoginScreenState extends State<LoginScreen> {
                       Positioned.fill(
                         child: Container(
                           decoration: const BoxDecoration(
-                            color: Style.white,
+                            color: Style.colorWhite,
                           ),
                         ),
                       ),
                       TextButton(
                         style: TextButton.styleFrom(
-                          padding: const EdgeInsets.fromLTRB(60, 16, 60, 16),
-                          primary: Colors.white,
+                          padding: const EdgeInsets.symmetric(vertical: 16),
+                          primary: Style.getColor(context, StyleColor.red),
+                          backgroundColor: Style.getColor(context, StyleColor.red),
                           textStyle: const TextStyle(fontSize: 20),
                         ),
                         onPressed: _login,
-                        child: const Text('Prijava'),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(
+                                'Prijava',
+                              style: Style.getTextStyle(context, StyleText.buttonTextWhite),
+                            ),
+                          ],
+                        ),
                       ),
                     ],
                   ),

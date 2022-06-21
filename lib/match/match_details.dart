@@ -21,11 +21,10 @@ class MatchDetails extends StatefulWidget {
 }
 
 class _MatchDetailsState extends State<MatchDetails> {
-  late int homeScore;
 
   @override
   void initState() {
-    homeScore = widget.match.homeScore;
+
     super.initState();
   }
 
@@ -42,12 +41,7 @@ class _MatchDetailsState extends State<MatchDetails> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
           MatchDetailHeader(match: widget.match),
-          ActionRow(myVoidCallback: () {
-            setState(() {
-              homeScore++;
-              widget.match.homeScore++;
-            });
-          })
+          ActionRow(match: widget.match)
         ],
       ),
       actions: _actions(widget.match),
@@ -77,7 +71,7 @@ class _MatchDetailHeaderState extends State<MatchDetailHeader> {
       height: 130,
       padding: const EdgeInsets.symmetric(vertical: 20),
       decoration: const BoxDecoration(
-          color: Style.grey
+          color: Style.colorGrey
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
@@ -86,7 +80,7 @@ class _MatchDetailHeaderState extends State<MatchDetailHeader> {
           Text(
             '${widget.match.date} at ${widget.match.time} - ${widget.match.duration} min',
             style: const TextStyle(
-                color: Style.black,
+                color: Style.colorBlack,
                 fontSize: 14
             ),
           ),
@@ -102,7 +96,7 @@ class _MatchDetailHeaderState extends State<MatchDetailHeader> {
                       widget.match.homeTeam,
                       style: const TextStyle(
                           fontSize: 16,
-                          color: Style.black,
+                          color: Style.colorBlack,
                           fontWeight: FontWeight.bold
                       ),
                     ),
@@ -118,7 +112,7 @@ class _MatchDetailHeaderState extends State<MatchDetailHeader> {
                       '${widget.match.homeScore} - 0',
                       style: const TextStyle(
                           fontSize: 26,
-                          color: Style.black,
+                          color: Style.colorBlack,
                           fontWeight: FontWeight.bold
                       ),
                     ),
@@ -134,7 +128,7 @@ class _MatchDetailHeaderState extends State<MatchDetailHeader> {
                       widget.match.awayTeam,
                       style: const TextStyle(
                           fontSize: 16,
-                          color: Style.black,
+                          color: Style.colorBlack,
                           fontWeight: FontWeight.bold
                       ),
                     ),
@@ -150,7 +144,7 @@ class _MatchDetailHeaderState extends State<MatchDetailHeader> {
               Text(
                 'Futsalito, ${widget.match.round}' 'st round',
                 style: const TextStyle(
-                    color: Style.black,
+                    color: Style.colorBlack,
                     fontSize: 14
                 ),
               ),
@@ -163,9 +157,9 @@ class _MatchDetailHeaderState extends State<MatchDetailHeader> {
 }
 
 class ActionRow extends StatefulWidget {
-  const ActionRow({Key? key, required this.myVoidCallback}) : super(key: key);
+  const ActionRow({Key? key, required this.match}) : super(key: key);
 
-  final VoidCallback myVoidCallback;
+  final Match match;
 
   @override
   State<ActionRow> createState() => _ActionRowState();
@@ -179,15 +173,11 @@ class _ActionRowState extends State<ActionRow> {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
-          GestureDetector(
-            onTap: () {
-              widget.myVoidCallback;
-            },
-            child: SquaredButton(
-                value: "Goal",
-                icon: Icons.sports_soccer,
-                page: Pages.addGoal
-            ),
+          SquaredButton(
+              value: "Goal",
+              icon: Icons.sports_soccer,
+              page: Pages.scorers,
+            match: widget.match,
           ),
           SquaredButton(
             value: "Card",
@@ -202,18 +192,20 @@ class _ActionRowState extends State<ActionRow> {
 
 _actions(Match match) {
 
+  match.homeScore++;
+
   return <Widget>[
-    SizedBox(
+    const SizedBox(
       width: 10,
     ),
     GestureDetector(
-      onTap: () {
+      onTap: () async {
         DatabaseService service = DatabaseService();
-        service.updateMatch(match);
+        await service.updateMatch(match);
       },
         child: Icon(Icons.save)
     ),
-    SizedBox(
+    const SizedBox(
       width: 10,
     )
   ];

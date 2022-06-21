@@ -5,6 +5,7 @@ import 'package:sca_app/competitions/create_new_competition.dart';
 import 'package:sca_app/home/home.dart';
 import 'package:sca_app/match/create_new_match.dart';
 import 'package:sca_app/match/match_details.dart';
+import 'package:sca_app/match/scorers.dart';
 import 'package:sca_app/models/match.dart';
 import 'package:sca_app/team/create_new_team.dart';
 import 'package:sca_app/team/team_details.dart';
@@ -34,6 +35,9 @@ void navigateTo(BuildContext context, Pages page, {Match? match, String? title, 
   } else if (page == Pages.teamDetails) {
     Navigator.push(
         context, MaterialPageRoute(builder: (context) => TeamDetails(team: team!)));
+  } else if (page == Pages.scorers) {
+    Navigator.push(
+        context, MaterialPageRoute(builder: (context) => Scorers(match: match!,)));
   }
 }
 
@@ -48,5 +52,6 @@ enum Pages {
   newLeague,
   addGoal,
   addCard,
-  teamDetails
+  teamDetails,
+  scorers
 }

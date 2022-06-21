@@ -36,8 +36,8 @@ class Match {
       'time': time,
       'duration': duration,
       'round': round,
-      'homeScore': homeScore = 0,
-      'awayScore': awayScore = 0,
+      'homeScore': homeScore,
+      'awayScore': awayScore,
     };
   }
 
