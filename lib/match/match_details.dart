@@ -191,9 +191,6 @@ class _ActionRowState extends State<ActionRow> {
 }
 
 _actions(Match match) {
-
-  match.homeScore++;
-
   return <Widget>[
     const SizedBox(
       width: 10,

@@ -6,6 +6,8 @@ import 'package:sca_app/router/router.dart';
 import 'package:sca_app/services/database_service.dart';
 import 'package:sca_app/widget/styled_layout.dart';
 
+import 'match_details.dart';
+
 Player player1 = Player(name: "Maro", lastName: "Globan", dateOfBirth: "13.03.2014");
 
 class Scorers extends StatelessWidget {
@@ -24,9 +26,11 @@ class Scorers extends StatelessWidget {
             //TODO Vedran
             DatabaseService service = DatabaseService();
             await service.addGoal(goal);
-            navigateTo(context, Pages.newMatch, match: match);
+            Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) {
+              return MatchDetails(match: match);
+            }));
           },
-          child: Center(child: Text("HHHH"),
+          child: const Center(child: Text("HHHH"),
         )
       ),
     );

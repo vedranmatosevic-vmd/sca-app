@@ -125,18 +125,66 @@ _header(BuildContext context, Team team) {
         const SizedBox(
           height: 10,
         ),
-        Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            _imagePlaceHolder(context, team.shortName[0]),
-            Padding(
-              padding: const EdgeInsets.only(left: 16.0, top: 10),
-              child: Text(
-                team.name,
-                style: Style.getTextStyle(
-                    context, StyleText.bigTextBold, StyleColor.black),
-              ),
-            )
+        Column(
+          children: [
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                _imagePlaceHolder(context, team.shortName[0]),
+                Padding(
+                  padding: const EdgeInsets.only(left: 16.0, top:  0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        team.name,
+                        style: Style.getTextStyle(
+                            context, StyleText.bigTextBold, StyleColor.black),
+                      ),
+                      const SizedBox(height: 6,),
+                      Row(
+                        children: <Widget>[
+                          Text(
+                              "Contact person: ",
+                            style: Style.getTextStyle(context, StyleText.smallTextRegular),
+                          ),
+                          Text(
+                            team.contactPerson!,
+                            style: Style.getTextStyle(context, StyleText.smallTextBold),
+                          )
+                        ],
+                      ),
+                      const SizedBox(height: 4,),
+                      Row(
+                        children: <Widget>[
+                          Text(
+                            "Email: ",
+                            style: Style.getTextStyle(context, StyleText.smallTextRegular),
+                          ),
+                          Text(
+                            team.email!,
+                            style: Style.getTextStyle(context, StyleText.smallTextBold),
+                          )
+                        ],
+                      ),
+                      const SizedBox(height: 4,),
+                      Row(
+                        children: <Widget>[
+                          Text(
+                            "Phone: ",
+                            style: Style.getTextStyle(context, StyleText.smallTextRegular),
+                          ),
+                          Text(
+                            team.phone!,
+                            style: Style.getTextStyle(context, StyleText.smallTextBold),
+                          )
+                        ],
+                      )
+                    ],
+                  ),
+                )
+              ],
+            ),
           ],
         )
       ],

@@ -11,6 +11,7 @@ class Match {
   late int awayScore;
   late int duration;
   late int round;
+  late bool isPlayed;
 
   Match.emptyMatch();
 
@@ -23,7 +24,8 @@ class Match {
     required this.duration,
     required this.round,
     this.homeScore = 0,
-    this.awayScore = 0
+    this.awayScore = 0,
+    this.isPlayed = false
   });
 
   Map<String, dynamic> toMap() {
@@ -38,6 +40,7 @@ class Match {
       'round': round,
       'homeScore': homeScore,
       'awayScore': awayScore,
+      'isPlayed': isPlayed,
     };
   }
 
@@ -51,5 +54,6 @@ class Match {
         duration = matchMap["duration"] as int,
         round = matchMap["round"] as int,
         homeScore = matchMap["homeScore"] as int,
-        awayScore = matchMap["awayScore"] as int;
+        awayScore = matchMap["awayScore"] as int,
+        isPlayed = matchMap["isPlayed"] as bool;
 }
