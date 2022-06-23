@@ -2,6 +2,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:sca_app/common/loaded_data.dart';
 import 'package:sca_app/services/database_service.dart';
+import 'package:sca_app/team/players.dart';
 import 'package:sca_app/widget/styled_layout.dart';
 import 'package:sca_app/models/match.dart';
 
@@ -90,12 +91,7 @@ _tabController(BuildContext context, Team team) {
                     child: TabBarView(
                       children: [
                         _results(context, team),
-                        // Center(
-                        //   child: Text("Status Pages"),
-                        // ),
-                        Center(
-                          child: Text('Calls Page'),
-                        ),
+                        Players(team: team),
                       ],
                     )),
               ],
