@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:sca_app/common/loaded_data.dart';
-import 'package:sca_app/team/team_details.dart';
 import 'package:sca_app/widget/styled_layout.dart';
 
 import '../common/style.dart';

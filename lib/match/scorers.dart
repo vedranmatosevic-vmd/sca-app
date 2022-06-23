@@ -8,7 +8,7 @@ import 'package:sca_app/widget/styled_layout.dart';
 
 import 'match_details.dart';
 
-Player player1 = Player(name: "Maro", lastName: "Globan", dateOfBirth: "13.03.2014");
+Player player1 = Player(name: "Maro", lastName: "Globan", birthDate: "13.03.2014");
 
 class Scorers extends StatelessWidget {
   const Scorers({Key? key, required this.match}) : super(key: key);

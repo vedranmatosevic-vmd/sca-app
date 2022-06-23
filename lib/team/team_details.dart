@@ -74,16 +74,13 @@ _tabController(BuildContext context, Team team) {
                 Tab(
                   text: 'Rezultati'.toUpperCase(),
                 ),
-                // Tab(
-                //   text: 'Raspored'.toUpperCase(),
-                // ),
                 Tab(
                   text: 'Momčad'.toUpperCase(),
                 ),
               ],
             ),
           ),
-          Container(
+          SizedBox(
             height: 450,
             child: Row(
               children: [

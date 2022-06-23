@@ -4,6 +4,7 @@ import 'package:firebase_database/firebase_database.dart';
 import 'package:sca_app/models/goal.dart';
 import 'package:sca_app/models/match.dart';
 
+import '../models/player.dart';
 import '../models/team.dart';
 
 class DatabaseService {
@@ -82,6 +83,29 @@ class DatabaseService {
 
   addGoal(Goal goal) async {
     await _ref.child("users/vematosevic/goals/${goal.uuid}").set(goal.toMap());
+  }
+
+  addPlayer(String competition, String team, Player player) async {
+    await _ref.child("users/vematosevic/competitions/$competition/$team/players/${player.uuid}").set(player.toMap());
+  }
+
+  Future<List<Player>> getPlayersByTeam(String competition, String team) async {
+    List<Player> players = List.empty(growable: true);
+    Stream<DatabaseEvent> matchesStream = _ref.child("users/vematosevic/competitions/$competition/$team/players").onValue;
+    matchesStream.listen((DatabaseEvent event) {
+      for (final child in event.snapshot.children) {
+        try {
+          var json =
+          jsonDecode(jsonEncode(child.value)) as Map<String, dynamic>;
+          players.add(Player.fromMap(json));
+        } catch (e) {
+          print(e);
+        }
+      }
+    });
+    return Future.delayed(const Duration(seconds: 2), () {
+      return players;
+    });
   }
 
 }

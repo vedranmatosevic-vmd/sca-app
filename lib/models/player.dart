@@ -4,22 +4,25 @@ class Player {
   late int uuid = UniqueKey().hashCode;
   late String name;
   late String lastName;
-  late String dateOfBirth;
+  late String? birthDate;
 
-  Player.emptyTeam();
+  Player.emptyPlayer();
 
-  Player({required this.name, required this.lastName, required this.dateOfBirth});
+  Player({required this.name, required this.lastName, required this.birthDate});
 
   Map<String, dynamic> toMap() {
     return {
+      'id': uuid,
       'name': name,
       'lastName': lastName,
-      'email': dateOfBirth
+      'birthDate': birthDate
     };
   }
 
   Player.fromMap(Map<String, dynamic> playerMap)
-      : name = playerMap["name"],
-        lastName = playerMap["lastName"],
-        dateOfBirth = playerMap["dateOfBirth"];
+      : uuid = playerMap["id"] as int,
+        name = playerMap["name"] as String,
+        lastName = playerMap["lastName"] as String,
+        birthDate = playerMap["birthDate"] as String;
+
 }

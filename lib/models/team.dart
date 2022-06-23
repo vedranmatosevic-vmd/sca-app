@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:sca_app/models/player.dart';
 
 class Team {
@@ -6,28 +8,54 @@ class Team {
   late String? email;
   late String? contactPerson;
   late String? phone;
-  late List<Player>? players = [];
+  late List<Player>? players;
 
   Team.emptyTeam();
 
-  Team({required this.name, required this.shortName, this.email, this.contactPerson, this.phone, this.players});
+  Team(
+      {required this.name,
+      required this.shortName,
+      this.email,
+      this.contactPerson,
+      this.phone,
+      this.players
+      });
 
-  Map<String, dynamic> toMap() {
-    return {
-      'name': name,
-      'shortName': shortName,
-      'email': email,
-      'contactPerson': contactPerson,
-      'phone': phone,
-      'players': players
-    };
+  List<Player> _convertPlayers(List<dynamic> playersMap) {
+    final players = <Player>[];
+
+    for (final player in playersMap) {
+      players.add(Player.fromMap(player as Map<String, dynamic>));
+    }
+    return players;
   }
 
-  Team.fromMap(Map<String, dynamic> teamMap)
-      : name = teamMap["name"],
-        shortName = teamMap["shortName"],
-        email = teamMap["email"],
-        contactPerson = teamMap["contactPerson"],
-        phone = teamMap["phone"],
-        players = teamMap["players"];
+  Map<String, dynamic> toMap() {
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['name'] = name;
+    data['shortName'] = shortName;
+    data['email'] = email;
+    data['contactPerson'] = contactPerson;
+    data['phone'] = phone;
+    if (players != null) {
+      data['players'] = players!.map((v) => v.toMap());
+    }
+    return data;
+  }
+
+  Team.fromMap(Map<String, dynamic> teamMap) {
+    name = teamMap["name"];
+    shortName = teamMap["shortName"];
+    email = teamMap["email"];
+    contactPerson = teamMap["contactPerson"];
+    phone = teamMap["phone"];
+
+    if (teamMap['players'] != null) {
+      players = <Player>[];
+      Map<String, dynamic> parsedList = jsonDecode(jsonEncode(teamMap["players"]));
+      parsedList.forEach((key, value) {
+        players?.add(Player.fromMap(value));
+      });
+    }
+  }
 }
