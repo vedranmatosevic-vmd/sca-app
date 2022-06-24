@@ -18,6 +18,10 @@ class DatabaseService {
     await _ref.child("users/vematosevic/matches/${match.uuid}").update(match.toMap());
   }
   
+  // addShirtnumber(String competition, String team) async {
+  //     _ref.child("users/vematosevic/competitions/$competition/$team").for;
+  // }
+  
   Future<List<Match>> getMatchesByCompetition(String competition) async {
     List<Match> matches = List.empty(growable: true);
     Stream<DatabaseEvent> matchesStream = _ref.child("users/vematosevic/matches").orderByChild("round").onValue;
@@ -33,7 +37,7 @@ class DatabaseService {
         }
       }
     });
-    return Future.delayed(const Duration(seconds: 2), () {
+    return Future.delayed(const Duration(seconds: 1), () {
       return matches;
     });
   }
@@ -55,7 +59,7 @@ class DatabaseService {
         }
       }
     });
-    return Future.delayed(const Duration(seconds: 2), () {
+    return Future.delayed(const Duration(seconds: 1), () {
       return team;
     });
   }
@@ -76,7 +80,7 @@ class DatabaseService {
         }
       }
     });
-    return Future.delayed(const Duration(seconds: 2), () {
+    return Future.delayed(const Duration(seconds: 1), () {
       return matches;
     });
   }
@@ -103,7 +107,7 @@ class DatabaseService {
         }
       }
     });
-    return Future.delayed(const Duration(seconds: 2), () {
+    return Future.delayed(const Duration(seconds: 1), () {
       return players;
     });
   }

@@ -69,8 +69,7 @@ _teamRow(BuildContext context, Team team) {
       navigateTo(context, Pages.teamDetails, team: team);
     },
     child: Container(
-      padding: const EdgeInsets.symmetric(horizontal: 20),
-      height: 60,
+      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 14),
       decoration: const BoxDecoration(
           border: Border(
             bottom: BorderSide(width: 1.0, color: Style.colorBlack),
@@ -82,6 +81,11 @@ _teamRow(BuildContext context, Team team) {
           Text(
             team.name,
             style: Style.getTextStyle(context, StyleText.textBold),
+          ),
+          Spacer(),
+          Icon(
+            Icons.arrow_right,
+            color: Style.getColor(context, StyleColor.red),
           )
         ],
       ),

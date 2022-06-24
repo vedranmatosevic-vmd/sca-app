@@ -21,10 +21,19 @@ class TeamDetails extends StatefulWidget {
 
 class _TeamDetailsState extends State<TeamDetails> {
   late final Team team;
+  DatabaseService service = DatabaseService();
+
+  // updateShirt() async {
+  //   await service.addShirtnumber(selectedLeague, team.name);
+  // }
 
   @override
   void initState() {
+
+
     team = widget.team;
+
+    // updateShirt();
     super.initState();
   }
 

@@ -53,6 +53,13 @@ enum StyleText {
 
   /// **[font]**: Roboto
   ///
+  /// **[weight]**: 500
+  ///
+  /// **[size]**: 9
+  ultraSmallTextRegular,
+
+  /// **[font]**: Roboto
+  ///
   /// **[weight]**: 400
   ///
   /// **[size]**: 11
@@ -177,6 +184,13 @@ class Style {
             fontFamily: "Roboto",
             fontWeight: FontWeight.w600,
             fontSize: 14,
+            color: getColor(context, color ?? StyleColor.black)
+        );
+      case StyleText.ultraSmallTextRegular:
+        return TextStyle(
+            fontFamily: "Roboto",
+            fontWeight: FontWeight.w500,
+            fontSize: 9,
             color: getColor(context, color ?? StyleColor.black)
         );
       case StyleText.smallTextRegular:

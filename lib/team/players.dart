@@ -113,6 +113,22 @@ Widget _playerCard(BuildContext context, Player player) {
           Text(
             "${player.name} ${player.lastName}",
             style: Style.getTextStyle(context, StyleText.textBold),
+          ),
+          Spacer(),
+          Container(
+            width: 32,
+            height: 32,
+            decoration: BoxDecoration(
+              image: DecorationImage(
+                image: AssetImage('assets/images/ic_shirt.png')
+              )
+            ),
+            child: Center(
+              child: Text(
+                "22",
+                style: Style.getTextStyle(context, StyleText.ultraSmallTextRegular, StyleColor.white),
+              ),
+            ),
           )
         ],
       ),
