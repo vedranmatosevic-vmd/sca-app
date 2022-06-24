@@ -85,7 +85,7 @@ Widget _playerCard(BuildContext context, Player player) {
 
     },
     child: Container(
-      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 6),
+      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 4),
       decoration: BoxDecoration(
         border: Border(
           bottom: BorderSide(
@@ -96,16 +96,16 @@ Widget _playerCard(BuildContext context, Player player) {
       child: Row(
         children: <Widget>[
           Container(
-            width: 30,
-            height: 30,
+            width: 38,
+            height: 38,
             decoration: const BoxDecoration(
-              color: Style.colorGrey,
-              borderRadius: BorderRadius.all(Radius.circular(15)),
+              color: Style.colorDarkBlue,
+              borderRadius: BorderRadius.all(Radius.circular(19)),
             ),
             child: Center(
               child: Text(
                 "${player.name[0]}${player.lastName[0]}",
-                style: Style.getTextStyle(context, StyleText.bigTextRegular),
+                style: Style.getTextStyle(context, StyleText.bigTextRegular, StyleColor.white),
               ),
             ),
           ),
@@ -114,18 +114,18 @@ Widget _playerCard(BuildContext context, Player player) {
             "${player.name} ${player.lastName}",
             style: Style.getTextStyle(context, StyleText.textBold),
           ),
-          Spacer(),
+          const Spacer(),
           Container(
             width: 32,
             height: 32,
-            decoration: BoxDecoration(
+            decoration: const BoxDecoration(
               image: DecorationImage(
                 image: AssetImage('assets/images/ic_shirt.png')
               )
             ),
             child: Center(
               child: Text(
-                "22",
+                player.shirtNumber.toString(),
                 style: Style.getTextStyle(context, StyleText.ultraSmallTextRegular, StyleColor.white),
               ),
             ),

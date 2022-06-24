@@ -11,6 +11,7 @@ import '../services/database_service.dart';
 final _nameTEC = TextEditingController();
 final _lastNameTEC = TextEditingController();
 final _birthDateTEC = TextEditingController();
+final _numberTEC = TextEditingController();
 
 class NewPlayer extends StatelessWidget {
   const NewPlayer({Key? key, required this.team}) : super(key: key);
@@ -50,6 +51,7 @@ class NewPlayer extends StatelessWidget {
           InputTextFormField(controller: _nameTEC, value: "Ime"),
           InputTextFormField(controller: _lastNameTEC, value: "Prezime"),
           InputTextFormField(controller: _birthDateTEC, value: "Datum rođenja"),
+          InputTextFormField(controller: _numberTEC, value: "Broj"),
         ],
       ),
     );
@@ -67,13 +69,15 @@ _action(BuildContext context, Team team) {
           Player newPlayer = Player(
               name: _nameTEC.text,
               lastName: _lastNameTEC.text,
-              birthDate: _birthDateTEC.text
+              birthDate: _birthDateTEC.text,
+              shirtNumber: _numberTEC.text
           );
           await service.addPlayer(selectedLeague, team.name.toString(), newPlayer);
           Navigator.pop(context);
           _nameTEC.clear();
           _lastNameTEC.clear();
           _birthDateTEC.clear();
+          _numberTEC.clear();
         },
         child: const Icon(Icons.save)),
     const SizedBox(

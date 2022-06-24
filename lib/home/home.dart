@@ -17,8 +17,15 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   String title = selectedLeague;
 
+  // DatabaseService service = DatabaseService();
+  //
+  // getTeams() async {
+  //   await service.getTeams(selectedLeague);
+  // }
+
   @override
   void initState() {
+    // getTeams();
     super.initState();
   }
 
@@ -30,8 +37,6 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-
-
     return StyledLayout(
       appBarTitle: title,
       drawer: const SideBar(),

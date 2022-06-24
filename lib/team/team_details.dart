@@ -23,8 +23,12 @@ class _TeamDetailsState extends State<TeamDetails> {
   late final Team team;
   DatabaseService service = DatabaseService();
 
-  // updateShirt() async {
-  //   await service.addShirtnumber(selectedLeague, team.name);
+  // updateShirtNumbers() async {
+  //   await service.addShirtNumbers(selectedLeague, team.name);
+  // }
+
+  // getTeams(Team team) async {
+  //   await service.getTeams(selectedLeague, team.name);
   // }
 
   @override
@@ -33,7 +37,8 @@ class _TeamDetailsState extends State<TeamDetails> {
 
     team = widget.team;
 
-    // updateShirt();
+    // getTeams(team);
+    // updateShirtNumbers();
     super.initState();
   }
 
@@ -215,7 +220,7 @@ _imagePlaceHolder(BuildContext context, String title) {
 _results(BuildContext context, Team team) {
   DatabaseService service = DatabaseService();
   return FutureBuilder<List<Match>>(
-      future: service.getMatchesByTeam(team.shortName),
+      future: service.getMatchesByTeam(selectedLeague, team.shortName),
       builder: (BuildContext context, AsyncSnapshot snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return const Center(

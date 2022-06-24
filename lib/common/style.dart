@@ -93,7 +93,8 @@ enum StyleColor {
   red,
   white,
   green,
-  orange
+  orange,
+  darkBlue
 }
 
 class Style {
@@ -106,6 +107,7 @@ class Style {
   static const colorWhite = Color(0xFFffffff);
   static const colorGreen = Color(0xff04d96d);
   static const colorOrange = Color(0xfffc9b6d);
+  static const colorDarkBlue = Color(0xff0d3b64);
 
   static Color getColor(BuildContext context, StyleColor styleColor) {
     switch (styleColor) {
@@ -126,6 +128,9 @@ class Style {
 
       case StyleColor.orange:
         return colorOrange;
+
+      case StyleColor.darkBlue:
+        return colorDarkBlue;
 
       default:
         throw UnimplementedError();

@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:sca_app/common/style.dart';
 import 'package:sca_app/models/match.dart';
@@ -11,20 +10,20 @@ import '../services/database_service.dart';
 class MatchDetails extends StatefulWidget {
   const MatchDetails({
     Key? key,
-    required this.match
+    required this.matchId,
   }) : super(key: key);
 
-  final Match match;
+  final String matchId;
 
   @override
   State<MatchDetails> createState() => _MatchDetailsState();
 }
 
 class _MatchDetailsState extends State<MatchDetails> {
+  DatabaseService service = DatabaseService();
 
   @override
   void initState() {
-
     super.initState();
   }
 
@@ -36,15 +35,33 @@ class _MatchDetailsState extends State<MatchDetails> {
   @override
   Widget build(BuildContext context) {
     return StyledLayout(
-        appBarTitle: "Match details",
-      body: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          MatchDetailHeader(match: widget.match),
-          ActionRow(match: widget.match)
-        ],
+      appBarTitle: "Match details",
+      body: FutureBuilder<Match>(
+        future: service.getMatch(widget.matchId),
+        builder: (BuildContext context, AsyncSnapshot snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Padding(
+              padding: EdgeInsets.symmetric(vertical: 100),
+              child: Center(
+                child: CircularProgressIndicator(
+                  color: Style.colorRed,
+                ),
+              ),
+            );
+          }
+          if (snapshot.hasData) {
+            return Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                MatchDetailHeader(match: snapshot.data),
+                ActionRow(match: snapshot.data),
+              ],
+            );
+          }
+          return const Text('Something went wrong');
+        },
       ),
-      actions: _actions(widget.match),
+      // actions: _actions(widget.match),
     );
   }
 }
@@ -109,9 +126,9 @@ class _MatchDetailHeaderState extends State<MatchDetailHeader> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text(
-                      '${widget.match.homeScore} - 0',
+                      '${widget.match.homeScore} - ${widget.match.awayScore} ',
                       style: const TextStyle(
-                          fontSize: 26,
+                          fontSize: 24,
                           color: Style.colorBlack,
                           fontWeight: FontWeight.bold
                       ),
@@ -156,6 +173,8 @@ class _MatchDetailHeaderState extends State<MatchDetailHeader> {
   }
 }
 
+typedef RefreshPage = void Function();
+
 class ActionRow extends StatefulWidget {
   const ActionRow({Key? key, required this.match}) : super(key: key);
 
@@ -174,9 +193,9 @@ class _ActionRowState extends State<ActionRow> {
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
           SquaredButton(
-              value: "Goal",
-              icon: Icons.sports_soccer,
-              page: Pages.scorers,
+            value: "Goal",
+            icon: Icons.sports_soccer,
+            page: Pages.scorers,
             match: widget.match,
           ),
           SquaredButton(

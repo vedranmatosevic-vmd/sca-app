@@ -13,10 +13,17 @@ import 'package:sca_app/team/team_details.dart';
 import 'package:sca_app/team/teams.dart';
 import '../models/team.dart';
 
-void navigateTo(BuildContext context, Pages page, {Match? match, String? title, Team? team}) {
+void navigateTo(
+    BuildContext context,
+    Pages page,
+    {
+      Match? match,
+      String? title,
+      Team? team,
+    }) {
   if (page == Pages.newMatch) {
     Navigator.push(
-        context, MaterialPageRoute(builder: (context) => MatchDetails(match: match!))
+        context, MaterialPageRoute(builder: (context) => MatchDetails(matchId: match!.uuid.toString()))
     );
   } else if (page == Pages.newLeague) {
     Navigator.push(
@@ -57,5 +64,6 @@ enum Pages {
   addGoal,
   addCard,
   teamDetails,
-  scorers
+  scorers,
+  matches
 }
