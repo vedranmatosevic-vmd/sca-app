@@ -155,28 +155,6 @@ class DatabaseService {
     });
   }
 
-
-  // Scorers function - maybe not used
-  // Future<List<Team>> getTeamsByMatch(String competitionName, Match match) async {
-  //   List<Team> teams = List.empty(growable: true);
-  //   Stream<DatabaseEvent> teamsStream = _ref.child("users/vematosevic/players").onValue;
-  //   teamsStream.listen((DatabaseEvent event) {
-  //     for (final child in event.snapshot.children) {
-  //       // if (child.child("shortName").value.toString() == match.homeTeam.toString() || child.child("shortName").value.toString() == match.awayTeam.toString()) {
-  //       //   try {
-  //       //     var json = jsonDecode(jsonEncode(child.value)) as Map<String, dynamic>;
-  //       //     teams.add(Team.fromMap(json));
-  //       //   } catch (e) {
-  //       //     print(e);
-  //       //   }
-  //       // }
-  //     }
-  //   });
-  //   return Future.delayed(const Duration(seconds: 1), () {
-  //     return teams;
-  //   });
-  // }
-
   Future<Match> getMatch(int matchId) async {
     Match match = Match.emptyMatch();
     Stream<DatabaseEvent> matchesStream = _ref.child("users/vematosevic/matches").onValue;
@@ -200,12 +178,16 @@ class DatabaseService {
     });
   }
 
-  Future<int> getScoreByGame(int matchId) async {
+  Future<int> getScoreByGame(int matchId, int teamId) async {
     int score = 0;
     Stream<DatabaseEvent> goalsStream = _ref.child("users/vematosevic/goals").onValue;
     goalsStream.listen((DatabaseEvent event) {
-      for (final goal in event.snapshot.children) {
-        print("Goal: ${goal.key}");
+      for (final child in event.snapshot.children) {
+        if (child.child("matchId").value == matchId && child.child("teamId").value == teamId) {
+          print("score");
+          print(score);
+          score++;
+        }
         // try {
         //   var json =
         //   jsonDecode(jsonEncode(child.value)) as Map<String, dynamic>;
@@ -215,7 +197,7 @@ class DatabaseService {
         // }
       }
     });
-    return Future.delayed(const Duration(seconds: 1), () {
+    return Future.delayed(const Duration(milliseconds: 300), () {
       return score;
     });
   }

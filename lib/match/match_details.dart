@@ -111,6 +111,28 @@ class MatchDetailHeader extends StatefulWidget {
 }
 
 class _MatchDetailHeaderState extends State<MatchDetailHeader> {
+  DatabaseService service = DatabaseService();
+  late int score;
+
+  Future<int> calculateScore(int matchId, int teamId) async {
+    score = await service.getScoreByGame(matchId, teamId);
+    return Future.delayed(const Duration(milliseconds: 300), () {
+      return score;
+    });
+  }
+
+  @override
+  void initState() {
+    print("Score: $score");
+    calculateScore(widget.match.uuid, widget.homeTeam.uuid);
+    super.initState();
+  }
+
+  @override
+  void setState(VoidCallback fn) {
+    calculateScore(widget.match.uuid, widget.homeTeam.uuid);
+    super.setState(fn);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -154,9 +176,9 @@ class _MatchDetailHeaderState extends State<MatchDetailHeader> {
                 flex: 2,
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
+                  children: <Widget>[
                     Text(
-                      '0 - 0 ',
+                      '${score} - 0 ',
                       // '${widget.match.homeScore} - ${widget.match.awayScore} ',
                       style: const TextStyle(
                           fontSize: 24,
