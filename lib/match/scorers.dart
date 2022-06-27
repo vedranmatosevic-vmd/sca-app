@@ -9,6 +9,7 @@ import 'package:sca_app/widget/styled_layout.dart';
 import '../common/style.dart';
 import '../models/goal.dart';
 import '../models/team.dart';
+import '../router/router.dart';
 
 Player player1 = Player(name: "Maro", lastName: "Globan", birthDate: "13.03.2014");
 
@@ -101,19 +102,18 @@ _listOfPlayers(BuildContext context, Match match, Team team) {
 Widget _playerCard(BuildContext context, Match match, Player player, Team team) {
   return GestureDetector(
     onTap: () async {
-      Goal goal = Goal(player: player, match: match);
+      Goal goal = Goal(playerId: player.uuid, matchId: match.uuid);
 
-      if (team.shortName == match.homeTeam) {
-        match.homeScore++;
-      } else if (team.shortName == match.awayTeam) {
-        match.awayScore++;
-      }
+      // if (team.shortName == match.homeTeam) {
+      //   match.homeScore++;
+      // } else if (team.shortName == match.awayTeam) {
+      //   match.awayScore++;
+      // }
 
       DatabaseService service = DatabaseService();
       await service.addGoal(match, goal);
-      await service.updateMatch(match);
-      // Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) => MatchDetails(matchId: match.uuid.toString())), (route) => false);
-      Navigator.pop(context);
+      // await service.updateMatch(match);
+      await Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) => MatchDetails(matchId: match.uuid.toString(), team: team, pageBack: pagesFromToMD,)), (route) => false);
     },
     child: Container(
       padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 4),

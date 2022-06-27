@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:sca_app/common/loaded_data.dart';
+import 'package:sca_app/home/home.dart';
+import 'package:sca_app/widget/leading_icons.dart';
 import 'package:sca_app/widget/styled_layout.dart';
 
 import '../common/style.dart';
@@ -19,7 +21,10 @@ class _TeamsState extends State<Teams> {
   Widget build(BuildContext context) {
     DatabaseService service = DatabaseService();
     return StyledLayout(
-        appBarTitle: "Teams",
+      appBarTitle: "Teams",
+      leading: LeadingIcons(callback: () {
+        Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) => const HomeScreen()), (route) => false);
+      },),
       body: FutureBuilder<List<Team>>(
         future: service.getTeamsByCompetition(selectedLeague),
         builder: (BuildContext context, AsyncSnapshot snapshot) {

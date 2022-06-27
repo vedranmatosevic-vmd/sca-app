@@ -21,15 +21,6 @@ class Team {
       this.players
       });
 
-  List<Player> _convertPlayers(List<dynamic> playersMap) {
-    final players = <Player>[];
-
-    for (final player in playersMap) {
-      players.add(Player.fromMap(player as Map<String, dynamic>));
-    }
-    return players;
-  }
-
   Map<String, dynamic> toMap() {
     final Map<String, dynamic> data = <String, dynamic>{};
     data['name'] = name;

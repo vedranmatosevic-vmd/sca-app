@@ -203,7 +203,7 @@ class Style {
             fontFamily: "Roboto",
             fontWeight: FontWeight.w400,
             fontSize: 11,
-            color: getColor(context, StyleColor.black)
+            color: getColor(context, color ?? StyleColor.black)
         );
       case StyleText.smallTextBold:
         return TextStyle(

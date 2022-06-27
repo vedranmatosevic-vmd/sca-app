@@ -87,7 +87,7 @@ class _SideBarState extends State<SideBar> {
             ),
             onTap: () {
               Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => const Matches()));
+                  MaterialPageRoute(builder: (context) => Matches(page: Pages.home,)));
             },
           ),
           ListTile(

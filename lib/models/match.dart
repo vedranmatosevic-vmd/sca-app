@@ -1,4 +1,8 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+
+import 'goal.dart';
 
 class Match {
   late int uuid = UniqueKey().hashCode;
@@ -7,8 +11,6 @@ class Match {
   late String awayTeam;
   late String date;
   late String time;
-  late int homeScore;
-  late int awayScore;
   late int duration;
   late int round;
   late bool isPlayed;
@@ -23,37 +25,32 @@ class Match {
     required this.time,
     required this.duration,
     required this.round,
-    this.homeScore = 0,
-    this.awayScore = 0,
     this.isPlayed = false
   });
 
   Map<String, dynamic> toMap() {
-    return {
-      'id': uuid,
-      'competition': competition,
-      'homeTeam': homeTeam,
-      'awayTeam': awayTeam,
-      'date': date,
-      'time': time,
-      'duration': duration,
-      'round': round,
-      'homeScore': homeScore,
-      'awayScore': awayScore,
-      'isPlayed': isPlayed,
-    };
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['id'] = uuid;
+    data['competition'] = competition;
+    data['homeTeam'] = homeTeam;
+    data['awayTeam'] = awayTeam;
+    data['date'] = date;
+    data['time'] = time;
+    data['duration'] = duration;
+    data['round'] = round;
+    data['isPlayed'] = isPlayed;
+    return data;
   }
 
-  Match.fromMap(Map<String, dynamic> matchMap)
-      : uuid = matchMap["id"] as int,
-        competition = matchMap["competition"],
-        homeTeam = matchMap["homeTeam"] as String,
-        awayTeam = matchMap["awayTeam"] as String,
-        date = matchMap["date"] as String,
-        time = matchMap["time"] as String,
-        duration = matchMap["duration"] as int,
-        round = matchMap["round"] as int,
-        homeScore = matchMap["homeScore"] as int,
-        awayScore = matchMap["awayScore"] as int,
-        isPlayed = matchMap["isPlayed"] as bool;
+  Match.fromMap(Map<String, dynamic> matchMap) {
+    uuid = matchMap["id"];
+    competition = matchMap["competition"];
+    homeTeam = matchMap["homeTeam"];
+    awayTeam = matchMap["awayTeam"];
+    date = matchMap["date"];
+    time = matchMap["time"];
+    duration = matchMap["duration"];
+    round = matchMap["round"];
+    isPlayed = matchMap["isPlayed"];
+  }
 }

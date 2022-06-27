@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:sca_app/common/loaded_data.dart';
 import 'package:sca_app/services/database_service.dart';
 import 'package:sca_app/team/players.dart';
+import 'package:sca_app/team/teams.dart';
+import 'package:sca_app/widget/leading_icons.dart';
 import 'package:sca_app/widget/styled_layout.dart';
 import 'package:sca_app/models/match.dart';
 
@@ -39,6 +41,7 @@ class _TeamDetailsState extends State<TeamDetails> {
 
     // getTeams(team);
     // updateShirtNumbers();
+    currentPage = Pages.teamDetails;
     super.initState();
   }
 
@@ -46,6 +49,9 @@ class _TeamDetailsState extends State<TeamDetails> {
   Widget build(BuildContext context) {
     return StyledLayout(
       appBarTitle: "Team details",
+      leading: LeadingIcons(callback: () {
+        Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) => const Teams()), (route) => false);
+      },),
       body: Column(
         mainAxisSize: MainAxisSize.min,
         children: <Widget>[
@@ -254,7 +260,8 @@ _listOfMatches(BuildContext context, List<Match> listOfMatches, Team team) {
 _resultMatchCard(BuildContext context, Match match, Team team) {
   return GestureDetector(
       onTap: () {
-        navigateTo(context, Pages.newMatch, match: match);
+        pagesFromToMD = Pages.teamDetails;
+        navigateTo(context, Pages.matchDetails, match: match, team: team);
       },
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 6),
@@ -280,7 +287,8 @@ _resultMatchCard(BuildContext context, Match match, Team team) {
                 Row(
                   children: <Widget>[
                     Text(
-                        match.homeScore.toString(),
+                        "home",
+                        // match.homeScore.toString(),
                       style: Style.getTextStyle(context, StyleText.textBold),
                     ),
                   ],
@@ -289,7 +297,8 @@ _resultMatchCard(BuildContext context, Match match, Team team) {
                 Row(
                   children: <Widget>[
                     Text(
-                        match.awayScore.toString(),
+                        "away",
+                        // match.awayScore.toString(),
                       style: Style.getTextStyle(context, StyleText.textBold),
                     ),
                   ],
@@ -306,12 +315,12 @@ _resultMatchCard(BuildContext context, Match match, Team team) {
 _boldWinner(BuildContext context, Team team, Match match) {
   bool isHomeWin = false;
   bool isAwayWin = false;
-  if (match.homeScore > match.awayScore) {
-    isHomeWin = true;
-  }
-  if (match.awayScore > match.homeScore) {
-    isAwayWin = true;
-  }
+  // if (match.homeScore > match.awayScore) {
+  //   isHomeWin = true;
+  // }
+  // if (match.awayScore > match.homeScore) {
+  //   isAwayWin = true;
+  // }
 
   return Column(
     crossAxisAlignment: CrossAxisAlignment.start,
@@ -346,22 +355,22 @@ enum ScoreResult {
 _calculateScore(BuildContext context, Team team, Match match) {
   Color backColor = Style.getColor(context, StyleColor.orange);
   String sign = "";
-  if (match.homeTeam.toString() == team.shortName && match.homeScore < match.awayScore) {
-    backColor = Style.getColor(context, StyleColor.red);
-    sign = "I";
-  } else if (match.homeTeam.toString() == team.shortName && match.homeScore > match.awayScore) {
-    backColor = Style.getColor(context, StyleColor.green);
-    sign = "P";
-  } else if (match.awayTeam.toString() == team.shortName && match.homeScore < match.awayScore) {
-    backColor = Style.getColor(context, StyleColor.green);
-    sign = "P";
-  } else if (match.awayTeam.toString() == team.shortName && match.homeScore > match.awayScore) {
-    backColor = Style.getColor(context, StyleColor.red);
-    sign = "I";
-  } else {
-    backColor = Style.getColor(context, StyleColor.orange);
-    sign = "N";
-  }
+  // if (match.homeTeam.toString() == team.shortName && match.homeScore < match.awayScore) {
+  //   backColor = Style.getColor(context, StyleColor.red);
+  //   sign = "I";
+  // } else if (match.homeTeam.toString() == team.shortName && match.homeScore > match.awayScore) {
+  //   backColor = Style.getColor(context, StyleColor.green);
+  //   sign = "P";
+  // } else if (match.awayTeam.toString() == team.shortName && match.homeScore < match.awayScore) {
+  //   backColor = Style.getColor(context, StyleColor.green);
+  //   sign = "P";
+  // } else if (match.awayTeam.toString() == team.shortName && match.homeScore > match.awayScore) {
+  //   backColor = Style.getColor(context, StyleColor.red);
+  //   sign = "I";
+  // } else {
+  //   backColor = Style.getColor(context, StyleColor.orange);
+  //   sign = "N";
+  // }
 
   return Container(
     margin: const EdgeInsets.only(left: 20),

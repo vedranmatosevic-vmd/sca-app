@@ -8,6 +8,8 @@ import 'package:sca_app/router/router.dart';
 import 'package:sca_app/services/database_service.dart';
 import 'package:sca_app/widget/styled_layout.dart';
 
+import '../models/goal.dart';
+
 Match newMatch = Match.emptyMatch();
 
 class CreateNewMatch extends StatefulWidget {
@@ -357,10 +359,11 @@ List<Widget> _actions(BuildContext context, TextEditingController dateController
         newMatch.date = dateController.text;
         newMatch.time = timeController.text;
         newMatch.competition = selectedLeague;
+        newMatch.isPlayed = false;
 
         await service.addMatch(newMatch);
 
-        navigateTo(context, Pages.newMatch, match: newMatch);
+        navigateTo(context, Pages.matchDetails, match: newMatch);
       },
       child: const Icon(
           Icons.save

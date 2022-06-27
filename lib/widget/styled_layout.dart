@@ -9,7 +9,8 @@ class StyledLayout extends StatefulWidget {
     this.actions,
     this.body,
     this.willPop = true,
-    this.drawer
+    this.drawer,
+    this.leading
   }) : super(key: key);
 
   final Color? backgroundColor;
@@ -18,6 +19,7 @@ class StyledLayout extends StatefulWidget {
   final Widget? body;
   final bool willPop;
   final Widget? drawer;
+  final Widget? leading;
 
   @override
   State<StyledLayout> createState() => _StyledLayoutState();
@@ -31,7 +33,7 @@ class _StyledLayoutState extends State<StyledLayout> {
       child: Scaffold(
         resizeToAvoidBottomInset: false,
         backgroundColor: widget.backgroundColor,
-        appBar: _appBar(widget.appBarTitle, widget.actions, willPop: widget.willPop),
+        appBar: _appBar(widget.appBarTitle, widget.actions, willPop: widget.willPop, leading: widget.leading),
         body: widget.body,
         drawer: widget.drawer,
       ),
@@ -39,23 +41,12 @@ class _StyledLayoutState extends State<StyledLayout> {
   }
 }
 
-AppBar _appBar(String appBarTitle, List<Widget>? actions, {bool? willPop = true}) {
+AppBar _appBar(String appBarTitle, List<Widget>? actions, {bool? willPop = true, Widget? leading}) {
   return AppBar(
       backgroundColor: Style.colorBlack,
       foregroundColor: Colors.white,
       title: Text(appBarTitle),
-      leading: willPop! ? Builder(
-        builder: (BuildContext context) {
-          return IconButton(
-            onPressed: () {
-              Navigator.pop(context);
-            },
-            icon: const Icon(
-              Icons.arrow_back,
-            ),
-          );
-        },
-      ) : null,
+      leading: willPop! ? leading : null,
       actions: actions,
   );
 }

@@ -102,7 +102,7 @@ class DatabaseService {
   }
 
   addGoal(Match match, Goal goal) async {
-    await _ref.child("users/vematosevic/matches/${match.uuid}/goals/${goal.uuid}").set(goal.toMap());
+    await _ref.child("users/vematosevic/goals/${goal.uuid}").set(goal.toMap());
   }
 
   addPlayer(String competition, String team, Player player) async {
@@ -161,6 +161,26 @@ class DatabaseService {
     });
     return Future.delayed(const Duration(seconds: 1), () {
       return match;
+    });
+  }
+
+  Future<int> getScoreByGame(String matchId) async {
+    int score = 0;
+    Stream<DatabaseEvent> goalsStream = _ref.child("users/vematosevic/goals").onValue;
+    goalsStream.listen((DatabaseEvent event) {
+      for (final goal in event.snapshot.children) {
+        print("Goal: ${goal.key}");
+        // try {
+        //   var json =
+        //   jsonDecode(jsonEncode(child.value)) as Map<String, dynamic>;
+        //   players.add(Player.fromMap(json));
+        // } catch (e) {
+        //   print(e);
+        // }
+      }
+    });
+    return Future.delayed(const Duration(seconds: 1), () {
+      return score;
     });
   }
 

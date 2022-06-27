@@ -1,35 +1,41 @@
 import 'dart:core';
 
 import 'package:flutter/material.dart';
+import 'package:sca_app/common/constants.dart';
 import 'package:sca_app/models/match.dart';
 import 'package:sca_app/models/player.dart';
 
 class Goal {
   late int uuid = UniqueKey().hashCode;
-  late Player player;
-  late Match match;
+  late int playerId;
+  late int matchId;
+  late int teamId;
   late bool? isOwnGoal = false;
+  late String createdTime = returnDateTimeNow();
 
-  Goal.emptyMatch();
+  Goal.emptyGoal();
 
   Goal({
-    required this.player,
-    required this.match,
+    required this.playerId,
+    required this.matchId,
     this.isOwnGoal,
   });
 
   Map<String, dynamic> toMap() {
-    return {
-      'id': uuid,
-      'player': player.toMap(),
-      'match': match.toMap(),
-      'isOwnGoal': isOwnGoal,
-    };
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['id'] = uuid;
+    data['playerId'] = playerId;
+    data['matchId'] = matchId;
+    data['isOwnGoal'] = isOwnGoal;
+    data['createdTime'] = createdTime;
+    return data;
   }
 
-  Goal.fromMap(Map<String, dynamic> goalMap)
-      : uuid = goalMap["id"] as int,
-        player = goalMap["player"] as Player,
-        match = goalMap["match"] as Match,
-        isOwnGoal = goalMap["isOwnGoal"] as bool;
+  Goal.fromMap(Map<String, dynamic> goalMap) {
+    uuid = goalMap["id"];
+    playerId = goalMap["playerId"];
+    matchId = goalMap["matchId"];
+    isOwnGoal = goalMap["isOwnGoal"];
+    createdTime = goalMap["createdTime"];
+  }
 }

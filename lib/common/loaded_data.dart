@@ -1,7 +1,11 @@
 import 'package:firebase_database/firebase_database.dart';
 
+import '../router/router.dart';
+
 String selectedLeague = "";
 String username = "";
+Pages currentPage = Pages.home;
+Pages pagesFromToMD = Pages.matches;
 
 List<String> competitionsByUser = [];
 

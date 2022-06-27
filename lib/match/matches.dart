@@ -1,14 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:sca_app/common/loaded_data.dart';
 import 'package:sca_app/common/style.dart';
+import 'package:sca_app/home/home.dart';
 import 'package:sca_app/router/router.dart';
+import 'package:sca_app/widget/leading_icons.dart';
 import 'package:sca_app/widget/styled_layout.dart';
 import 'package:sca_app/models/match.dart';
 
 import '../services/database_service.dart';
 
 class Matches extends StatefulWidget {
-  const Matches({Key? key}) : super(key: key);
+  const Matches({Key? key, this.page}) : super(key: key);
+
+  final Pages? page;
 
   @override
   State<Matches> createState() => _MatchesState();
@@ -17,9 +21,14 @@ class Matches extends StatefulWidget {
 class _MatchesState extends State<Matches> {
   @override
   Widget build(BuildContext context) {
+    currentPage = Pages.matches;
+
     DatabaseService service = DatabaseService();
     return StyledLayout(
       appBarTitle: 'Matches',
+      leading: LeadingIcons(callback: () {
+        Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) => const HomeScreen()), (route) => false);
+      },),
       actions: _actions(context),
       body: FutureBuilder<List<Match>>(
         future: service.getMatchesByCompetition(selectedLeague),
@@ -78,11 +87,13 @@ _roundTitle(String s) {
     decoration: const BoxDecoration(
       color: Style.colorGrey,
     ),
-    child: Flexible(
-      child: Text(
-        '$round round',
-        style: const TextStyle(color: Style.colorRed, fontSize: 16),
-      ),
+    child: Row(
+      children: <Widget>[
+        Text(
+          '$round round',
+          style: const TextStyle(color: Style.colorDarkBlue, fontSize: 16),
+        ),
+      ]
     ),
   );
 }
@@ -90,7 +101,8 @@ _roundTitle(String s) {
 _matchCard(BuildContext context, Match match) {
   return GestureDetector(
     onTap: () {
-      navigateTo(context, Pages.newMatch, match: match);
+      pagesFromToMD = Pages.matches;
+      navigateTo(context, Pages.matchDetails, match: match);
     },
     child: Container(
       padding: const EdgeInsets.symmetric(horizontal: 20),
@@ -116,10 +128,10 @@ _circleHours(BuildContext context, Match match) {
     height: 40,
     alignment: Alignment.center,
     decoration: const BoxDecoration(
-        color: Style.colorGrey, shape: BoxShape.circle),
+        color: Style.colorDarkBlue, shape: BoxShape.circle),
     child: Text(
       match.time,
-      style: Style.getTextStyle(context, StyleText.smallTextRegular),
+      style: Style.getTextStyle(context, StyleText.smallTextRegular, StyleColor.white),
     ),
   );
 }
@@ -132,7 +144,8 @@ _scoreRow(BuildContext context, Match match) {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          '${match.homeTeam} ${match.homeScore} - ${match.awayScore} ${match.awayTeam}',
+          '${match.homeTeam} 0 - 0 ${match.awayTeam}',
+          // '${match.homeTeam} ${match.homeScore} - ${match.awayScore} ${match.awayTeam}',
           style: Style.getTextStyle(context, StyleText.textBold),
         ),
         Text(match.date,
