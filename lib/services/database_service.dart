@@ -2,7 +2,7 @@ import 'dart:convert';
 
 import 'package:firebase_database/firebase_database.dart';
 import 'package:sca_app/match/scorers.dart';
-import 'package:sca_app/models/goal.dart';
+import 'package:sca_app/models/event.dart';
 import 'package:sca_app/models/match.dart';
 
 import '../models/competition.dart';
@@ -126,8 +126,8 @@ class DatabaseService {
     });
   }
 
-  addGoal(Match match, Goal goal) async {
-    await _ref.child("users/vematosevic/goals/${goal.uuid}").set(goal.toMap());
+  addEvent(Match match, Event event) async {
+    await _ref.child("users/vematosevic/events/${event.uuid}").set(event.toMap());
   }
 
   addPlayer(String team, Player player) async {
@@ -152,6 +152,46 @@ class DatabaseService {
     });
     return Future.delayed(const Duration(milliseconds: 300), () {
       return players;
+    });
+  }
+
+  Future<List<Player>> getPlayersByTeams(int homeTeamId, int awayTeamId) async {
+    List<Player> players = List.empty(growable: true);
+    Stream<DatabaseEvent> matchesStream = _ref.child("users/vematosevic/players").onValue;
+    matchesStream.listen((DatabaseEvent event) {
+      for (final child in event.snapshot.children) {
+        if (child.child("teamId").value == homeTeamId || child.child("teamId").value == awayTeamId){
+          try {
+            var json =
+            jsonDecode(jsonEncode(child.value)) as Map<String, dynamic>;
+            players.add(Player.fromMap(json));
+          } catch (e) {
+            print(e);
+          }
+        }
+      }
+    });
+    return Future.delayed(const Duration(milliseconds: 300), () {
+      return players;
+    });
+  }
+
+  Future<String> getPlayer(int playerId) async {
+    String player = "";
+    Stream<DatabaseEvent> playerStream = _ref.child("users/vematosevic/players").onValue;
+    playerStream.listen((DatabaseEvent event) {
+      for (final child in event.snapshot.children) {
+        if (child.child("id").value == playerId){
+          try {
+            player = child.child("name").value.toString();
+          } catch (e) {
+            print(e);
+          }
+        }
+      }
+    });
+    return Future.delayed(const Duration(milliseconds: 100), () {
+      return player;
     });
   }
 
@@ -180,21 +220,12 @@ class DatabaseService {
 
   Future<int> getScoreByGame(int matchId, int teamId) async {
     int score = 0;
-    Stream<DatabaseEvent> goalsStream = _ref.child("users/vematosevic/goals").onValue;
-    goalsStream.listen((DatabaseEvent event) {
+    Stream<DatabaseEvent> eventsStream = _ref.child("users/vematosevic/events").onValue;
+    eventsStream.listen((DatabaseEvent event) {
       for (final child in event.snapshot.children) {
-        if (child.child("matchId").value == matchId && child.child("teamId").value == teamId) {
-          print("score");
-          print(score);
+        if (child.child("matchId").value == matchId && child.child("teamId").value == teamId && child.child("eventType").value == "goal") {
           score++;
         }
-        // try {
-        //   var json =
-        //   jsonDecode(jsonEncode(child.value)) as Map<String, dynamic>;
-        //   players.add(Player.fromMap(json));
-        // } catch (e) {
-        //   print(e);
-        // }
       }
     });
     return Future.delayed(const Duration(milliseconds: 300), () {
@@ -206,7 +237,6 @@ class DatabaseService {
     Competition competition = Competition.emptyCompetition();
     Stream<DatabaseEvent> competitionStream = _ref.child("users/vematosevic/competitions/$competitionName").onValue;
     competitionStream.listen((DatabaseEvent event) {
-      print(event.snapshot.value);
       try {
         var json =
         jsonDecode(jsonEncode(event.snapshot.value)) as Map<String, dynamic>;
@@ -217,6 +247,27 @@ class DatabaseService {
     });
     return Future.delayed(const Duration(seconds: 1), () {
       return competition;
+    });
+  }
+
+  Future<List<Event>> getEvents(int matchId) async {
+    List<Event> events = [];
+    Stream<DatabaseEvent> eventStream = _ref.child("users/vematosevic/events").onValue;
+    eventStream.listen((DatabaseEvent event) {
+      for (final child in event.snapshot.children){
+        if (child.child("matchId").value == matchId) {
+          try {
+            var json =
+            jsonDecode(jsonEncode(child.value)) as Map<String, dynamic>;
+            events.add(Event.fromMap(json));
+          } catch (e) {
+            print(e);
+          }
+        }
+      }
+    });
+    return Future.delayed(const Duration(milliseconds: 300), () {
+      return events;
     });
   }
 

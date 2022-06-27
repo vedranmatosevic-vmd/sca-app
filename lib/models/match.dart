@@ -2,7 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 
-import 'goal.dart';
+import 'event.dart';
 
 class Match {
   late int uuid = UniqueKey().hashCode;

@@ -8,7 +8,7 @@ import 'package:sca_app/router/router.dart';
 import 'package:sca_app/services/database_service.dart';
 import 'package:sca_app/widget/styled_layout.dart';
 
-import '../models/goal.dart';
+import '../models/event.dart';
 
 Match newMatch = Match.emptyMatch();
 

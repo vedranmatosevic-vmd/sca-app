@@ -9,6 +9,8 @@ import 'package:sca_app/widget/leading_icons.dart';
 import 'package:sca_app/widget/squared_button.dart';
 import 'package:sca_app/widget/styled_layout.dart';
 
+import '../models/event.dart';
+import '../models/player.dart';
 import '../models/team.dart';
 import '../services/database_service.dart';
 
@@ -32,10 +34,25 @@ class _MatchDetailsState extends State<MatchDetails> {
   DatabaseService service = DatabaseService();
   late Team _homeTeam;
   late Team _awayTeam;
+  late int homeScore;
+  late int awayScore;
+  late List<Event> events;
+  late List<Player> players;
+
+  Future<int> calculateScore(int matchId, int teamId) async {
+    int score = await service.getScoreByGame(matchId, teamId);
+    return Future.delayed(const Duration(milliseconds: 100), () {
+      return score;
+    });
+  }
 
   Future<void> getTeams() async {
     _homeTeam = await service.getTeamsById(widget.match.homeTeam);
     _awayTeam = await service.getTeamsById(widget.match.awayTeam);
+    homeScore = await calculateScore(widget.match.uuid, _homeTeam.uuid);
+    awayScore = await calculateScore(widget.match.uuid, _awayTeam.uuid);
+    events = await service.getEvents(widget.match.uuid);
+    players = await service.getPlayersByTeams(_homeTeam.uuid, _awayTeam.uuid);
   }
 
   @override
@@ -49,11 +66,6 @@ class _MatchDetailsState extends State<MatchDetails> {
     getTeams();
     super.setState(fn);
   }
-
-  //TODO Vedran
-  // getHomeScore() async {
-  //   await service.getScoreByGame(widget.matchId);
-  // }
 
   @override
   Widget build(BuildContext context) {
@@ -82,13 +94,22 @@ class _MatchDetailsState extends State<MatchDetails> {
             );
           }
           if (!snapshot.hasError) {
-            return Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                MatchDetailHeader(match: widget.match, homeTeam: _homeTeam, awayTeam: _awayTeam),
-                ActionRow(match: widget.match),
-                EventColumn(match: widget.match)
-              ],
+            return SingleChildScrollView(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisSize: MainAxisSize.min,
+                children: <Widget>[
+                  MatchDetailHeader(
+                      match: widget.match,
+                      homeTeam: _homeTeam,
+                      awayTeam: _awayTeam,
+                    homeScore: homeScore,
+                    awayScore: awayScore
+                  ),
+                  ActionRow(match: widget.match),
+                  EventColumn(events: events, players: players)
+                ],
+              ),
             );
           }
           return const Text('Something went wrong');
@@ -100,11 +121,20 @@ class _MatchDetailsState extends State<MatchDetails> {
 }
 
 class MatchDetailHeader extends StatefulWidget {
-  const MatchDetailHeader({Key? key, required this.match, required this.homeTeam, required this.awayTeam}) : super(key: key);
+  const MatchDetailHeader({
+    Key? key,
+    required this.match,
+    required this.homeTeam,
+    required this.awayTeam,
+    required this.homeScore,
+    required this.awayScore
+  }) : super(key: key);
 
   final Match match;
   final Team homeTeam;
   final Team awayTeam;
+  final int homeScore;
+  final int awayScore;
 
   @override
   State<MatchDetailHeader> createState() => _MatchDetailHeaderState();
@@ -112,27 +142,6 @@ class MatchDetailHeader extends StatefulWidget {
 
 class _MatchDetailHeaderState extends State<MatchDetailHeader> {
   DatabaseService service = DatabaseService();
-  late int score;
-
-  Future<int> calculateScore(int matchId, int teamId) async {
-    score = await service.getScoreByGame(matchId, teamId);
-    return Future.delayed(const Duration(milliseconds: 300), () {
-      return score;
-    });
-  }
-
-  @override
-  void initState() {
-    print("Score: $score");
-    calculateScore(widget.match.uuid, widget.homeTeam.uuid);
-    super.initState();
-  }
-
-  @override
-  void setState(VoidCallback fn) {
-    calculateScore(widget.match.uuid, widget.homeTeam.uuid);
-    super.setState(fn);
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -178,8 +187,7 @@ class _MatchDetailHeaderState extends State<MatchDetailHeader> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
                     Text(
-                      '${score} - 0 ',
-                      // '${widget.match.homeScore} - ${widget.match.awayScore} ',
+                      '${widget.homeScore} - ${widget.awayScore}',
                       style: const TextStyle(
                           fontSize: 24,
                           color: Style.colorBlack,

@@ -55,7 +55,6 @@ class _SideBarState extends State<SideBar> {
                         ));
                   }).toList(),
                   onChanged: (String? value) async {
-                    print(value);
                     selectedLeague = await service.getCompetitionByValue(value!);
                     setState(() {
                       getTeamsByCompetitions(selectedLeague.uuid);

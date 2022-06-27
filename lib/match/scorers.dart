@@ -7,7 +7,7 @@ import 'package:sca_app/services/database_service.dart';
 import 'package:sca_app/widget/styled_layout.dart';
 
 import '../common/style.dart';
-import '../models/goal.dart';
+import '../models/event.dart';
 import '../models/team.dart';
 import '../router/router.dart';
 
@@ -99,7 +99,7 @@ _listOfPlayers(BuildContext context, Match match, Team team, List<Player> listOf
 Widget _playerCard(BuildContext context, Match match, Player player, Team team) {
   return GestureDetector(
     onTap: () async {
-      Goal goal = Goal(playerId: player.uuid, matchId: match.uuid, teamId: team.uuid);
+      Event goal = Event(playerId: player.uuid, matchId: match.uuid, teamId: team.uuid, eventType: EventType.goal.name);
 
       // if (team.shortName == match.homeTeam) {
       //   match.homeScore++;
@@ -108,7 +108,7 @@ Widget _playerCard(BuildContext context, Match match, Player player, Team team) 
       // }
 
       DatabaseService service = DatabaseService();
-      await service.addGoal(match, goal);
+      await service.addEvent(match, goal);
       // await service.updateMatch(match);
       await Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) => MatchDetails(match: match, team: team, pageBack: pagesFromToMD,)), (route) => false);
     },
