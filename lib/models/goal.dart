@@ -18,6 +18,7 @@ class Goal {
   Goal({
     required this.playerId,
     required this.matchId,
+    required this.teamId,
     this.isOwnGoal,
   });
 
@@ -26,6 +27,7 @@ class Goal {
     data['id'] = uuid;
     data['playerId'] = playerId;
     data['matchId'] = matchId;
+    data['teamId'] = teamId;
     data['isOwnGoal'] = isOwnGoal;
     data['createdTime'] = createdTime;
     return data;
@@ -35,6 +37,7 @@ class Goal {
     uuid = goalMap["id"];
     playerId = goalMap["playerId"];
     matchId = goalMap["matchId"];
+    teamId = goalMap["teamId"];
     isOwnGoal = goalMap["isOwnGoal"];
     createdTime = goalMap["createdTime"];
   }

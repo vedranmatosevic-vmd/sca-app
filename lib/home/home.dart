@@ -16,7 +16,7 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  String title = selectedLeague;
+  String title = selectedLeague.name;
 
   // DatabaseService service = DatabaseService();
   //
@@ -33,7 +33,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   void setState(VoidCallback fn) {
-    title = selectedLeague;
+    title = selectedLeague.name;
     super.setState(fn);
   }
 

@@ -1,27 +1,32 @@
+import 'dart:convert';
+
 import 'package:firebase_database/firebase_database.dart';
+import 'package:sca_app/models/competition.dart';
 
 import '../router/router.dart';
 
-String selectedLeague = "";
+Competition selectedLeague = Competition.emptyCompetition();
 String username = "";
 Pages currentPage = Pages.home;
 Pages pagesFromToMD = Pages.matches;
 
-List<String> competitionsByUser = [];
+List<Competition> competitionsByUser = [];
 
 List<String> teamsByCompetitions = [];
 
-Future<List<String>> getTeamsByCompetitions(String name) async{
+Future<List<String>> getTeamsByCompetitions(int competitionId) async{
   teamsByCompetitions.clear();
 
   DatabaseReference databaseRef =
-  FirebaseDatabase.instance.ref().child('users/vematosevic/competitions');
+  FirebaseDatabase.instance.ref().child('users/vematosevic/teams');
 
-  Stream<DatabaseEvent> competitionsStream = databaseRef.child(name).onValue;
+  Stream<DatabaseEvent> competitionsStream = databaseRef.onValue;
 
   competitionsStream.listen((DatabaseEvent event) {
     for (final child in event.snapshot.children) {
-      teamsByCompetitions.add(child.child("shortName").value.toString());
+      if (child.child("competitionId").value == competitionId){
+        teamsByCompetitions.add(child.child("shortName").value.toString());
+      }
     }
   });
 
@@ -36,7 +41,7 @@ void updateCompetitionsList() {
 
   competitionsStream.listen((DatabaseEvent event) {
     for (final child in event.snapshot.children) {
-      competitionsByUser.add(child.key!);
+      competitionsByUser.add(Competition.fromMap(jsonDecode(jsonEncode(child.value))));
     }
   });
 }

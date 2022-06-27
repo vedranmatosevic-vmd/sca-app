@@ -130,7 +130,7 @@ _header(BuildContext context, Team team) {
         Row(
           children: <Widget>[
             Text(
-              selectedLeague,
+              selectedLeague.name,
               style: Style.getTextStyle(context, StyleText.subTitle),
             )
           ],
@@ -225,8 +225,15 @@ _imagePlaceHolder(BuildContext context, String title) {
 
 _results(BuildContext context, Team team) {
   DatabaseService service = DatabaseService();
+  late List<Team> listOfTeams;
+
+  Future<List<Match>> getData() async {
+    listOfTeams = await service.getTeamsByCompetition(selectedLeague.uuid);
+    return await service.getMatchesByTeam(selectedLeague.name, team.uuid);
+  }
+
   return FutureBuilder<List<Match>>(
-      future: service.getMatchesByTeam(selectedLeague, team.shortName),
+      future: getData(),
       builder: (BuildContext context, AsyncSnapshot snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return const Center(
@@ -236,28 +243,28 @@ _results(BuildContext context, Team team) {
           );
         }
         if (snapshot.hasData) {
-          return _listOfResults(context, snapshot.data!, team);
+          return _listOfResults(context, snapshot.data!, team, listOfTeams);
         }
         return const Text('Something went wrong');
       }
   );
 }
 
-_listOfResults(BuildContext context, List<Match> listOfMatches, Team team) {
+_listOfResults(BuildContext context, List<Match> listOfMatches, Team team, List<Team> listOfTeams) {
   return ListView(
-    children: _listOfMatches(context, listOfMatches, team),
+    children: _listOfMatches(context, listOfMatches, team, listOfTeams),
   );
 }
 
-_listOfMatches(BuildContext context, List<Match> listOfMatches, Team team) {
+_listOfMatches(BuildContext context, List<Match> listOfMatches, Team team, List<Team> listOfTeams) {
   List<Widget> widgets = [];
   for (final match in listOfMatches) {
-    widgets.add(_resultMatchCard(context, match, team));
+    widgets.add(_resultMatchCard(context, match, team, listOfTeams));
   }
   return widgets;
 }
 
-_resultMatchCard(BuildContext context, Match match, Team team) {
+_resultMatchCard(BuildContext context, Match match, Team team, List<Team> listOfTeams) {
   return GestureDetector(
       onTap: () {
         pagesFromToMD = Pages.teamDetails;
@@ -280,7 +287,7 @@ _resultMatchCard(BuildContext context, Match match, Team team) {
               style: Style.getTextStyle(context, StyleText.smallTextBold),
             ),
             const SizedBox(width: 10,),
-            _boldWinner(context, team, match),
+            _boldWinner(context, team, match, listOfTeams),
             const Spacer(),
             Column(
               children: <Widget>[
@@ -312,9 +319,17 @@ _resultMatchCard(BuildContext context, Match match, Team team) {
   );
 }
 
-_boldWinner(BuildContext context, Team team, Match match) {
+_boldWinner(BuildContext context, Team team, Match match, List<Team> listOfTeams) {
   bool isHomeWin = false;
   bool isAwayWin = false;
+
+  String _homeTeam = "";
+  String _awayTeam = "";
+  for (final team in listOfTeams) {
+    if (team.uuid == match.homeTeam) _homeTeam = team.name;
+    if (team.uuid == match.awayTeam) _awayTeam = team.name;
+  }
+
   // if (match.homeScore > match.awayScore) {
   //   isHomeWin = true;
   // }
@@ -328,7 +343,7 @@ _boldWinner(BuildContext context, Team team, Match match) {
       Row(
         children: <Widget>[
           Text(
-            match.homeTeam,
+            _homeTeam,
             style: isHomeWin ? Style.getTextStyle(context, StyleText.textBold) : Style.getTextStyle(context, StyleText.textRegular),
           ),
         ],
@@ -337,7 +352,7 @@ _boldWinner(BuildContext context, Team team, Match match) {
       Row(
         children: <Widget>[
           Text(
-            match.awayTeam,
+            _awayTeam,
             style: isAwayWin ? Style.getTextStyle(context, StyleText.textBold) : Style.getTextStyle(context, StyleText.textRegular),
           ),
         ],

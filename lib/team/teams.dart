@@ -26,7 +26,7 @@ class _TeamsState extends State<Teams> {
         Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) => const HomeScreen()), (route) => false);
       },),
       body: FutureBuilder<List<Team>>(
-        future: service.getTeamsByCompetition(selectedLeague),
+        future: service.getTeamsByCompetition(selectedLeague.uuid),
         builder: (BuildContext context, AsyncSnapshot snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const Center(

@@ -7,6 +7,7 @@ import 'package:sca_app/widget/leading_icons.dart';
 import 'package:sca_app/widget/styled_layout.dart';
 import 'package:sca_app/models/match.dart';
 
+import '../models/team.dart';
 import '../services/database_service.dart';
 
 class Matches extends StatefulWidget {
@@ -19,11 +20,18 @@ class Matches extends StatefulWidget {
 }
 
 class _MatchesState extends State<Matches> {
+  DatabaseService service = DatabaseService();
+  late List<Team> listOfTeam;
+
+  Future<List<Match>> getData() async {
+    listOfTeam = await service.getTeamsByCompetition(selectedLeague.uuid);
+    return await service.getMatchesByCompetition(selectedLeague.uuid);
+  }
+
   @override
   Widget build(BuildContext context) {
     currentPage = Pages.matches;
 
-    DatabaseService service = DatabaseService();
     return StyledLayout(
       appBarTitle: 'Matches',
       leading: LeadingIcons(callback: () {
@@ -31,7 +39,7 @@ class _MatchesState extends State<Matches> {
       },),
       actions: _actions(context),
       body: FutureBuilder<List<Match>>(
-        future: service.getMatchesByCompetition(selectedLeague),
+        future: getData(),
           builder: (BuildContext context, AsyncSnapshot snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
               return const Center(
@@ -41,7 +49,7 @@ class _MatchesState extends State<Matches> {
               );
             }
             if (snapshot.hasData) {
-              return _body(context, snapshot.data!);
+              return _body(context, snapshot.data!, listOfTeam);
             }
             return const Text('Something went wrong');
           }),
@@ -49,13 +57,13 @@ class _MatchesState extends State<Matches> {
   }
 }
 
-_body(BuildContext context, List<Match> listOfMatches) {
+_body(BuildContext context, List<Match> listOfMatches, List<Team> listOfTeams) {
   return ListView(
-    children: _matchesByRound(context, listOfMatches),
+    children: _matchesByRound(context, listOfMatches, listOfTeams),
   );
 }
 
-_matchesByRound(BuildContext context, List<Match> listOfMatches) {
+_matchesByRound(BuildContext context, List<Match> listOfMatches, List<Team> listOfTeams) {
   List<Widget> widgets = [];
   int currentRounds = 1;
   bool newRound = true;
@@ -68,7 +76,7 @@ _matchesByRound(BuildContext context, List<Match> listOfMatches) {
       widgets.add(_roundTitle(currentRounds.toString()));
       newRound = false;
     }
-    widgets.add(_matchCard(context, match));
+    widgets.add(_matchCard(context, match, listOfTeams));
   }
   return widgets;
 }
@@ -98,7 +106,7 @@ _roundTitle(String s) {
   );
 }
 
-_matchCard(BuildContext context, Match match) {
+_matchCard(BuildContext context, Match match, List<Team> listOfTeams) {
   return GestureDetector(
     onTap: () {
       pagesFromToMD = Pages.matches;
@@ -115,7 +123,7 @@ _matchCard(BuildContext context, Match match) {
       child: Row(
         children: <Widget>[
           _circleHours(context,match),
-          _scoreRow(context, match),
+          _scoreRow(context, match, listOfTeams),
         ],
       ),
     ),
@@ -136,7 +144,15 @@ _circleHours(BuildContext context, Match match) {
   );
 }
 
-_scoreRow(BuildContext context, Match match) {
+_scoreRow(BuildContext context, Match match, List<Team> listOfTeams) {
+  String _homeTeam = "";
+  String _awayTeam = "";
+
+  for (final team in listOfTeams) {
+    if (team.uuid == match.homeTeam) _homeTeam = team.shortName;
+    if (team.uuid == match.awayTeam) _awayTeam = team.shortName;
+  }
+
   return Container(
     padding: const EdgeInsets.only(left: 14.0),
     child: Column(
@@ -144,7 +160,7 @@ _scoreRow(BuildContext context, Match match) {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          '${match.homeTeam} 0 - 0 ${match.awayTeam}',
+          '$_homeTeam 0 - 0 $_awayTeam',
           // '${match.homeTeam} ${match.homeScore} - ${match.awayScore} ${match.awayTeam}',
           style: Style.getTextStyle(context, StyleText.textBold),
         ),

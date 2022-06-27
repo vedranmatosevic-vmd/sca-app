@@ -16,7 +16,7 @@ class Players extends StatelessWidget {
   Widget build(BuildContext context) {
     DatabaseService service = DatabaseService();
     return FutureBuilder<List<Player>>(
-        future: service.getPlayersByTeam(selectedLeague, team.name),
+        future: service.getPlayersByTeam(team.uuid),
         builder: (BuildContext context, AsyncSnapshot snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const Padding(

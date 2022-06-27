@@ -23,7 +23,7 @@ void navigateTo(BuildContext context, Pages page,
         context,
         MaterialPageRoute(
             builder: (context) => MatchDetails(
-                  matchId: match!.uuid.toString(),
+                  match: match!,
                   pageBack: currentPage,
                   team: team,
                 )));

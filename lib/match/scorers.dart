@@ -11,8 +11,6 @@ import '../models/goal.dart';
 import '../models/team.dart';
 import '../router/router.dart';
 
-Player player1 = Player(name: "Maro", lastName: "Globan", birthDate: "13.03.2014");
-
 class Scorers extends StatelessWidget {
   const Scorers({Key? key, required this.match}) : super(key: key);
 
@@ -22,10 +20,22 @@ class Scorers extends StatelessWidget {
   Widget build(BuildContext context) {
     DatabaseService service = DatabaseService();
 
+    List<Player> _homePlayers = [];
+    List<Player> _awayPlayers = [];
+    Team _homeTeam = Team.emptyTeam();
+    Team _awayTeam = Team.emptyTeam();
+
+    Future<void> getPlayers() async {
+      _homePlayers = await service.getPlayersByTeam(match.homeTeam);
+      _awayPlayers = await service.getPlayersByTeam(match.awayTeam);
+      _homeTeam = await service.getTeamsById(match.homeTeam);
+      _awayTeam = await service.getTeamsById(match.awayTeam);
+    }
+
     return StyledLayout(
         appBarTitle: "Scorers",
-        body: FutureBuilder<List<Team>>(
-          future: service.getTeamsByMatch(selectedLeague, match),
+        body: FutureBuilder(
+          future: getPlayers(),
           builder: (BuildContext context, AsyncSnapshot snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
               return const Padding(
@@ -37,26 +47,13 @@ class Scorers extends StatelessWidget {
                 ),
               );
             }
-            if (snapshot.hasData) {
-
-              Team _homeTeam = Team.emptyTeam();
-              Team _awayTeam = Team.emptyTeam();
-
-              for (final team in snapshot.data! as List<Team>) {
-                if (team.shortName == match.homeTeam) {
-                  _homeTeam = team;
-                } else if (team.shortName == match.awayTeam) {
-                  _awayTeam = team;
-
-                }
-              }
-
+            if (!snapshot.hasError) {
               return SingleChildScrollView(
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: <Widget>[
-                    _playersListView(context, match, _homeTeam),
-                    _playersListView(context, match, _awayTeam),
+                    _playersListView(context, match, _homeTeam, _homePlayers),
+                    _playersListView(context, match, _awayTeam, _awayPlayers),
                   ],
                 ),
               );
@@ -68,13 +65,13 @@ class Scorers extends StatelessWidget {
   }
 }
 
-_playersListView(BuildContext context, Match match, Team team) {
+_playersListView(BuildContext context, Match match, Team team, List<Player> listOfPlayers) {
   return Column(
-    children: _listOfPlayers(context, match, team),
+    children: _listOfPlayers(context, match, team, listOfPlayers),
   );
 }
 
-_listOfPlayers(BuildContext context, Match match, Team team) {
+_listOfPlayers(BuildContext context, Match match, Team team, List<Player> listOfPlayers) {
 
   List<Widget> widgets = [];
   widgets.add(
@@ -86,14 +83,14 @@ _listOfPlayers(BuildContext context, Match match, Team team) {
       child: Row(
         children: [
           Text(
-            team.name.toString(),
+            team.name,
             style: Style.getTextStyle(context, StyleText.textBold),
           ),
         ],
       ),
     )
   );
-  for (final player in team.players!) {
+  for (final player in listOfPlayers) {
     widgets.add(_playerCard(context, match, player, team));
   }
   return widgets;
@@ -102,7 +99,7 @@ _listOfPlayers(BuildContext context, Match match, Team team) {
 Widget _playerCard(BuildContext context, Match match, Player player, Team team) {
   return GestureDetector(
     onTap: () async {
-      Goal goal = Goal(playerId: player.uuid, matchId: match.uuid);
+      Goal goal = Goal(playerId: player.uuid, matchId: match.uuid, teamId: team.uuid);
 
       // if (team.shortName == match.homeTeam) {
       //   match.homeScore++;
@@ -113,7 +110,7 @@ Widget _playerCard(BuildContext context, Match match, Player player, Team team) 
       DatabaseService service = DatabaseService();
       await service.addGoal(match, goal);
       // await service.updateMatch(match);
-      await Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) => MatchDetails(matchId: match.uuid.toString(), team: team, pageBack: pagesFromToMD,)), (route) => false);
+      await Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) => MatchDetails(match: match, team: team, pageBack: pagesFromToMD,)), (route) => false);
     },
     child: Container(
       padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 4),

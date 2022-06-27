@@ -6,10 +6,11 @@ class Player {
   late String lastName;
   late String? birthDate;
   late String? shirtNumber = "";
+  late int teamId;
 
   Player.emptyPlayer();
 
-  Player({required this.name, required this.lastName, required this.birthDate, this.shirtNumber});
+  Player({required this.name, required this.lastName, required this.birthDate, required this.teamId, this.shirtNumber});
   // Player({required this.name, required this.lastName, required this.birthDate});
 
   Map<String, dynamic> toMap() {
@@ -18,7 +19,8 @@ class Player {
       'name': name,
       'lastName': lastName,
       'birthDate': birthDate,
-      'shirtNumber': shirtNumber
+      'shirtNumber': shirtNumber,
+      'teamId': teamId
     };
   }
 
@@ -27,6 +29,7 @@ class Player {
         name = playerMap["name"] as String,
         lastName = playerMap["lastName"] as String,
         birthDate = playerMap["birthDate"] as String,
-        shirtNumber = playerMap["shirtNumber"] as String;
+        shirtNumber = playerMap["shirtNumber"] as String,
+        teamId = playerMap["teamId"];
 
 }

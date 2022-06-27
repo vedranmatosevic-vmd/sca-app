@@ -36,8 +36,8 @@ class _NewTeamState extends State<NewTeam> {
         GestureDetector(
             onTap: () async {
               DatabaseService service = DatabaseService();
-              newTeam = Team(name: _nameTEC.text, shortName: _shortNameTEC.text, email: _emailTEC.text, contactPerson: _contactPersonTEC.text, phone: _phoneTEC.text);
-              service.addTeam(selectedLeague, newTeam);
+              newTeam = Team(name: _nameTEC.text, competitionId: selectedLeague.uuid, shortName: _shortNameTEC.text, email: _emailTEC.text, contactPerson: _contactPersonTEC.text, phone: _phoneTEC.text);
+              service.addTeam(newTeam);
             },
             child: const Icon(Icons.save)
         ),

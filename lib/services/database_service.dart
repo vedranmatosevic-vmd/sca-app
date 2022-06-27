@@ -5,6 +5,7 @@ import 'package:sca_app/match/scorers.dart';
 import 'package:sca_app/models/goal.dart';
 import 'package:sca_app/models/match.dart';
 
+import '../models/competition.dart';
 import '../models/player.dart';
 import '../models/team.dart';
 
@@ -18,32 +19,13 @@ class DatabaseService {
   updateMatch(Match match) async {
     await _ref.child("users/vematosevic/matches/${match.uuid}").update(match.toMap());
   }
-
-  // getTeams(String competition) async {
-  //   Stream<DatabaseEvent> playersStream = _ref.child("users/vematosevic/competitions").onValue;
-  //   playersStream.listen((DatabaseEvent event) {
-  //     for (final child in event.snapshot.children) {
-  //       for (final team in child.children) {
-  //         for (final player in team.child("players").children) {
-  //           updatePlayer(competition, team.child("name").value.toString(), player.child("id").value.toString());
-  //         }
-  //       }
-  //     }
-  //   });
-  // }
-  //
-  // updatePlayer(String competition, String team, String playerId) async {
-  //   Future.delayed(const Duration(seconds: 2), () {
-  //     _ref.child("users/vematosevic/competitions/$competition/$team/players/$playerId/shirtNumber").set("");
-  //   });
-  // }
   
-  Future<List<Match>> getMatchesByCompetition(String competition) async {
+  Future<List<Match>> getMatchesByCompetition(int competition) async {
     List<Match> matches = List.empty(growable: true);
     Stream<DatabaseEvent> matchesStream = _ref.child("users/vematosevic/matches").orderByChild("round").onValue;
     matchesStream.listen((DatabaseEvent event) {
       for (final child in event.snapshot.children) {
-        if (child.child("competition").value.toString() == competition)  {
+        if (child.child("competition").value == competition)  {
           try{
             var json = jsonDecode(jsonEncode(child.value)) as Map<String, dynamic>;
             matches.add(Match.fromMap(json));
@@ -58,20 +40,23 @@ class DatabaseService {
     });
   }
   
-  addTeam(String competition, Team team) async {
-    await _ref.child("users/vematosevic/competitions/$competition/${team.name}").set(team.toMap());
+  addTeam(Team team) async {
+    await _ref.child("users/vematosevic/teams/${team.name}").set(team.toMap());
   }
 
-  Future<List<Team>> getTeamsByCompetition(String competition) async {
+  Future<List<Team>> getTeamsByCompetition(int competitionID) async {
     List<Team> team = List.empty(growable: true);
-    Stream<DatabaseEvent> teamsStream = _ref.child("users/vematosevic/competitions/$competition").orderByChild("name").onValue;
+    Stream<DatabaseEvent> teamsStream = _ref.child("users/vematosevic/teams").orderByChild("name").onValue;
     teamsStream.listen((DatabaseEvent event) {
       for (final child in event.snapshot.children) {
-        try{
-          var json = jsonDecode(jsonEncode(child.value)) as Map<String, dynamic>;
-          team.add(Team.fromMap(json));
-        } catch(e) {
-          print(e);
+        if (child.child("competitionId").value == competitionID){
+          try {
+            var json =
+                jsonDecode(jsonEncode(child.value)) as Map<String, dynamic>;
+            team.add(Team.fromMap(json));
+          } catch (e) {
+            print(e);
+          }
         }
       }
     });
@@ -80,12 +65,52 @@ class DatabaseService {
     });
   }
 
-  Future<List<Match>> getMatchesByTeam(String competition, String team) async {
+  Future<Team> getTeamsById(int teamId) async {
+    Team team = Team.emptyTeam();
+    Stream<DatabaseEvent> teamsStream = _ref.child("users/vematosevic/teams").onValue;
+    teamsStream.listen((DatabaseEvent event) {
+      for (final child in event.snapshot.children) {
+        if (child.child("id").value == teamId){
+          try {
+            var json =
+            jsonDecode(jsonEncode(child.value)) as Map<String, dynamic>;
+            team = Team.fromMap(json);
+          } catch (e) {
+            print(e);
+          }
+        }
+      }
+    });
+    return Future.delayed(const Duration(milliseconds: 300), () {
+      return team;
+    });
+  }
+
+  Future<int> getTeamIdByName(int competitionId, String teamName) async {
+    int teamId = 0;
+    Stream<DatabaseEvent> teamsStream = _ref.child("users/vematosevic/teams").onValue;
+    teamsStream.listen((DatabaseEvent event) {
+      for (final child in event.snapshot.children) {
+        if (child.child("shortName").value.toString() == teamName && child.child("competitionId").value == competitionId){
+          try {
+            teamId = int.parse(child.child("id").value.toString());
+          } catch (e) {
+            print(e);
+          }
+        }
+      }
+    });
+    return Future.delayed(const Duration(seconds: 1), () {
+      return teamId;
+    });
+  }
+
+  Future<List<Match>> getMatchesByTeam(String competition, int teamId) async {
     List<Match> matches = List.empty(growable: true);
-    Stream<DatabaseEvent> matchesStream = _ref.child("users/vematosevic/matches").onValue;
+    Stream<DatabaseEvent> matchesStream = _ref.child("users/vematosevic/matches").orderByChild("date").onValue;
     matchesStream.listen((DatabaseEvent event) {
       for (final child in event.snapshot.children) {
-        if (child.child("homeTeam").value.toString() == team || child.child("awayTeam").value.toString() == team && child.child("competition").value.toString() == competition) {
+        if (child.child("homeTeam").value == teamId || child.child("awayTeam").value == teamId && child.child("competition").value.toString() == competition) {
           try {
             var json =
                 jsonDecode(jsonEncode(child.value)) as Map<String, dynamic>;
@@ -105,38 +130,65 @@ class DatabaseService {
     await _ref.child("users/vematosevic/goals/${goal.uuid}").set(goal.toMap());
   }
 
-  addPlayer(String competition, String team, Player player) async {
-    await _ref.child("users/vematosevic/competitions/$competition/$team/players/${player.uuid}").set(player.toMap());
+  addPlayer(String team, Player player) async {
+    await _ref.child("users/vematosevic/players/${player.name} ${player.lastName}").set(player.toMap());
   }
 
-  Future<List<Player>> getPlayersByTeam(String competition, String team) async {
+  Future<List<Player>> getPlayersByTeam(int teamId) async {
     List<Player> players = List.empty(growable: true);
-    Stream<DatabaseEvent> matchesStream = _ref.child("users/vematosevic/competitions/$competition/$team/players").onValue;
+    Stream<DatabaseEvent> matchesStream = _ref.child("users/vematosevic/players").onValue;
     matchesStream.listen((DatabaseEvent event) {
       for (final child in event.snapshot.children) {
-        try {
-          var json =
-          jsonDecode(jsonEncode(child.value)) as Map<String, dynamic>;
-          players.add(Player.fromMap(json));
-        } catch (e) {
-          print(e);
+        if (child.child("teamId").value == teamId){
+          try {
+            var json =
+                jsonDecode(jsonEncode(child.value)) as Map<String, dynamic>;
+            players.add(Player.fromMap(json));
+          } catch (e) {
+            print(e);
+          }
         }
       }
     });
-    return Future.delayed(const Duration(seconds: 1), () {
+    return Future.delayed(const Duration(milliseconds: 300), () {
       return players;
     });
   }
 
-  Future<List<Team>> getTeamsByMatch(String competition, Match match) async {
-    List<Team> teams = List.empty(growable: true);
-    Stream<DatabaseEvent> teamsStream = _ref.child("users/vematosevic/competitions/$competition").onValue;
-    teamsStream.listen((DatabaseEvent event) {
+
+  // Scorers function - maybe not used
+  // Future<List<Team>> getTeamsByMatch(String competitionName, Match match) async {
+  //   List<Team> teams = List.empty(growable: true);
+  //   Stream<DatabaseEvent> teamsStream = _ref.child("users/vematosevic/players").onValue;
+  //   teamsStream.listen((DatabaseEvent event) {
+  //     for (final child in event.snapshot.children) {
+  //       // if (child.child("shortName").value.toString() == match.homeTeam.toString() || child.child("shortName").value.toString() == match.awayTeam.toString()) {
+  //       //   try {
+  //       //     var json = jsonDecode(jsonEncode(child.value)) as Map<String, dynamic>;
+  //       //     teams.add(Team.fromMap(json));
+  //       //   } catch (e) {
+  //       //     print(e);
+  //       //   }
+  //       // }
+  //     }
+  //   });
+  //   return Future.delayed(const Duration(seconds: 1), () {
+  //     return teams;
+  //   });
+  // }
+
+  Future<Match> getMatch(int matchId) async {
+    Match match = Match.emptyMatch();
+    Stream<DatabaseEvent> matchesStream = _ref.child("users/vematosevic/matches").onValue;
+    matchesStream.listen((DatabaseEvent event) {
       for (final child in event.snapshot.children) {
-        if (child.child("shortName").value.toString() == match.homeTeam.toString() || child.child("shortName").value.toString() == match.awayTeam.toString()) {
+        if (child
+            .child("id")
+            .value == matchId) {
           try {
-            var json = jsonDecode(jsonEncode(child.value)) as Map<String, dynamic>;
-            teams.add(Team.fromMap(json));
+            var json = jsonDecode(jsonEncode(child.value))
+            as Map<String, dynamic>;
+            match = Match.fromMap(json);
           } catch (e) {
             print(e);
           }
@@ -144,27 +196,11 @@ class DatabaseService {
       }
     });
     return Future.delayed(const Duration(seconds: 1), () {
-      return teams;
-    });
-  }
-
-  Future<Match> getMatch(String matchId) async {
-    Match match = Match.emptyMatch();
-    Stream<DatabaseEvent> matchesStream = _ref.child("users/vematosevic/matches/$matchId").onValue;
-    matchesStream.listen((DatabaseEvent event) {
-      try {
-        var json = jsonDecode(jsonEncode(event.snapshot.value)) as Map<String, dynamic>;
-        match = Match.fromMap(json);
-      } catch (e) {
-        print(e);
-      }
-    });
-    return Future.delayed(const Duration(seconds: 1), () {
       return match;
     });
   }
 
-  Future<int> getScoreByGame(String matchId) async {
+  Future<int> getScoreByGame(int matchId) async {
     int score = 0;
     Stream<DatabaseEvent> goalsStream = _ref.child("users/vematosevic/goals").onValue;
     goalsStream.listen((DatabaseEvent event) {
@@ -182,6 +218,28 @@ class DatabaseService {
     return Future.delayed(const Duration(seconds: 1), () {
       return score;
     });
+  }
+
+  Future<Competition> getCompetitionByValue(String competitionName) async {
+    Competition competition = Competition.emptyCompetition();
+    Stream<DatabaseEvent> competitionStream = _ref.child("users/vematosevic/competitions/$competitionName").onValue;
+    competitionStream.listen((DatabaseEvent event) {
+      print(event.snapshot.value);
+      try {
+        var json =
+        jsonDecode(jsonEncode(event.snapshot.value)) as Map<String, dynamic>;
+        competition = Competition.fromMap(json);
+      } catch (e) {
+        print(e);
+      }
+    });
+    return Future.delayed(const Duration(seconds: 1), () {
+      return competition;
+    });
+  }
+
+  addCompetition(Competition competition) async {
+    await _ref.child("users/vematosevic/competitions/${competition.name}").set(competition.toMap());
   }
 
 }

@@ -15,12 +15,12 @@ import '../services/database_service.dart';
 class MatchDetails extends StatefulWidget {
   const MatchDetails({
     Key? key,
-    required this.matchId,
+    required this.match,
     this.pageBack,
     required this.team
   }) : super(key: key);
 
-  final String matchId;
+  final Match match;
   final Pages? pageBack;
   final Team? team;
 
@@ -30,22 +30,30 @@ class MatchDetails extends StatefulWidget {
 
 class _MatchDetailsState extends State<MatchDetails> {
   DatabaseService service = DatabaseService();
+  late Team _homeTeam;
+  late Team _awayTeam;
 
-  getHomeScore() async {
-    await service.getScoreByGame(widget.matchId);
+  Future<void> getTeams() async {
+    _homeTeam = await service.getTeamsById(widget.match.homeTeam);
+    _awayTeam = await service.getTeamsById(widget.match.awayTeam);
   }
 
   @override
   void initState() {
-    getHomeScore();
+    getTeams();
     super.initState();
   }
 
   @override
   void setState(VoidCallback fn) {
-    getHomeScore();
+    getTeams();
     super.setState(fn);
   }
+
+  //TODO Vedran
+  // getHomeScore() async {
+  //   await service.getScoreByGame(widget.matchId);
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -56,10 +64,12 @@ class _MatchDetailsState extends State<MatchDetails> {
           Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) => TeamDetails(team: widget.team!)), (route) => false);
         } else if (widget.pageBack == Pages.matches) {
           Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) => const Matches()), (route) => false);
+        } else if (widget.pageBack == Pages.createNewMatch) {
+          Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) => const Matches()), (route) => false);
         }
       }),
-      body: FutureBuilder<Match>(
-        future: service.getMatch(widget.matchId),
+      body: FutureBuilder(
+        future: getTeams(),
         builder: (BuildContext context, AsyncSnapshot snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const Padding(
@@ -71,13 +81,13 @@ class _MatchDetailsState extends State<MatchDetails> {
               ),
             );
           }
-          if (snapshot.hasData) {
+          if (!snapshot.hasError) {
             return Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
-                MatchDetailHeader(match: snapshot.data),
-                ActionRow(match: snapshot.data),
-                EventColumn(match: snapshot.data)
+                MatchDetailHeader(match: widget.match, homeTeam: _homeTeam, awayTeam: _awayTeam),
+                ActionRow(match: widget.match),
+                EventColumn(match: widget.match)
               ],
             );
           }
@@ -90,20 +100,17 @@ class _MatchDetailsState extends State<MatchDetails> {
 }
 
 class MatchDetailHeader extends StatefulWidget {
-  const MatchDetailHeader({Key? key, required this.match}) : super(key: key);
+  const MatchDetailHeader({Key? key, required this.match, required this.homeTeam, required this.awayTeam}) : super(key: key);
 
   final Match match;
+  final Team homeTeam;
+  final Team awayTeam;
 
   @override
   State<MatchDetailHeader> createState() => _MatchDetailHeaderState();
 }
 
 class _MatchDetailHeaderState extends State<MatchDetailHeader> {
-
-  @override
-  void setState(VoidCallback fn) {
-    super.setState(fn);
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -133,7 +140,7 @@ class _MatchDetailHeaderState extends State<MatchDetailHeader> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text(
-                      widget.match.homeTeam,
+                      widget.homeTeam.shortName,
                       style: const TextStyle(
                           fontSize: 16,
                           color: Style.colorBlack,
@@ -166,7 +173,7 @@ class _MatchDetailHeaderState extends State<MatchDetailHeader> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text(
-                      widget.match.awayTeam,
+                      widget.awayTeam.shortName,
                       style: const TextStyle(
                           fontSize: 16,
                           color: Style.colorBlack,

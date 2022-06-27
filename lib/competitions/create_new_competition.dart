@@ -1,6 +1,8 @@
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:sca_app/common/loaded_data.dart';
+import 'package:sca_app/models/competition.dart';
+import 'package:sca_app/services/database_service.dart';
 import 'package:sca_app/widget/input_text_form_field.dart';
 import 'package:sca_app/widget/styled_layout.dart';
 
@@ -14,9 +16,9 @@ class NewCompetition extends StatefulWidget {
 }
 
 class _NewCompetitionState extends State<NewCompetition> {
-  final myController = TextEditingController();
+  final nameController = TextEditingController();
 
-  final DatabaseReference _testRef = FirebaseDatabase.instance.ref().child('users/vematosevic/competitions');
+  DatabaseService service = DatabaseService();
 
   @override
   Widget build(BuildContext context) {
@@ -25,8 +27,9 @@ class _NewCompetitionState extends State<NewCompetition> {
       actions: [
         const SizedBox(width: 10,),
         GestureDetector(
-          onTap: () {
-            _testRef.child(myController.text).set("");
+          onTap: () async {
+            Competition competition = Competition(name: nameController.text);
+            await service.addCompetition(competition);
             Navigator.pop(context);
           },
           child: const Icon(
@@ -42,7 +45,7 @@ class _NewCompetitionState extends State<NewCompetition> {
             children: <Widget>[
               Flexible(
                 child: InputTextFormField(
-                  controller: myController,
+                  controller: nameController,
                   isPhoneNumber: false,
                   padding: const EdgeInsets.all(0),
                   value: 'Name',

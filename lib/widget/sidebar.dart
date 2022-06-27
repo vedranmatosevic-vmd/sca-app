@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:sca_app/home/home.dart';
+import 'package:sca_app/models/competition.dart';
 import 'package:sca_app/router/router.dart';
+import 'package:sca_app/services/database_service.dart';
 
 import '../common/loaded_data.dart';
 import '../common/style.dart';
@@ -14,6 +16,7 @@ class SideBar extends StatefulWidget {
 }
 
 class _SideBarState extends State<SideBar> {
+  DatabaseService service = DatabaseService();
 
   @override
   Widget build(BuildContext context) {
@@ -42,19 +45,20 @@ class _SideBarState extends State<SideBar> {
                   dropdownColor: Style.colorGrey,
                   iconEnabledColor: Style.colorBlack,
                   underline: Container(),
-                  value: selectedLeague,
-                  items: competitionsByUser.map((String item) {
+                  value: selectedLeague.name,
+                  items: competitionsByUser.map((Competition item) {
                     return DropdownMenuItem(
-                        value: item,
+                        value: item.name,
                         child: Text(
-                          item,
+                          item.name,
                           style: Style.getTextStyle(context, StyleText.subTitle),
                         ));
                   }).toList(),
                   onChanged: (String? value) async {
+                    print(value);
+                    selectedLeague = await service.getCompetitionByValue(value!);
                     setState(() {
-                      selectedLeague = value!;
-                      getTeamsByCompetitions(selectedLeague);
+                      getTeamsByCompetitions(selectedLeague.uuid);
                     });
                     navigateTo(context, Pages.home);
                     // navigateTo(context, Pages.home, title: selectedLeague);

@@ -6,9 +6,9 @@ import 'goal.dart';
 
 class Match {
   late int uuid = UniqueKey().hashCode;
-  late String competition;
-  late String homeTeam;
-  late String awayTeam;
+  late int competitionId;
+  late int homeTeam;
+  late int awayTeam;
   late String date;
   late String time;
   late int duration;
@@ -18,7 +18,7 @@ class Match {
   Match.emptyMatch();
 
   Match({
-    required this.competition,
+    required this.competitionId,
     required this.homeTeam,
     required this.awayTeam,
     required this.date,
@@ -31,7 +31,7 @@ class Match {
   Map<String, dynamic> toMap() {
     final Map<String, dynamic> data = <String, dynamic>{};
     data['id'] = uuid;
-    data['competition'] = competition;
+    data['competition'] = competitionId;
     data['homeTeam'] = homeTeam;
     data['awayTeam'] = awayTeam;
     data['date'] = date;
@@ -44,7 +44,7 @@ class Match {
 
   Match.fromMap(Map<String, dynamic> matchMap) {
     uuid = matchMap["id"];
-    competition = matchMap["competition"];
+    competitionId = matchMap["competition"];
     homeTeam = matchMap["homeTeam"];
     awayTeam = matchMap["awayTeam"];
     date = matchMap["date"];

@@ -70,9 +70,10 @@ _action(BuildContext context, Team team) {
               name: _nameTEC.text,
               lastName: _lastNameTEC.text,
               birthDate: _birthDateTEC.text,
-              shirtNumber: _numberTEC.text
+              shirtNumber: _numberTEC.text,
+            teamId: team.uuid
           );
-          await service.addPlayer(selectedLeague, team.name.toString(), newPlayer);
+          await service.addPlayer(team.uuid.toString(), newPlayer);
           Navigator.pop(context);
           _nameTEC.clear();
           _lastNameTEC.clear();

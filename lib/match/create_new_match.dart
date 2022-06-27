@@ -272,6 +272,8 @@ class DropDownItem extends StatefulWidget {
 }
 
 class _DropDownItemState extends State<DropDownItem> {
+  DatabaseService service = DatabaseService();
+
   late String selectedValue;
 
   @override
@@ -301,7 +303,8 @@ class _DropDownItemState extends State<DropDownItem> {
             child: Text(items),
           );
         }).toList(),
-        onChanged: (String? newValue) {
+        onChanged: (String? newValue) async {
+
           setState(() {
             selectedValue = newValue!.toString();
             _setDropDownValue(selectedValue);
@@ -309,12 +312,13 @@ class _DropDownItemState extends State<DropDownItem> {
         });
   }
 
-  void _setDropDownValue(String value) {
+  void _setDropDownValue(String value) async {
+    DatabaseService service = DatabaseService();
 
     if (widget.type == FormFieldType.home) {
-      newMatch.homeTeam = value;
+      newMatch.homeTeam = await service.getTeamIdByName(selectedLeague.uuid, value);
     } else if (widget.type == FormFieldType.away) {
-      newMatch.awayTeam = value;
+      newMatch.awayTeam = await service.getTeamIdByName(selectedLeague.uuid, value);
     } else if (widget.type == FormFieldType.round) {
       newMatch.round = int.parse(value);
     } else if (widget.type == FormFieldType.duration) {
@@ -358,12 +362,13 @@ List<Widget> _actions(BuildContext context, TextEditingController dateController
         newMatch.uuid = UniqueKey().hashCode;
         newMatch.date = dateController.text;
         newMatch.time = timeController.text;
-        newMatch.competition = selectedLeague;
+        newMatch.competitionId = selectedLeague.uuid;
         newMatch.isPlayed = false;
 
         await service.addMatch(newMatch);
 
-        navigateTo(context, Pages.matchDetails, match: newMatch);
+        pagesFromToMD = Pages.createNewMatch;
+        navigateTo(context, Pages.matchDetails, match: newMatch, pageBack: Pages.createNewMatch);
       },
       child: const Icon(
           Icons.save

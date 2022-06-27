@@ -1,10 +1,12 @@
 import 'dart:async';
+import 'dart:convert';
 
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:sca_app/common/style.dart';
 import 'package:sca_app/home/home.dart';
 import 'package:sca_app/login/login.dart';
+import 'package:sca_app/models/competition.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'common/loaded_data.dart';
@@ -45,10 +47,10 @@ class _SplashScreenState extends State<SplashScreen> {
       competitionsStream.listen((DatabaseEvent event) {
         competitionsByUser.clear();
         for (final child in event.snapshot.children) {
-          competitionsByUser.add(child.key!);
+          competitionsByUser.add(Competition.fromMap(jsonDecode(jsonEncode(child.value))));
         }
         if (screenCounter == 0) selectedLeague = competitionsByUser.first;
-        getTeamsByCompetitions(selectedLeague);
+        getTeamsByCompetitions(selectedLeague.uuid);
         screenCounter++;
       });
     });
