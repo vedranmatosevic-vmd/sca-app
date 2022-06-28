@@ -7,7 +7,8 @@ import 'package:sca_app/home/home.dart';
 import 'package:sca_app/match/create_new_match.dart';
 import 'package:sca_app/match/match_details.dart';
 import 'package:sca_app/match/matches.dart';
-import 'package:sca_app/match/scorers.dart';
+import 'package:sca_app/match/events.dart';
+import 'package:sca_app/models/event.dart';
 import 'package:sca_app/models/match.dart';
 import 'package:sca_app/players/create_new_player.dart';
 import 'package:sca_app/team/create_new_team.dart';
@@ -16,7 +17,7 @@ import 'package:sca_app/team/teams.dart';
 import '../models/team.dart';
 
 void navigateTo(BuildContext context, Pages page,
-    {Match? match, String? title, Team? team, Pages? pageBack}) {
+    {Match? match, String? title, Team? team, Pages? pageBack, EventType? eventType}) {
 
   if (page == Pages.matchDetails) {
     Navigator.push(
@@ -45,12 +46,13 @@ void navigateTo(BuildContext context, Pages page,
   } else if (page == Pages.teamDetails) {
     Navigator.push(context,
         MaterialPageRoute(builder: (context) => TeamDetails(team: team!)));
-  } else if (page == Pages.scorers) {
+  } else if (page == Pages.events) {
     Navigator.push(
         context,
         MaterialPageRoute(
-            builder: (context) => Scorers(
+            builder: (context) => Events(
                   match: match!,
+              eventType: eventType!,
                 )));
   } else if (page == Pages.newPlayer) {
     Navigator.push(context,
@@ -70,6 +72,6 @@ enum Pages {
   addGoal,
   addCard,
   teamDetails,
-  scorers,
+  events,
   matches
 }

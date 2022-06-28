@@ -68,22 +68,7 @@ class _EventColumnState extends State<EventColumn> {
                   borderRadius: BorderRadius.all(Radius.circular(25))
                 ),
                 alignment: Alignment.bottomRight,
-                child: Container(
-                  width: 20,
-                  height: 20,
-                  decoration: BoxDecoration(
-                      color: Style.getColor(context, StyleColor.white),
-                      borderRadius: BorderRadius.all(Radius.circular(10)),
-                    border: Border.all(
-                      color: Style.getColor(context, StyleColor.grey),
-                      width: 1,
-                    ),
-                  ),
-                  child: Icon(
-                    Icons.sports_soccer,
-                    size: 16,
-                  ),
-                ),
+                child: _eventIcon(event.eventType)
               ),
               // TODO VEDRAN - dodati box za gol gosta
               SizedBox(width: 10,),
@@ -138,4 +123,45 @@ class _EventColumnState extends State<EventColumn> {
         )
     );
   }
+
+  _eventIcon(String eventType) {
+    IconData? iconData;
+    Color? cardColor;
+
+    if (eventType == EventType.goal.name) {
+      iconData = Icons.sports_soccer;
+    } else if (eventType == EventType.yellowCard.name) {
+      cardColor = Style.getColor(context, StyleColor.yellow);
+    } else if (eventType == EventType.redCard.name) {
+      cardColor = Style.getColor(context, StyleColor.red);
+    }
+
+    return Container(
+      width: 20,
+      height: 20,
+      decoration: BoxDecoration(
+        color: Style.getColor(context, StyleColor.white),
+        borderRadius: BorderRadius.all(Radius.circular(10)),
+        border: Border.all(
+          color: Style.getColor(context, StyleColor.grey),
+          width: 1,
+        ),
+      ),
+      child: eventType == EventType.goal.name ? Icon(
+        iconData,
+        size: 16,
+      ) : Center(
+            child: Container(
+              width: 10,
+              height: 14,
+              decoration: BoxDecoration(
+                color: cardColor,
+                borderRadius: BorderRadius.all(Radius.circular(2))
+              ),
+            ),
+      ),
+    );
+  }
 }
+
+

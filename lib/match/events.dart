@@ -11,10 +11,11 @@ import '../models/event.dart';
 import '../models/team.dart';
 import '../router/router.dart';
 
-class Scorers extends StatelessWidget {
-  const Scorers({Key? key, required this.match}) : super(key: key);
+class Events extends StatelessWidget {
+  const Events({Key? key, required this.match, required this.eventType}) : super(key: key);
 
   final Match match;
+  final EventType eventType;
 
   @override
   Widget build(BuildContext context) {
@@ -52,8 +53,8 @@ class Scorers extends StatelessWidget {
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: <Widget>[
-                    _playersListView(context, match, _homeTeam, _homePlayers),
-                    _playersListView(context, match, _awayTeam, _awayPlayers),
+                    _playersListView(context, match, _homeTeam, _homePlayers, eventType),
+                    _playersListView(context, match, _awayTeam, _awayPlayers, eventType),
                   ],
                 ),
               );
@@ -65,13 +66,13 @@ class Scorers extends StatelessWidget {
   }
 }
 
-_playersListView(BuildContext context, Match match, Team team, List<Player> listOfPlayers) {
+_playersListView(BuildContext context, Match match, Team team, List<Player> listOfPlayers, EventType eventType) {
   return Column(
-    children: _listOfPlayers(context, match, team, listOfPlayers),
+    children: _listOfPlayers(context, match, team, listOfPlayers, eventType),
   );
 }
 
-_listOfPlayers(BuildContext context, Match match, Team team, List<Player> listOfPlayers) {
+_listOfPlayers(BuildContext context, Match match, Team team, List<Player> listOfPlayers, EventType eventType) {
 
   List<Widget> widgets = [];
   widgets.add(
@@ -91,15 +92,15 @@ _listOfPlayers(BuildContext context, Match match, Team team, List<Player> listOf
     )
   );
   for (final player in listOfPlayers) {
-    widgets.add(_playerCard(context, match, player, team));
+    widgets.add(_playerCard(context, match, player, team, eventType));
   }
   return widgets;
 }
 
-Widget _playerCard(BuildContext context, Match match, Player player, Team team) {
+Widget _playerCard(BuildContext context, Match match, Player player, Team team, EventType eventType) {
   return GestureDetector(
     onTap: () async {
-      Event goal = Event(playerId: player.uuid, matchId: match.uuid, teamId: team.uuid, eventType: EventType.goal.name);
+      Event goal = Event(playerId: player.uuid, matchId: match.uuid, teamId: team.uuid, eventType: eventType.name);
 
       // if (team.shortName == match.homeTeam) {
       //   match.homeScore++;

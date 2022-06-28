@@ -1,7 +1,7 @@
 import 'dart:convert';
 
 import 'package:firebase_database/firebase_database.dart';
-import 'package:sca_app/match/scorers.dart';
+import 'package:sca_app/match/events.dart';
 import 'package:sca_app/models/event.dart';
 import 'package:sca_app/models/match.dart';
 

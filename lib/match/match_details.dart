@@ -256,13 +256,16 @@ class _ActionRowState extends State<ActionRow> {
           SquaredButton(
             value: "Goal",
             icon: Icons.sports_soccer,
-            page: Pages.scorers,
+            page: Pages.events,
             match: widget.match,
+            eventType: EventType.goal,
           ),
           SquaredButton(
             value: "Card",
             icon: Icons.crop_square,
-            page: Pages.addCard,
+            page: Pages.events,
+            match: widget.match,
+            eventType: EventType.yellowCard,
           )
         ],
       ),

@@ -1,15 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:sca_app/common/style.dart';
+import 'package:sca_app/models/event.dart';
 import 'package:sca_app/router/router.dart';
 import 'package:sca_app/models/match.dart';
 
 class SquaredButton extends StatelessWidget {
-  const SquaredButton({Key? key, required this.value, required this.icon, required this.page, this.match}) : super(key: key);
+  const SquaredButton({Key? key, required this.value, required this.icon, required this.page, this.match, this.eventType}) : super(key: key);
 
   final String value;
   final IconData? icon;
   final Pages page;
   final Match? match;
+  final EventType? eventType;
 
   @override
   Widget build(BuildContext context) {
@@ -35,7 +37,7 @@ class SquaredButton extends StatelessWidget {
           SizedBox.fromSize(
             size: const Size(100, 100),
             child: InkWell(
-              onTap: () {navigateTo(context, page, match: match);},
+              onTap: () {navigateTo(context, page, match: match, eventType: eventType);},
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
