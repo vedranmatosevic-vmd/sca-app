@@ -107,7 +107,7 @@ class _MatchDetailsState extends State<MatchDetails> {
                     awayScore: awayScore
                   ),
                   ActionRow(match: widget.match),
-                  EventColumn(events: events, players: players)
+                  EventColumn(events: events, players: players, match: widget.match)
                 ],
               ),
             );

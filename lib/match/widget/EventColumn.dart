@@ -9,10 +9,11 @@ import '../../common/style.dart';
 DatabaseService service = DatabaseService();
 
 class EventColumn extends StatefulWidget {
-  const EventColumn({Key? key, required this.events, required this.players}) : super(key: key);
+  const EventColumn({Key? key, required this.events, required this.players, required this.match}) : super(key: key);
 
   final List<Event> events;
   final List<Player> players;
+  final Match match;
 
   @override
   State<EventColumn> createState() => _EventColumnState();
@@ -57,70 +58,92 @@ class _EventColumnState extends State<EventColumn> {
                   )
               )
           ),
-          child: Row(
-            mainAxisSize: MainAxisSize.max,
-            children: <Widget>[
-              Container(
-                width: 50,
-                height: 50,
-                decoration: BoxDecoration(
-                  color: Style.getColor(context, StyleColor.darkBlue),
-                  borderRadius: BorderRadius.all(Radius.circular(25))
-                ),
-                alignment: Alignment.bottomRight,
-                child: _eventIcon(event.eventType)
-              ),
-              // TODO VEDRAN - dodati box za gol gosta
-              SizedBox(width: 10,),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
-                    children: [
-                      Text(
-                        event.eventType == EventType.goal.name ? "Scored goal!" : event.eventType == EventType.yellowCard.name ? "Yellow card!" : "Red card!",
-                        style: Style.getTextStyle(context, StyleText.textBold),
-                      ),
-                    ],
-                  ),
-                  Row(
-                    children: [
-                      Text(
-                        _playerName,
-                        style: Style.getTextStyle(context, StyleText.textRegular),
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-              const SizedBox(width: 10,),
-              const Spacer(),
-              Column(
-                children: <Widget>[
-                  Row(
-                    children: <Widget>[
-                      Text(
-                        "home",
-                        // match.homeScore.toString(),
-                        style: Style.getTextStyle(context, StyleText.textBold),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 2,),
-                  Row(
-                    children: <Widget>[
-                      Text(
-                        "away",
-                        // match.awayScore.toString(),
-                        style: Style.getTextStyle(context, StyleText.textBold),
-                      ),
-                    ],
-                  )
-                ],
-              ),
-            ],
-          ),
+          child: event.teamId == widget.match.homeTeam ? _homeEventCard(event, _playerName) : _awayEventCard(event, _playerName)
         )
+    );
+  }
+
+  _homeEventCard(Event event, String playerName) {
+    return Row(
+      mainAxisSize: MainAxisSize.max,
+      children: <Widget>[
+        Container(
+            width: 50,
+            height: 50,
+            decoration: BoxDecoration(
+                color: Style.getColor(context, StyleColor.darkBlue),
+                borderRadius: const BorderRadius.all(Radius.circular(25))
+            ),
+            alignment: Alignment.bottomRight,
+            child: _eventIcon(event.eventType)
+        ),
+        const SizedBox(width: 10,),
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              children: [
+                Text(
+                  event.eventType == EventType.goal.name ? "Scored goal!" : event.eventType == EventType.yellowCard.name ? "Yellow card!" : "Red card!",
+                  style: Style.getTextStyle(context, StyleText.textBold),
+                ),
+              ],
+            ),
+            Row(
+              children: [
+                Text(
+                  playerName,
+                  style: Style.getTextStyle(context, StyleText.textRegular),
+                ),
+              ],
+            ),
+          ],
+        ),
+        const SizedBox(width: 10,),
+      ],
+    );
+  }
+
+  _awayEventCard(Event event, String playerName) {
+    return Row(
+      mainAxisSize: MainAxisSize.max,
+      mainAxisAlignment: MainAxisAlignment.end,
+      children: <Widget>[
+        const Spacer(),
+        const SizedBox(width: 10,),
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              children: [
+                Text(
+                  event.eventType == EventType.goal.name ? "Scored goal!" : event.eventType == EventType.yellowCard.name ? "Yellow card!" : "Red card!",
+                  style: Style.getTextStyle(context, StyleText.textBold),
+                ),
+              ],
+            ),
+            Row(
+              children: [
+                Text(
+                  playerName,
+                  style: Style.getTextStyle(context, StyleText.textRegular),
+                ),
+              ],
+            ),
+          ],
+        ),
+        const SizedBox(width: 10,),
+        Container(
+            width: 50,
+            height: 50,
+            decoration: BoxDecoration(
+                color: Style.getColor(context, StyleColor.darkBlue),
+                borderRadius: const BorderRadius.all(Radius.circular(25))
+            ),
+            alignment: Alignment.bottomLeft,
+            child: _eventIcon(event.eventType)
+        ),
+      ],
     );
   }
 
