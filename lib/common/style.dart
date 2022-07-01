@@ -109,6 +109,7 @@ class Style {
   static const colorGreen = Color(0xff04d96d);
   static const colorOrange = Color(0xfffc9b6d);
   static const colorDarkBlue = Color(0xff0d3b64);
+  static const colorLightBlue = Color(0xff1d548a);
   static const colorYellow = Color(0xfffcdd21);
 
   static Color getColor(BuildContext context, StyleColor styleColor) {

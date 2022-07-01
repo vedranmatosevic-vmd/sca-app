@@ -149,7 +149,13 @@ class _MatchDetailHeaderState extends State<MatchDetailHeader> {
       height: 130,
       padding: const EdgeInsets.symmetric(vertical: 20),
       decoration: const BoxDecoration(
-          color: Style.colorGrey
+        gradient: LinearGradient(
+            colors: [
+              Style.colorDarkBlue,
+              Style.colorLightBlue,
+              Style.colorDarkBlue,
+            ]
+        ),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
@@ -158,7 +164,7 @@ class _MatchDetailHeaderState extends State<MatchDetailHeader> {
           Text(
             '${widget.match.date} at ${widget.match.time} - ${widget.match.duration} min',
             style: const TextStyle(
-                color: Style.colorBlack,
+                color: Style.colorWhite,
                 fontSize: 14
             ),
           ),
@@ -174,7 +180,7 @@ class _MatchDetailHeaderState extends State<MatchDetailHeader> {
                       widget.homeTeam.shortName,
                       style: const TextStyle(
                           fontSize: 16,
-                          color: Style.colorBlack,
+                          color: Style.colorWhite,
                           fontWeight: FontWeight.bold
                       ),
                     ),
@@ -190,7 +196,7 @@ class _MatchDetailHeaderState extends State<MatchDetailHeader> {
                       '${widget.homeScore} - ${widget.awayScore}',
                       style: const TextStyle(
                           fontSize: 24,
-                          color: Style.colorBlack,
+                          color: Style.colorWhite,
                           fontWeight: FontWeight.bold
                       ),
                     ),
@@ -206,7 +212,7 @@ class _MatchDetailHeaderState extends State<MatchDetailHeader> {
                       widget.awayTeam.shortName,
                       style: const TextStyle(
                           fontSize: 16,
-                          color: Style.colorBlack,
+                          color: Style.colorWhite,
                           fontWeight: FontWeight.bold
                       ),
                     ),
@@ -222,7 +228,7 @@ class _MatchDetailHeaderState extends State<MatchDetailHeader> {
               Text(
                 'Futsalito, ${widget.match.round}' 'st round',
                 style: const TextStyle(
-                    color: Style.colorBlack,
+                    color: Style.colorWhite,
                     fontSize: 14
                 ),
               ),
@@ -259,6 +265,8 @@ class _ActionRowState extends State<ActionRow> {
             page: Pages.events,
             match: widget.match,
             eventType: EventType.goal,
+            iconColor: Style.colorDarkBlue,
+            textColor: StyleColor.darkBlue,
           ),
           SquaredButton(
             value: "Card",
@@ -266,6 +274,8 @@ class _ActionRowState extends State<ActionRow> {
             page: Pages.events,
             match: widget.match,
             eventType: EventType.yellowCard,
+            iconColor: Style.colorDarkBlue,
+            textColor: StyleColor.darkBlue,
           )
         ],
       ),
