@@ -20,6 +20,7 @@ class Events extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     DatabaseService service = DatabaseService();
+    String title = "";
 
     List<Player> _homePlayers = [];
     List<Player> _awayPlayers = [];
@@ -33,8 +34,16 @@ class Events extends StatelessWidget {
       _awayTeam = await service.getTeamsById(match.awayTeam);
     }
 
+    if (eventType == EventType.goal) {
+      title = "Goals";
+    } else if (eventType == EventType.yellowCard) {
+      title = "Yellow card";
+    } else if (eventType == EventType.redCard) {
+      title = "Red card";
+    }
+
     return StyledLayout(
-        appBarTitle: "Scorers",
+        appBarTitle: title,
         body: FutureBuilder(
           future: getPlayers(),
           builder: (BuildContext context, AsyncSnapshot snapshot) {
@@ -100,16 +109,18 @@ _listOfPlayers(BuildContext context, Match match, Team team, List<Player> listOf
 Widget _playerCard(BuildContext context, Match match, Player player, Team team, EventType eventType) {
   return GestureDetector(
     onTap: () async {
-      Event goal = Event(playerId: player.uuid, matchId: match.uuid, teamId: team.uuid, eventType: eventType.name);
-
-      // if (team.shortName == match.homeTeam) {
-      //   match.homeScore++;
-      // } else if (team.shortName == match.awayTeam) {
-      //   match.awayScore++;
-      // }
+      Event event = Event(playerId: player.uuid, matchId: match.uuid, teamId: team.uuid, eventType: eventType.name);
 
       DatabaseService service = DatabaseService();
-      await service.addEvent(match, goal);
+      await service.addEvent(match, event);
+      if (event.eventType == EventType.goal.name) {
+        if (match.homeTeam == player.teamId) {
+          match.homeScore++;
+        } else if (match.awayTeam == player.teamId) {
+          match.awayScore++;
+        }
+      }
+      await service.updateMatch(match);
       // await service.updateMatch(match);
       await Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) => MatchDetails(match: match, team: team, pageBack: pagesFromToMD,)), (route) => false);
     },

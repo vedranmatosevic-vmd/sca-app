@@ -99,7 +99,7 @@ Widget _playerCard(BuildContext context, Player player) {
             width: 38,
             height: 38,
             decoration: const BoxDecoration(
-              color: Style.colorDarkBlue,
+              color: Style.colorBlack,
               borderRadius: BorderRadius.all(Radius.circular(19)),
             ),
             child: Center(

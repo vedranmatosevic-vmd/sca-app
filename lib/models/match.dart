@@ -9,6 +9,8 @@ class Match {
   late int competitionId;
   late int homeTeam;
   late int awayTeam;
+  late int homeScore = 0;
+  late int awayScore = 0;
   late String date;
   late String time;
   late int duration;
@@ -25,6 +27,8 @@ class Match {
     required this.time,
     required this.duration,
     required this.round,
+    required this.homeScore,
+    required this.awayScore,
     this.isPlayed = false
   });
 
@@ -34,6 +38,8 @@ class Match {
     data['competition'] = competitionId;
     data['homeTeam'] = homeTeam;
     data['awayTeam'] = awayTeam;
+    data['homeScore'] = homeScore;
+    data['awayScore'] = awayScore;
     data['date'] = date;
     data['time'] = time;
     data['duration'] = duration;
@@ -47,6 +53,8 @@ class Match {
     competitionId = matchMap["competition"];
     homeTeam = matchMap["homeTeam"];
     awayTeam = matchMap["awayTeam"];
+    homeScore = matchMap["homeScore"];
+    awayScore = matchMap["awayScore"];
     date = matchMap["date"];
     time = matchMap["time"];
     duration = matchMap["duration"];

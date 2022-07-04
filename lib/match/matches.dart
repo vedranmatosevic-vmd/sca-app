@@ -65,12 +65,12 @@ _body(BuildContext context, List<Match> listOfMatches, List<Team> listOfTeams) {
 
 _matchesByRound(BuildContext context, List<Match> listOfMatches, List<Team> listOfTeams) {
   List<Widget> widgets = [];
-  int currentRounds = 1;
+  int currentRounds = listOfMatches[0].round;
   bool newRound = true;
   for (final match in listOfMatches) {
     if (match.round > currentRounds) {
       newRound = true;
-      currentRounds++;
+      currentRounds = match.round;
     }
     if (newRound) {
       widgets.add(_roundTitle(currentRounds.toString()));
@@ -93,13 +93,13 @@ _roundTitle(String s) {
     height: 50,
     alignment: Alignment.centerLeft,
     decoration: const BoxDecoration(
-      color: Style.colorGrey,
+      color: Style.colorDarkRed,
     ),
     child: Row(
       children: <Widget>[
         Text(
           '$round round',
-          style: const TextStyle(color: Style.colorDarkBlue, fontSize: 16),
+          style: const TextStyle(color: Style.colorWhite, fontSize: 16),
         ),
       ]
     ),
@@ -136,7 +136,7 @@ _circleHours(BuildContext context, Match match) {
     height: 40,
     alignment: Alignment.center,
     decoration: const BoxDecoration(
-        color: Style.colorDarkBlue, shape: BoxShape.circle),
+        color: Style.colorBlack, shape: BoxShape.circle),
     child: Text(
       match.time,
       style: Style.getTextStyle(context, StyleText.smallTextRegular, StyleColor.white),
@@ -145,12 +145,13 @@ _circleHours(BuildContext context, Match match) {
 }
 
 _scoreRow(BuildContext context, Match match, List<Team> listOfTeams) {
-  String _homeTeam = "";
-  String _awayTeam = "";
+
+  late Team _homeTeam;
+  late Team _awayTeam;
 
   for (final team in listOfTeams) {
-    if (team.uuid == match.homeTeam) _homeTeam = team.shortName;
-    if (team.uuid == match.awayTeam) _awayTeam = team.shortName;
+    if (team.uuid == match.homeTeam) _homeTeam = team;
+    if (team.uuid == match.awayTeam) _awayTeam = team;
   }
 
   return Container(
@@ -160,8 +161,7 @@ _scoreRow(BuildContext context, Match match, List<Team> listOfTeams) {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          '$_homeTeam 0 - 0 $_awayTeam',
-          // '${match.homeTeam} ${match.homeScore} - ${match.awayScore} ${match.awayTeam}',
+          '${_homeTeam.name} ${match.homeScore} - ${match.awayScore} ${_awayTeam.name}',
           style: Style.getTextStyle(context, StyleText.textBold),
         ),
         Text(match.date,

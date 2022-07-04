@@ -61,6 +61,7 @@ class SquaredButton extends StatelessWidget {
                   Text(
                       value,
                       style: Style.getTextStyle(context, StyleText.buttonText, textColor),
+                      maxLines: 2,
                     ),
                 ],
               ),

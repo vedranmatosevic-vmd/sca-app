@@ -22,9 +22,18 @@ class EventColumn extends StatefulWidget {
 class _EventColumnState extends State<EventColumn> {
   @override
   Widget build(BuildContext context) {
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      children: _listOfEvents(context)
+    return Container(
+      decoration: BoxDecoration(
+        border: Border(
+          top: BorderSide(
+            color: Style.getColor(context, StyleColor.greyBorder),
+          )
+        )
+      ),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: _listOfEvents(context)
+      ),
     );
   }
 
@@ -50,14 +59,6 @@ class _EventColumnState extends State<EventColumn> {
 
         },
         child: Container(
-          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 6),
-          decoration: BoxDecoration(
-              border: Border(
-                  bottom: BorderSide(
-                      color: Style.getColor(context, StyleColor.grey)
-                  )
-              )
-          ),
           child: event.teamId == widget.match.homeTeam ? _homeEventCard(event, _playerName) : _awayEventCard(event, _playerName)
         )
     );
@@ -66,40 +67,46 @@ class _EventColumnState extends State<EventColumn> {
   _homeEventCard(Event event, String playerName) {
     return Row(
       mainAxisSize: MainAxisSize.max,
+      mainAxisAlignment: MainAxisAlignment.end,
       children: <Widget>[
-        Container(
-            width: 50,
-            height: 50,
-            decoration: BoxDecoration(
-                color: Style.getColor(context, StyleColor.darkBlue),
-                borderRadius: const BorderRadius.all(Radius.circular(25))
+        Stack(
+          clipBehavior: Clip.none,
+          alignment: Alignment.centerRight,
+          children: <Widget>[
+            Container(
+              width: MediaQuery.of(context).size.width / 2,
+              height: 60,
+              decoration: const BoxDecoration(
+                  border: Border(
+                      left: BorderSide(
+                          color: Style.colorGreyBorder,
+                          width: 1
+                      )
+                  )
+              ),
             ),
-            alignment: Alignment.bottomRight,
-            child: _eventIcon(event.eventType)
-        ),
-        const SizedBox(width: 10,),
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
-              children: [
-                Text(
-                  event.eventType == EventType.goal.name ? "Scored goal!" : event.eventType == EventType.yellowCard.name ? "Yellow card!" : "Red card!",
-                  style: Style.getTextStyle(context, StyleText.textBold),
-                ),
-              ],
-            ),
-            Row(
-              children: [
-                Text(
-                  playerName,
-                  style: Style.getTextStyle(context, StyleText.textRegular),
-                ),
-              ],
+            Container(
+              margin: EdgeInsets.only(right: MediaQuery.of(context).size.width / 2 - 21),
+              height: 60,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: <Widget>[
+                  Row(
+                    children: [
+                      Text(
+                        playerName,
+                        style: Style.getTextStyle(context, StyleText.textRegular),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(width: 10,),
+                  _eventIcon(event.eventType),
+                ],
+              ),
             ),
           ],
-        ),
-        const SizedBox(width: 10,),
+        )
       ],
     );
   }
@@ -107,42 +114,45 @@ class _EventColumnState extends State<EventColumn> {
   _awayEventCard(Event event, String playerName) {
     return Row(
       mainAxisSize: MainAxisSize.max,
-      mainAxisAlignment: MainAxisAlignment.end,
+      mainAxisAlignment: MainAxisAlignment.start,
       children: <Widget>[
-        const Spacer(),
-        const SizedBox(width: 10,),
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
-              children: [
-                Text(
-                  event.eventType == EventType.goal.name ? "Scored goal!" : event.eventType == EventType.yellowCard.name ? "Yellow card!" : "Red card!",
-                  style: Style.getTextStyle(context, StyleText.textBold),
-                ),
-              ],
+        Stack(
+          clipBehavior: Clip.none,
+          children: <Widget>[
+            Container(
+              width: MediaQuery.of(context).size.width / 2 + 1,
+              height: 60,
+              decoration: const BoxDecoration(
+                  border: Border(
+                      right: BorderSide(
+                          color: Style.colorGreyBorder,
+                          width: 1
+                      )
+                  )
+              ),
             ),
-            Row(
-              children: [
-                Text(
-                  playerName,
-                  style: Style.getTextStyle(context, StyleText.textRegular),
-                ),
-              ],
+            Container(
+              margin: EdgeInsets.only(left: MediaQuery.of(context).size.width / 2 - 20),
+              height: 60,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: <Widget>[
+                  _eventIcon(event.eventType),
+                  const SizedBox(width: 10,),
+                  Row(
+                    children: [
+                      Text(
+                        playerName,
+                        style: Style.getTextStyle(context, StyleText.textRegular),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
             ),
           ],
-        ),
-        const SizedBox(width: 10,),
-        Container(
-            width: 50,
-            height: 50,
-            decoration: BoxDecoration(
-                color: Style.getColor(context, StyleColor.darkBlue),
-                borderRadius: const BorderRadius.all(Radius.circular(25))
-            ),
-            alignment: Alignment.bottomLeft,
-            child: _eventIcon(event.eventType)
-        ),
+        )
       ],
     );
   }
@@ -160,11 +170,11 @@ class _EventColumnState extends State<EventColumn> {
     }
 
     return Container(
-      width: 20,
-      height: 20,
+      width: 40,
+      height: 40,
       decoration: BoxDecoration(
         color: Style.getColor(context, StyleColor.white),
-        borderRadius: BorderRadius.all(Radius.circular(10)),
+        borderRadius: const BorderRadius.all(Radius.circular(20)),
         border: Border.all(
           color: Style.getColor(context, StyleColor.grey),
           width: 1,
@@ -172,11 +182,11 @@ class _EventColumnState extends State<EventColumn> {
       ),
       child: eventType == EventType.goal.name ? Icon(
         iconData,
-        size: 16,
+        size: 28,
       ) : Center(
             child: Container(
-              width: 10,
-              height: 14,
+              width: 16,
+              height: 20,
               decoration: BoxDecoration(
                 color: cardColor,
                 borderRadius: BorderRadius.all(Radius.circular(2))

@@ -43,7 +43,7 @@ class _StyledLayoutState extends State<StyledLayout> {
 
 AppBar _appBar(String appBarTitle, List<Widget>? actions, {bool? willPop = true, Widget? leading}) {
   return AppBar(
-      backgroundColor: Style.colorBlack,
+      backgroundColor: Style.colorRed,
       foregroundColor: Colors.white,
       title: Text(appBarTitle),
       leading: willPop! ? leading : null,

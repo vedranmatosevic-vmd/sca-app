@@ -58,6 +58,13 @@ class _LoginScreenState extends State<LoginScreen> {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
+                    Text(
+                      'Prijava',
+                      style: Style.getTextStyle(context, StyleText.ultraBigText, StyleColor.black),
+                    ),
+                    const SizedBox(
+                      height: 50,
+                    ),
                     TextField(
                       style: Style.getTextStyle(context, StyleText.formFieldTextNormal),
                       controller: usernameController,
@@ -65,7 +72,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       decoration: InputDecoration(
                           border: OutlineInputBorder(
                             borderSide: BorderSide(
-                                color: Style.getColor(context, StyleColor.grey)
+                                color: Style.getColor(context, StyleColor.greyBorder)
                             )
                           ),
                           focusedBorder: OutlineInputBorder(
@@ -84,7 +91,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       decoration: InputDecoration(
                           border: OutlineInputBorder(
                             borderSide: BorderSide(
-                              color: Style.getColor(context, StyleColor.grey)
+                              color: Style.getColor(context, StyleColor.greyBorder)
                             )
                           ),
                           focusedBorder: OutlineInputBorder(
@@ -94,6 +101,18 @@ class _LoginScreenState extends State<LoginScreen> {
                           ),
                           hintText: 'Password'
                       ),
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: <Widget>[
+                        Padding(
+                          padding: const EdgeInsets.only(top: 8.0),
+                          child: Text(
+                            'ZABORAVILI STE LOZINKU?',
+                            style: Style.getTextStyle(context, StyleText.smallTextRegular),
+                          ),
+                        )
+                      ],
                     )
                   ],
                 ),

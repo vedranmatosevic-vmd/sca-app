@@ -100,9 +100,9 @@ class _MatchDetailsState extends State<MatchDetails> {
                 mainAxisSize: MainAxisSize.min,
                 children: <Widget>[
                   MatchDetailHeader(
-                      match: widget.match,
-                      homeTeam: _homeTeam,
-                      awayTeam: _awayTeam,
+                    match: widget.match,
+                    homeTeam: _homeTeam,
+                    awayTeam: _awayTeam,
                     homeScore: homeScore,
                     awayScore: awayScore
                   ),
@@ -149,13 +149,7 @@ class _MatchDetailHeaderState extends State<MatchDetailHeader> {
       height: 130,
       padding: const EdgeInsets.symmetric(vertical: 20),
       decoration: const BoxDecoration(
-        gradient: LinearGradient(
-            colors: [
-              Style.colorDarkBlue,
-              Style.colorLightBlue,
-              Style.colorDarkBlue,
-            ]
-        ),
+        color: Style.colorBlack
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
@@ -165,7 +159,8 @@ class _MatchDetailHeaderState extends State<MatchDetailHeader> {
             '${widget.match.date} at ${widget.match.time} - ${widget.match.duration} min',
             style: const TextStyle(
                 color: Style.colorWhite,
-                fontSize: 14
+                fontSize: 14,
+              fontWeight: FontWeight.bold
             ),
           ),
           const SizedBox(height: 10,),
@@ -179,7 +174,7 @@ class _MatchDetailHeaderState extends State<MatchDetailHeader> {
                     Text(
                       widget.homeTeam.shortName,
                       style: const TextStyle(
-                          fontSize: 16,
+                          fontSize: 20,
                           color: Style.colorWhite,
                           fontWeight: FontWeight.bold
                       ),
@@ -211,10 +206,11 @@ class _MatchDetailHeaderState extends State<MatchDetailHeader> {
                     Text(
                       widget.awayTeam.shortName,
                       style: const TextStyle(
-                          fontSize: 16,
+                          fontSize: 20,
                           color: Style.colorWhite,
-                          fontWeight: FontWeight.bold
+                          fontWeight: FontWeight.bold,
                       ),
+
                     ),
                   ],
                 ),
@@ -229,7 +225,8 @@ class _MatchDetailHeaderState extends State<MatchDetailHeader> {
                 'Futsalito, ${widget.match.round}' 'st round',
                 style: const TextStyle(
                     color: Style.colorWhite,
-                    fontSize: 14
+                    fontSize: 14,
+                  fontWeight: FontWeight.bold
                 ),
               ),
             ],
@@ -254,7 +251,7 @@ class ActionRow extends StatefulWidget {
 class _ActionRowState extends State<ActionRow> {
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return SizedBox(
       height: 140,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -265,17 +262,26 @@ class _ActionRowState extends State<ActionRow> {
             page: Pages.events,
             match: widget.match,
             eventType: EventType.goal,
-            iconColor: Style.colorDarkBlue,
-            textColor: StyleColor.darkBlue,
+            iconColor: Style.colorBlack,
+            textColor: StyleColor.black,
           ),
           SquaredButton(
-            value: "Card",
-            icon: Icons.crop_square,
+            value: "Yellow",
+            icon: MyFlutterApp.card,
             page: Pages.events,
             match: widget.match,
             eventType: EventType.yellowCard,
-            iconColor: Style.colorDarkBlue,
-            textColor: StyleColor.darkBlue,
+            iconColor: Style.colorYellow,
+            textColor: StyleColor.black,
+          ),
+          SquaredButton(
+            value: "Red",
+            icon: MyFlutterApp.card,
+            page: Pages.events,
+            match: widget.match,
+            eventType: EventType.redCard,
+            iconColor: Style.colorRed,
+            textColor: StyleColor.black,
           )
         ],
       ),

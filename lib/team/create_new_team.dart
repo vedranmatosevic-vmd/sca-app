@@ -82,7 +82,7 @@ Container _newTeamHeader() {
           height: 90,
           margin: const EdgeInsets.symmetric(vertical: 20),
           decoration: const BoxDecoration(
-              color: Style.colorRed, shape: BoxShape.circle
+              color: Style.colorDarkBlue, shape: BoxShape.circle
           ),
           child: const Center(
             child: Text(

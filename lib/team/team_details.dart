@@ -35,8 +35,6 @@ class _TeamDetailsState extends State<TeamDetails> {
 
   @override
   void initState() {
-
-
     team = widget.team;
 
     // getTeams(team);
@@ -122,7 +120,7 @@ _header(BuildContext context, Team team) {
   return Container(
     padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
     decoration: BoxDecoration(
-        color: Style.getColor(context, StyleColor.grey)
+        color: Style.getColor(context, StyleColor.black)
     ),
     child: Column(
       mainAxisSize: MainAxisSize.min,
@@ -131,7 +129,7 @@ _header(BuildContext context, Team team) {
           children: <Widget>[
             Text(
               selectedLeague.name,
-              style: Style.getTextStyle(context, StyleText.subTitle),
+              style: Style.getTextStyle(context, StyleText.subTitle, StyleColor.white),
             )
           ],
         ),
@@ -152,18 +150,18 @@ _header(BuildContext context, Team team) {
                       Text(
                         team.name,
                         style: Style.getTextStyle(
-                            context, StyleText.bigTextBold, StyleColor.black),
+                            context, StyleText.bigTextBold, StyleColor.white),
                       ),
                       const SizedBox(height: 6,),
                       Row(
                         children: <Widget>[
                           Text(
                               "Contact person: ",
-                            style: Style.getTextStyle(context, StyleText.smallTextRegular),
+                            style: Style.getTextStyle(context, StyleText.smallTextRegular, StyleColor.white),
                           ),
                           Text(
                             team.contactPerson!,
-                            style: Style.getTextStyle(context, StyleText.smallTextBold),
+                            style: Style.getTextStyle(context, StyleText.smallTextBold, StyleColor.white),
                           )
                         ],
                       ),
@@ -172,11 +170,11 @@ _header(BuildContext context, Team team) {
                         children: <Widget>[
                           Text(
                             "Email: ",
-                            style: Style.getTextStyle(context, StyleText.smallTextRegular),
+                            style: Style.getTextStyle(context, StyleText.smallTextRegular, StyleColor.white),
                           ),
                           Text(
                             team.email!,
-                            style: Style.getTextStyle(context, StyleText.smallTextBold),
+                            style: Style.getTextStyle(context, StyleText.smallTextBold, StyleColor.white),
                           )
                         ],
                       ),
@@ -185,11 +183,11 @@ _header(BuildContext context, Team team) {
                         children: <Widget>[
                           Text(
                             "Phone: ",
-                            style: Style.getTextStyle(context, StyleText.smallTextRegular),
+                            style: Style.getTextStyle(context, StyleText.smallTextRegular, StyleColor.white),
                           ),
                           Text(
                             team.phone!,
-                            style: Style.getTextStyle(context, StyleText.smallTextBold),
+                            style: Style.getTextStyle(context, StyleText.smallTextBold, StyleColor.white),
                           )
                         ],
                       )
@@ -229,7 +227,7 @@ _results(BuildContext context, Team team) {
 
   Future<List<Match>> getData() async {
     listOfTeams = await service.getTeamsByCompetition(selectedLeague.uuid);
-    return await service.getMatchesByTeam(selectedLeague.name, team.uuid);
+    return await service.getMatchesByTeam(selectedLeague.uuid, team.uuid);
   }
 
   return FutureBuilder<List<Match>>(
@@ -294,7 +292,7 @@ _resultMatchCard(BuildContext context, Match match, Team team, List<Team> listOf
                 Row(
                   children: <Widget>[
                     Text(
-                        "home",
+                        match.homeScore.toString(),
                         // match.homeScore.toString(),
                       style: Style.getTextStyle(context, StyleText.textBold),
                     ),
@@ -304,7 +302,7 @@ _resultMatchCard(BuildContext context, Match match, Team team, List<Team> listOf
                 Row(
                   children: <Widget>[
                     Text(
-                        "away",
+                        match.awayScore.toString(),
                         // match.awayScore.toString(),
                       style: Style.getTextStyle(context, StyleText.textBold),
                     ),
@@ -325,17 +323,18 @@ _boldWinner(BuildContext context, Team team, Match match, List<Team> listOfTeams
 
   String _homeTeam = "";
   String _awayTeam = "";
+
   for (final team in listOfTeams) {
     if (team.uuid == match.homeTeam) _homeTeam = team.name;
     if (team.uuid == match.awayTeam) _awayTeam = team.name;
   }
 
-  // if (match.homeScore > match.awayScore) {
-  //   isHomeWin = true;
-  // }
-  // if (match.awayScore > match.homeScore) {
-  //   isAwayWin = true;
-  // }
+  if (match.homeScore > match.awayScore) {
+    isHomeWin = true;
+  }
+  if (match.awayScore > match.homeScore) {
+    isAwayWin = true;
+  }
 
   return Column(
     crossAxisAlignment: CrossAxisAlignment.start,
@@ -370,22 +369,22 @@ enum ScoreResult {
 _calculateScore(BuildContext context, Team team, Match match) {
   Color backColor = Style.getColor(context, StyleColor.orange);
   String sign = "";
-  // if (match.homeTeam.toString() == team.shortName && match.homeScore < match.awayScore) {
-  //   backColor = Style.getColor(context, StyleColor.red);
-  //   sign = "I";
-  // } else if (match.homeTeam.toString() == team.shortName && match.homeScore > match.awayScore) {
-  //   backColor = Style.getColor(context, StyleColor.green);
-  //   sign = "P";
-  // } else if (match.awayTeam.toString() == team.shortName && match.homeScore < match.awayScore) {
-  //   backColor = Style.getColor(context, StyleColor.green);
-  //   sign = "P";
-  // } else if (match.awayTeam.toString() == team.shortName && match.homeScore > match.awayScore) {
-  //   backColor = Style.getColor(context, StyleColor.red);
-  //   sign = "I";
-  // } else {
-  //   backColor = Style.getColor(context, StyleColor.orange);
-  //   sign = "N";
-  // }
+  if (match.homeTeam == team.uuid && match.homeScore < match.awayScore) {
+    backColor = Style.getColor(context, StyleColor.red);
+    sign = "I";
+  } else if (match.homeTeam == team.uuid && match.homeScore > match.awayScore) {
+    backColor = Style.getColor(context, StyleColor.green);
+    sign = "P";
+  } else if (match.awayTeam == team.uuid && match.homeScore < match.awayScore) {
+    backColor = Style.getColor(context, StyleColor.green);
+    sign = "P";
+  } else if (match.awayTeam == team.uuid && match.homeScore > match.awayScore) {
+    backColor = Style.getColor(context, StyleColor.red);
+    sign = "I";
+  } else {
+    backColor = Style.getColor(context, StyleColor.orange);
+    sign = "N";
+  }
 
   return Container(
     margin: const EdgeInsets.only(left: 20),

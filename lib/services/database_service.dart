@@ -105,12 +105,14 @@ class DatabaseService {
     });
   }
 
-  Future<List<Match>> getMatchesByTeam(String competition, int teamId) async {
+  Future<List<Match>> getMatchesByTeam(int competition, int teamId) async {
     List<Match> matches = List.empty(growable: true);
     Stream<DatabaseEvent> matchesStream = _ref.child("users/vematosevic/matches").orderByChild("date").onValue;
     matchesStream.listen((DatabaseEvent event) {
       for (final child in event.snapshot.children) {
-        if (child.child("homeTeam").value == teamId || child.child("awayTeam").value == teamId && child.child("competition").value.toString() == competition) {
+        if (child.child("awayTeam").value == teamId || child.child("homeTeam").value == teamId && child.child("competition").value == competition) {
+          print("Function getMatchesByTeam receive parameter competitionId: $competition");
+          print("child");
           try {
             var json =
                 jsonDecode(jsonEncode(child.value)) as Map<String, dynamic>;
