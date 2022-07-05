@@ -21,6 +21,16 @@ class EventColumn extends StatefulWidget {
 
 class _EventColumnState extends State<EventColumn> {
   @override
+  void initState() {
+    widget.events.sort((a, b) {
+      int cmp = b.minute!.compareTo(a.minute!);
+      if (cmp != 0) return cmp;
+      return b.period!.compareTo(a.period!);
+    });
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
@@ -50,7 +60,7 @@ class _EventColumnState extends State<EventColumn> {
 
     for (final player in widget.players) {
       if (player.uuid == event.playerId) {
-        _playerName = "${player.name} ${player.lastName}";
+        _playerName = "${player.name[0]}. ${player.lastName}";
       }
     }
 
@@ -95,7 +105,7 @@ class _EventColumnState extends State<EventColumn> {
                   Row(
                     children: [
                       Text(
-                        playerName,
+                        "$playerName  ${event.minute}'",
                         style: Style.getTextStyle(context, StyleText.textRegular),
                       ),
                     ],
@@ -143,7 +153,7 @@ class _EventColumnState extends State<EventColumn> {
                   Row(
                     children: [
                       Text(
-                        playerName,
+                        "${event.minute}'  $playerName",
                         style: Style.getTextStyle(context, StyleText.textRegular),
                       ),
                     ],

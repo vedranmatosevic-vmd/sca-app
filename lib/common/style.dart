@@ -104,7 +104,8 @@ enum StyleColor {
   darkBlue,
   yellow,
   lightBlue,
-  greyBorder
+  greyBorder,
+  darkRed
 }
 
 class Style {
@@ -154,6 +155,9 @@ class Style {
 
       case StyleColor.greyBorder:
         return colorGreyBorder;
+
+      case StyleColor.darkRed:
+        return colorDarkRed;
 
       default:
         throw UnimplementedError();

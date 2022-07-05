@@ -39,18 +39,18 @@ class _MatchDetailsState extends State<MatchDetails> {
   late List<Event> events;
   late List<Player> players;
 
-  Future<int> calculateScore(int matchId, int teamId) async {
-    int score = await service.getScoreByGame(matchId, teamId);
-    return Future.delayed(const Duration(milliseconds: 100), () {
-      return score;
-    });
-  }
+  // Future<int> calculateScore(int matchId, int teamId) async {
+  //   int score = await service.getScoreByGame(matchId, teamId);
+  //   return Future.delayed(const Duration(milliseconds: 100), () {
+  //     return score;
+  //   });
+  // }
 
   Future<void> getTeams() async {
     _homeTeam = await service.getTeamsById(widget.match.homeTeam);
     _awayTeam = await service.getTeamsById(widget.match.awayTeam);
-    homeScore = await calculateScore(widget.match.uuid, _homeTeam.uuid);
-    awayScore = await calculateScore(widget.match.uuid, _awayTeam.uuid);
+    // homeScore = await calculateScore(widget.match.uuid, _homeTeam.uuid);
+    // awayScore = await calculateScore(widget.match.uuid, _awayTeam.uuid);
     events = await service.getEvents(widget.match.uuid);
     players = await service.getPlayersByTeams(_homeTeam.uuid, _awayTeam.uuid);
   }
@@ -71,6 +71,7 @@ class _MatchDetailsState extends State<MatchDetails> {
   Widget build(BuildContext context) {
     return StyledLayout(
       appBarTitle: "Match details",
+      actions: _actions(context, widget.match),
       leading: LeadingIcons(callback: () {
         if (widget.pageBack == Pages.teamDetails) {
           Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) => TeamDetails(team: widget.team!)), (route) => false);
@@ -103,8 +104,6 @@ class _MatchDetailsState extends State<MatchDetails> {
                     match: widget.match,
                     homeTeam: _homeTeam,
                     awayTeam: _awayTeam,
-                    homeScore: homeScore,
-                    awayScore: awayScore
                   ),
                   ActionRow(match: widget.match),
                   EventColumn(events: events, players: players, match: widget.match)
@@ -126,15 +125,11 @@ class MatchDetailHeader extends StatefulWidget {
     required this.match,
     required this.homeTeam,
     required this.awayTeam,
-    required this.homeScore,
-    required this.awayScore
   }) : super(key: key);
 
   final Match match;
   final Team homeTeam;
   final Team awayTeam;
-  final int homeScore;
-  final int awayScore;
 
   @override
   State<MatchDetailHeader> createState() => _MatchDetailHeaderState();
@@ -188,7 +183,7 @@ class _MatchDetailHeaderState extends State<MatchDetailHeader> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
                     Text(
-                      '${widget.homeScore} - ${widget.awayScore}',
+                      '${widget.match.homeScore} - ${widget.match.awayScore}',
                       style: const TextStyle(
                           fontSize: 24,
                           color: Style.colorWhite,
@@ -289,17 +284,41 @@ class _ActionRowState extends State<ActionRow> {
   }
 }
 
-_actions(Match match) {
+_actions(BuildContext context, Match match) {
   return <Widget>[
+    GestureDetector(
+      onTap: () {
+
+      },
+      child: const Icon(Icons.edit),
+    ),
     const SizedBox(
       width: 10,
     ),
     GestureDetector(
       onTap: () async {
-        DatabaseService service = DatabaseService();
-        await service.updateMatch(match);
+        showDialog(
+            context: context,
+            builder: (BuildContext context) => AlertDialog(
+              title: Text('Delete match?', style: Style.getTextStyle(context, StyleText.bigTextBold),),
+              actions: <Widget>[
+                TextButton(
+                    onPressed: () => Navigator.pop(context, 'Cancel'),
+                    child: Text('Cancel', style: Style.getTextStyle(context, StyleText.textBold, StyleColor.red))
+                ),
+                TextButton(
+                    onPressed: () async {
+                      DatabaseService service = DatabaseService();
+                      await service.removeMatch(match);
+                      Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) => const Matches()), (route) => false);
+                    },
+                    child: Text('OK', style: Style.getTextStyle(context, StyleText.textBold, StyleColor.red))
+                ),
+              ],
+            )
+        );
       },
-        child: Icon(Icons.save)
+        child: const Icon(Icons.delete)
     ),
     const SizedBox(
       width: 10,

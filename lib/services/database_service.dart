@@ -12,12 +12,18 @@ import '../models/team.dart';
 class DatabaseService {
   final DatabaseReference _ref = FirebaseDatabase.instance.ref();
 
+  // Matches
+  // - all functions of matches
   addMatch(Match matchData) async {
     await _ref.child("users/vematosevic/matches/${matchData.uuid}").set(matchData.toMap());
   }
   
   updateMatch(Match match) async {
     await _ref.child("users/vematosevic/matches/${match.uuid}").update(match.toMap());
+  }
+
+  removeMatch(Match match) async {
+    await _ref.child("users/vematosevic/matches/${match.uuid}").remove();
   }
   
   Future<List<Match>> getMatchesByCompetition(int competition) async {
@@ -130,6 +136,10 @@ class DatabaseService {
 
   addEvent(Match match, Event event) async {
     await _ref.child("users/vematosevic/events/${event.uuid}").set(event.toMap());
+  }
+
+  updateEvent(Event event) async {
+    await _ref.child("users/vematosevic/events/${event.uuid}").update(event.toMap());
   }
 
   addPlayer(String team, Player player) async {
@@ -254,7 +264,7 @@ class DatabaseService {
 
   Future<List<Event>> getEvents(int matchId) async {
     List<Event> events = [];
-    Stream<DatabaseEvent> eventStream = _ref.child("users/vematosevic/events").onValue;
+    Stream<DatabaseEvent> eventStream = _ref.child("users/vematosevic/events").orderByChild("period").onValue;
     eventStream.listen((DatabaseEvent event) {
       for (final child in event.snapshot.children){
         if (child.child("matchId").value == matchId) {

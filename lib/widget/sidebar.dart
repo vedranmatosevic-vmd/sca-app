@@ -103,8 +103,7 @@ class _SideBarState extends State<SideBar> {
               style: Style.getTextStyle(context, StyleText.textRegular),
             ),
             onTap: () {
-              // Update the state of the app.
-              // ...
+              navigateTo(context, Pages.table);
             },
           ),
         ],

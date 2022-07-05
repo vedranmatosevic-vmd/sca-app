@@ -38,6 +38,7 @@ class _NewTeamState extends State<NewTeam> {
               DatabaseService service = DatabaseService();
               newTeam = Team(name: _nameTEC.text, competitionId: selectedLeague.uuid, shortName: _shortNameTEC.text, email: _emailTEC.text, contactPerson: _contactPersonTEC.text, phone: _phoneTEC.text);
               service.addTeam(newTeam);
+              Navigator.pop(context);
             },
             child: const Icon(Icons.save)
         ),
@@ -70,7 +71,7 @@ class _NewTeamState extends State<NewTeam> {
 Container _newTeamHeader() {
   return Container(
     decoration: const BoxDecoration(
-      color: Style.colorGrey
+      color: Style.colorBlack
     ),
     child: Row(
       mainAxisSize: MainAxisSize.max,
@@ -82,7 +83,7 @@ Container _newTeamHeader() {
           height: 90,
           margin: const EdgeInsets.symmetric(vertical: 20),
           decoration: const BoxDecoration(
-              color: Style.colorDarkBlue, shape: BoxShape.circle
+              color: Style.colorRed, shape: BoxShape.circle
           ),
           child: const Center(
             child: Text(

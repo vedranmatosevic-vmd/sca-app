@@ -11,6 +11,8 @@ class Event {
   late int matchId;
   late int teamId;
   late String eventType;
+  late int? period;
+  late int? minute;
   late bool? isOwnGoal = false;
   late String createdTime = returnDateTimeNow();
 
@@ -22,6 +24,8 @@ class Event {
     required this.teamId,
     required this.eventType,
     this.isOwnGoal,
+    this.period = 1,
+    this.minute = 10
   });
 
   Map<String, dynamic> toMap() {
@@ -30,6 +34,8 @@ class Event {
     data['playerId'] = playerId;
     data['matchId'] = matchId;
     data['teamId'] = teamId;
+    data['period'] = period;
+    data['minute'] = minute;
     data['eventType'] = eventType;
     data['isOwnGoal'] = isOwnGoal;
     data['createdTime'] = createdTime;
@@ -41,6 +47,8 @@ class Event {
     playerId = goalMap["playerId"];
     matchId = goalMap["matchId"];
     teamId = goalMap["teamId"];
+    period = goalMap["period"];
+    minute = goalMap["minute"];
     eventType = goalMap["eventType"];
     isOwnGoal = goalMap["isOwnGoal"];
     createdTime = goalMap["createdTime"];

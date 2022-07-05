@@ -161,7 +161,7 @@ _scoreRow(BuildContext context, Match match, List<Team> listOfTeams) {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          '${_homeTeam.name} ${match.homeScore} - ${match.awayScore} ${_awayTeam.name}',
+          '${_homeTeam.shortName} ${match.homeScore} - ${match.awayScore} ${_awayTeam.shortName}',
           style: Style.getTextStyle(context, StyleText.textBold),
         ),
         Text(match.date,

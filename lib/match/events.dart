@@ -87,14 +87,14 @@ _listOfPlayers(BuildContext context, Match match, Team team, List<Player> listOf
   widgets.add(
     Container(
       decoration: BoxDecoration(
-        color: Style.getColor(context, StyleColor.grey)
+        color: Style.getColor(context, StyleColor.darkRed)
       ),
       padding: const EdgeInsets.all(16.0),
       child: Row(
         children: [
           Text(
             team.name,
-            style: Style.getTextStyle(context, StyleText.textBold),
+            style: Style.getTextStyle(context, StyleText.textBold, StyleColor.white),
           ),
         ],
       ),
@@ -109,20 +109,21 @@ _listOfPlayers(BuildContext context, Match match, Team team, List<Player> listOf
 Widget _playerCard(BuildContext context, Match match, Player player, Team team, EventType eventType) {
   return GestureDetector(
     onTap: () async {
-      Event event = Event(playerId: player.uuid, matchId: match.uuid, teamId: team.uuid, eventType: eventType.name);
 
-      DatabaseService service = DatabaseService();
-      await service.addEvent(match, event);
-      if (event.eventType == EventType.goal.name) {
-        if (match.homeTeam == player.teamId) {
-          match.homeScore++;
-        } else if (match.awayTeam == player.teamId) {
-          match.awayScore++;
-        }
-      }
-      await service.updateMatch(match);
+      Event event = Event(playerId: player.uuid, matchId: match.uuid, teamId: team.uuid, eventType: eventType.name);
+      navigateTo(context, Pages.goal, event: event, player: player, match: match, team: team);
+      // DatabaseService service = DatabaseService();
+      // await service.addEvent(match, event);
+      // if (event.eventType == EventType.goal.name) {
+      //   if (match.homeTeam == player.teamId) {
+      //     match.homeScore++;
+      //   } else if (match.awayTeam == player.teamId) {
+      //     match.awayScore++;
+      //   }
+      // }
       // await service.updateMatch(match);
-      await Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) => MatchDetails(match: match, team: team, pageBack: pagesFromToMD,)), (route) => false);
+      // // await service.updateMatch(match);
+      // await Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) => MatchDetails(match: match, team: team, pageBack: pagesFromToMD,)), (route) => false);
     },
     child: Container(
       padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 4),
@@ -139,7 +140,7 @@ Widget _playerCard(BuildContext context, Match match, Player player, Team team, 
             width: 38,
             height: 38,
             decoration: const BoxDecoration(
-              color: Style.colorDarkBlue,
+              color: Style.colorBlack,
               borderRadius: BorderRadius.all(Radius.circular(19)),
             ),
             child: Center(
